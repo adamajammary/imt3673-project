@@ -1,4 +1,4 @@
-package com.imt3673.project.constants;
+package com.imt3673.project.graphics;
 
 public final class Constants {
 

@@ -3,7 +3,6 @@ package com.imt3673.project.graphics;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
-import android.os.SystemClock;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -14,9 +13,9 @@ import javax.microedition.khronos.opengles.GL10;
 class GLRenderer implements GLSurfaceView.Renderer {
 
     private volatile float angle;
-    private float[]        mvpMatrix        = new float[16];
-    private float[]        projectionMatrix = new float[16];
-    private float[]        viewMatrix       = new float[16];
+    private final float[]  mvpMatrix        = new float[16];
+    private final float[]  projectionMatrix = new float[16];
+    private final float[]  viewMatrix       = new float[16];
     private Square         square;
     private Triangle       triangle;
     private ShaderManager  shaderManager;

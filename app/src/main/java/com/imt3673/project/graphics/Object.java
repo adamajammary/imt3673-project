@@ -2,8 +2,6 @@ package com.imt3673.project.graphics;
 
 import android.opengl.GLES20;
 
-import com.imt3673.project.constants.Constants;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
