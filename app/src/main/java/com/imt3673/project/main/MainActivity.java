@@ -6,16 +6,23 @@ import android.os.Bundle;
 import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
 import com.imt3673.project.graphics.GLView;
+import com.imt3673.project.sensors.HapticFeedbackManager;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final MediaManager mediaManager = new MediaManager(this);
+
+    private HapticFeedbackManager hapticManager;
+    private MediaManager          mediaManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(new GLView(this));
+
+        this.hapticManager = new HapticFeedbackManager(this);
+        this.mediaManager  = new MediaManager(this);
+
         this.loadResources();
     }
 

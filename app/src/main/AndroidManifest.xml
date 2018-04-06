@@ -4,6 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.imt3673.project.main">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <uses-feature android:glEsVersion="0x00020000" android:required="true" />
 
     <!--
@@ -19,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!-- Restrict screen orientation
+        <activity android:name="com.imt3673.project.main.MainActivity" android:screenOrientation="landscape">
+        -->
         <activity android:name="com.imt3673.project.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
