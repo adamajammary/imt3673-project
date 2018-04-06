@@ -2,6 +2,8 @@ package com.imt3673.project.graphics;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
+import android.os.SystemClock;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -11,9 +13,13 @@ import javax.microedition.khronos.opengles.GL10;
  */
 class GLRenderer implements GLSurfaceView.Renderer {
 
-    private Square        square;
-    private Triangle      triangle;
-    private ShaderManager shaderManager;
+    private volatile float angle;
+    private float[]        mvpMatrix        = new float[16];
+    private float[]        projectionMatrix = new float[16];
+    private float[]        viewMatrix       = new float[16];
+    private Square         square;
+    private Triangle       triangle;
+    private ShaderManager  shaderManager;
 
     /**
      * Called for each redraw of the view.
@@ -22,9 +28,12 @@ class GLRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(final GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
-        if ( this.shaderManager != null) {
-            this.square.draw( this.shaderManager.getProgram());
-            this.triangle.draw( this.shaderManager.getProgram());
+        this.setMVP();
+        this.rotateMVP();
+
+        if (this.shaderManager != null) {
+            this.square.draw(this.shaderManager.getProgram(),   this.mvpMatrix);
+            this.triangle.draw(this.shaderManager.getProgram(), this.mvpMatrix);
         }
     }
 
@@ -64,6 +73,47 @@ class GLRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceChanged(final GL10 gl, final int width, final int height) {
         GLES20.glViewport(0, 0, width, height);
+
+        final float ratio = ((float)width / (float)height);
+        Matrix.frustumM(this.projectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public float getAngle() {
+        return this.angle;
+    }
+
+    /**
+     *
+     * @param angle
+     */
+    public void setAngle(final float angle) {
+        this.angle = angle;
+    }
+
+    /**
+     *
+     */
+    private void rotateMVP() {
+        // Auto-rotate over time
+        //long  time  = (SystemClock.uptimeMillis() % 4000L);
+        //float angle = (0.090f * (int)time);
+
+        float[] rotMatrix = new float[16];
+
+        Matrix.setRotateM(rotMatrix, 0, this.angle, 0, 0, -1.0f);
+        Matrix.multiplyMM(this.mvpMatrix, 0, this.mvpMatrix, 0, rotMatrix, 0);
+    }
+
+    /**
+     *
+     */
+    private void setMVP() {
+        Matrix.setLookAtM(this.viewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.multiplyMM(this.mvpMatrix, 0, this.projectionMatrix, 0, this.viewMatrix, 0);
     }
 
 }

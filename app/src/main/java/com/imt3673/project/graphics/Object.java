@@ -36,8 +36,12 @@ class Object {
     /**
      *
      */
-    public void draw(final int shaderProgram) {
+    public void draw(final int shaderProgram, final float[] mvpMatrix) {
         GLES20.glUseProgram(shaderProgram);
+
+        // MVP - Model View Projection Matrix
+        int mvpUniform = GLES20.glGetUniformLocation(shaderProgram,"mvpMatrix");
+        GLES20.glUniformMatrix4fv(mvpUniform, 1, false, mvpMatrix, 0);
 
         // Set the object vertex attrib array (position)
         int positionAttrib = GLES20.glGetAttribLocation(shaderProgram,"position");
