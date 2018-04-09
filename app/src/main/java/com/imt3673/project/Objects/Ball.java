@@ -15,10 +15,8 @@ public class Ball extends GameObject {
     private float radius;
 
     //Ball physics variables
-    final float accelDelta = 0.1f; //Used for acceleration calculations
+    final float accelDelta = 4f; //Used for acceleration calculations
     final float drag = 0.95f; //Used for slowing down ball when hitting wall
-
-    private Paint paint;
 
     /**
      * Constructs the ball
@@ -41,12 +39,12 @@ public class Ball extends GameObject {
      * @param accelData xyz acceleration data
      * @param boundry bounding box
      */
-    public void physicsUpdate(final float[] accelData, RectF boundry){
+    public void physicsUpdate(final float[] accelData, float deltaTime, RectF boundry){
         //zFactor helps reduce acceleration when the phone is put flat on a table
         float zFactor = 1 - (Math.abs(accelData[2]) / (Math.abs(accelData[0]) + Math.abs(accelData[1]) + Math.abs(accelData[2])));
         velocity = Vector2.add(velocity, new Vector2(accelData[1] * accelDelta * zFactor, accelData[0] * accelDelta * zFactor));
         Vector2 oldPos = position;
-        position = Vector2.add(position, velocity);
+        position = Vector2.add(position, Vector2.mult(velocity, deltaTime));
 
         boolean collision = false;
         if (position.x - radius < boundry.left || position.x + radius > boundry.right) {

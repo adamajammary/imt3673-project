@@ -1,6 +1,7 @@
 package com.imt3673.project.Objects;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import com.imt3673.project.utils.Vector2;
 
@@ -9,6 +10,7 @@ import com.imt3673.project.utils.Vector2;
  */
 public abstract class GameObject {
     protected Vector2 position;
+    protected Paint paint;
 
     //We havent decided if we'll go with OpenGL or Android thingie yet,
     //changhing the implementation of draw should be enough though,

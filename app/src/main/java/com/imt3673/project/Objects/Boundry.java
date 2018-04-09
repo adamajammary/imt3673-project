@@ -1,6 +1,7 @@
 package com.imt3673.project.Objects;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
@@ -9,12 +10,21 @@ import android.graphics.RectF;
  * A box
  */
 public class Boundry extends GameObject{
-
     private RectF rectangle;
-    private Paint paint;
 
+    /**
+     * Creates a boundry box
+     * @param width of box
+     * @param height of box
+     */
     public Boundry(float width, float height){
+        final float gap = 10;
+        rectangle = new RectF(gap, gap, width - gap, height - gap);
 
+        paint = new Paint();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(10);
+        paint.setColor(Color.BLACK);
     }
 
     /**
@@ -27,6 +37,6 @@ public class Boundry extends GameObject{
 
     @Override
     public void draw(Canvas canvas){
-
+        canvas.drawRect(rectangle, paint);
     }
 }

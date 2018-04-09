@@ -15,7 +15,6 @@ import java.util.ArrayList;
  */
 public class CanvasView extends View {
 
-    private final Paint drawPen      = new Paint();
     private long        lastDrawTime = 0;
 
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
@@ -26,6 +25,21 @@ public class CanvasView extends View {
     public CanvasView(final Context context) {
         super(context);
         setFocusable(true);
+    }
+
+    /**
+     * Adds the GameObject to the canvas
+     * @param obj
+     */
+    public void addGameObject(GameObject obj){
+        gameObjects.add(obj);
+    }
+
+    /**
+     * Triggers a draw call
+     */
+    public void draw(){
+        invalidate();
     }
 
     /**
@@ -40,11 +54,12 @@ public class CanvasView extends View {
         // TODO: Update objects (Think object updates should be event based, such as per sensor event)
 
         // Clear the background
-        canvas.drawColor(Color.BLUE);
+        canvas.drawColor(Color.WHITE);
 
         for (GameObject obj : gameObjects){
             obj.draw(canvas);
         }
     }
+
 
 }
