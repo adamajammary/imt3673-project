@@ -1,17 +1,24 @@
 package com.imt3673.project.main;
 
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
+import com.imt3673.project.Objects.Ball;
+import com.imt3673.project.Objects.Boundry;
 import com.imt3673.project.graphics.CanvasView;
 import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
 import com.imt3673.project.graphics.GLView;
 import com.imt3673.project.sensors.HapticFeedbackManager;
 import com.imt3673.project.sensors.SensorListenerManager;
+import com.imt3673.project.utils.Vector2;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,12 +28,38 @@ public class MainActivity extends AppCompatActivity {
     private MediaManager          mediaManager;
     private SensorListenerManager sensorManager;
 
+    private CanvasView canvas;
+    private long lastUpdateTime = 0;
+
+    //GameObjects
+    private Ball ball;
+    private Boundry boundry;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Set window fullscreen and remove title bar, and force landscape orientation
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
         //setContentView(new GLView(this));
-        setContentView(new CanvasView(this));
+        canvas = new CanvasView(this);
+        setContentView(canvas);
+
+        canvas.post(new Runnable() {
+            @Override
+            public void run() { //So that we wait until the UI system is ready
+                int w = canvas.getWidth();
+                int h = canvas.getHeight();
+
+                ball = new Ball(new Vector2(w / 2, h / 2), w * 0.02f);
+                boundry = new Boundry(w, h);
+                canvas.addGameObject(ball);
+                canvas.addGameObject(boundry);
+            }
+        });
 
         this.sensorManager       = new SensorListenerManager(this);
         this.acceleratorListener = new AcceleratorListener();
@@ -35,18 +68,20 @@ public class MainActivity extends AppCompatActivity {
         this.mediaManager        = new MediaManager(this);
 
         this.loadResources();
+
+        lastUpdateTime = System.currentTimeMillis();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        this.sensorManager.addListener(this.acceleratorListener, this.acceleratorSensor);
+        this.sensorManager.removeListener(this.acceleratorListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        this.sensorManager.removeListener(this.acceleratorListener);
+        this.sensorManager.addListener(this.acceleratorListener, this.acceleratorSensor);
     }
 
     /**
@@ -70,7 +105,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onSensorChanged(final SensorEvent sensorEvent) {
             if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                // TODO:
+                long  currentTime = System.currentTimeMillis();
+                float deltaTime   = ((float)(currentTime - lastUpdateTime) / 1000.0f);
+                lastUpdateTime = currentTime;
+
+                if (ball != null) { //Because we dont know when the graphics will be initialized
+                    ball.physicsUpdate(sensorEvent.values, deltaTime, boundry.getRectangle());
+                    canvas.draw();
+                }
             }
         }
 
@@ -82,7 +124,5 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onAccuracyChanged(final Sensor sensor, int delta) {
         }
-
     }
-
 }

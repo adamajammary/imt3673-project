@@ -6,13 +6,18 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
+import com.imt3673.project.Objects.GameObject;
+
+import java.util.ArrayList;
+
 /**
  * Canvas View - Custom canvas view used for drawing 2D graphics.
  */
 public class CanvasView extends View {
 
-    private final Paint drawPen      = new Paint();
     private long        lastDrawTime = 0;
+
+    private ArrayList<GameObject> gameObjects = new ArrayList<>();
 
     /**
      * @param context Context
@@ -20,6 +25,21 @@ public class CanvasView extends View {
     public CanvasView(final Context context) {
         super(context);
         setFocusable(true);
+    }
+
+    /**
+     * Adds the GameObject to the canvas
+     * @param obj
+     */
+    public void addGameObject(GameObject obj){
+        gameObjects.add(obj);
+    }
+
+    /**
+     * Triggers a draw call
+     */
+    public void draw(){
+        invalidate();
     }
 
     /**
@@ -31,17 +51,15 @@ public class CanvasView extends View {
 
         this.lastDrawTime = currentTime;
 
-        // TODO: Update objects
+        // TODO: Update objects (Think object updates should be event based, such as per sensor event)
 
         // Clear the background
-        canvas.drawColor(Color.BLUE);
+        canvas.drawColor(Color.WHITE);
 
-        // TODO: Draw objects
-        this.drawPen.setAntiAlias(true);
-        this.drawPen.setColor(Color.YELLOW);
-        this.drawPen.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(canvas.getWidth() / 2, canvas.getHeight() / 2, 200, this.drawPen);
-
+        for (GameObject obj : gameObjects){
+            obj.draw(canvas);
+        }
     }
+
 
 }
