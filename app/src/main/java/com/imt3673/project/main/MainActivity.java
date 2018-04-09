@@ -6,6 +6,8 @@ import android.hardware.SensorEventListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.imt3673.project.Objects.Ball;
+import com.imt3673.project.Objects.Boundry;
 import com.imt3673.project.graphics.CanvasView;
 import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
@@ -21,12 +23,18 @@ public class MainActivity extends AppCompatActivity {
     private MediaManager          mediaManager;
     private SensorListenerManager sensorManager;
 
+    //GameObjects
+    private Ball ball;
+    private Boundry boundry;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // TODO - Init GameObjects
 
         //setContentView(new GLView(this));
         setContentView(new CanvasView(this));
+        // TODO - Add GameObjects to canvas (For drawing)
 
         this.sensorManager       = new SensorListenerManager(this);
         this.acceleratorListener = new AcceleratorListener();
@@ -70,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onSensorChanged(final SensorEvent sensorEvent) {
             if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                // TODO:
+                ball.physicsUpdate(sensorEvent.values, boundry.getRectangle());
+                //TODO - Trigger a draw call
             }
         }
 
@@ -82,7 +91,5 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onAccuracyChanged(final Sensor sensor, int delta) {
         }
-
     }
-
 }
