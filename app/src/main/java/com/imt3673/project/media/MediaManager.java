@@ -1,6 +1,7 @@
 package com.imt3673.project.media;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 
@@ -12,6 +13,7 @@ public class MediaManager {
     private final Context   context;
     private MediaPlayer     mediaPlayer;
     private final SoundPool soundPool;
+    private final float Volume;
 
     /**
      *
@@ -20,6 +22,10 @@ public class MediaManager {
     public MediaManager(final Context context) {
         this.context   = context;
         this.soundPool = new SoundPool.Builder().setMaxStreams(2).build();
+
+        //Load user volume preference
+        SharedPreferences settings = this.context.getSharedPreferences(com.imt3673.project.graphics.Constants.PREFERENCE_FILE, 0);
+        this.Volume =  settings.getFloat(com.imt3673.project.graphics.Constants.PREFERENCE_VOLUME_SLIDER,1.0f);
     }
 
     /**
@@ -132,7 +138,7 @@ public class MediaManager {
      */
     private void playSound(final int resourceID) {
         this.soundPool.stop(resourceID);
-        this.soundPool.play(resourceID, 1.0f, 1.0f, 1, 0, 1.0f);
+        this.soundPool.play(resourceID, this.Volume, this.Volume, 1, 0, 1.0f);
     }
 
     /**

@@ -3,6 +3,7 @@ package com.imt3673.project.menu;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.CheckBox;
 import android.widget.SeekBar;
 
 import com.imt3673.project.graphics.Constants;
@@ -12,7 +13,6 @@ import com.imt3673.project.main.R;
  * Options controls volume, vibration etc
  */
 public class OptionsMenu extends AppCompatActivity {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,8 @@ public class OptionsMenu extends AppCompatActivity {
     private void loadUserPreferences() {
         SharedPreferences settings = getSharedPreferences(Constants.PREFERENCE_FILE, 0);
         SeekBar volumeBar = findViewById(R.id.OptionMenu_volume_control);
-        volumeBar.setProgress(settings.getInt(Constants.PREFERENCE_VOLUME_SLIDER,0));
+        volumeBar.setProgress((int)(settings.getFloat(Constants.PREFERENCE_VOLUME_SLIDER,0.0f) * Constants.VOLUME_RANGE));
+        ((CheckBox)findViewById(R.id.OptionsMenu_vibration_box)).setChecked(settings.getBoolean(Constants.PREFERENCE_VIBRATE,true));
     }
 
     /**
@@ -44,7 +45,8 @@ public class OptionsMenu extends AppCompatActivity {
         (findViewById(R.id.OptionMenu_save_btn)).setOnClickListener(v -> {
             SharedPreferences settings = getSharedPreferences(Constants.PREFERENCE_FILE, 0);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putInt(Constants.PREFERENCE_VOLUME_SLIDER, ((SeekBar)findViewById(R.id.OptionMenu_volume_control)).getProgress());
+            editor.putFloat(Constants.PREFERENCE_VOLUME_SLIDER, (((SeekBar)findViewById(R.id.OptionMenu_volume_control)).getProgress() / Constants.VOLUME_RANGE));
+            editor.putBoolean(Constants.PREFERENCE_VIBRATE, ((CheckBox)findViewById(R.id.OptionsMenu_vibration_box)).isChecked());
             editor.apply();
             finish();
         });
