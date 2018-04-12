@@ -1,6 +1,7 @@
 package com.imt3673.project.main;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -129,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //TODO - Have this task take level name as input
     private class LoadLevel extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -140,9 +142,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             level = new Level();
-            level.buildFromPNG(mediaManager.loadLevelPNG("level1"), canvasWidth, canvasHeight);
+            Bitmap levelBitMap = mediaManager.loadLevelPNG("level1");
+            level.buildFromPNG(levelBitMap, canvasWidth, canvasHeight);
 
-            ball = new Ball(new Vector2(canvasWidth / 2, canvasHeight / 2), canvasWidth * 0.02f);
+            ball = new Ball(new Vector2(canvasWidth / 2, canvasHeight / 2), 0.25f * level.getPixelSize());
 
             return null;
         }
@@ -157,13 +160,6 @@ public class MainActivity extends AppCompatActivity {
             canvas.setLevel(level);
             canvas.setBall(ball);
             ready = true;
-            /*
-            mediaManager.makeToast("" + level.getBlocks().size(),0);
-            mediaManager.makeToast("Canvas width: " + canvasWidth + " Canvas height: " + canvasHeight, 0);
-            mediaManager.makeToast("ball pos: " + ball.getPosition().toString(), 0);
-            for(Block block : level.getBlocks()){
-                mediaManager.makeToast("rect: " + block.getRectangle().toShortString(), 0);
-            } */
         }
     }
 }

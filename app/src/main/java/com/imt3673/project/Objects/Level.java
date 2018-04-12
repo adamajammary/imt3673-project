@@ -19,6 +19,7 @@ public class Level {
     private static final String TAG = Level.class.getName();
 
     private ArrayList<Block> blocks = new ArrayList<>();
+    private float pixelSize;
 
     /**
      * Draws all blocks in level
@@ -40,6 +41,13 @@ public class Level {
     }
 
     /**
+     * Size of one pixel in bitmap in world
+     */
+    public float getPixelSize(){
+        return pixelSize;
+    }
+
+    /**
      * Builds level from a bitmap
      * @param level bitmap to use
      * @param phoneWidth width of canvas
@@ -48,6 +56,7 @@ public class Level {
     public void buildFromPNG(Bitmap level, int phoneWidth, int phoneHeight){
         Log.d(TAG, "BUILD LEVEL! Width: " + level.getWidth() + " Height: " + level.getHeight());
         float scaling = phoneHeight / level.getHeight();
+        pixelSize = scaling;
 
         for (int x = 0; x < level.getWidth(); x++){
             for (int y = 0; y < level.getHeight(); y++){

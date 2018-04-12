@@ -4,7 +4,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.Build;
 
+import com.imt3673.project.utils.LineSegment;
 import com.imt3673.project.utils.Vector2;
 
 import java.util.ArrayList;
@@ -56,8 +58,11 @@ public class Ball extends GameObject {
         Vector2 oldPos = position;
         position = Vector2.add(position, Vector2.mult(velocity, deltaTime));
 
+        LineSegment movement = new LineSegment(oldPos, position);
+
         for(Block block : blocks) {
-            if (Physics.BallBlockCollision(this, block)) {
+            //The first function checks if we passed through a block, the second if we are intersecting it
+            if (Physics.LineSegmentBlockCollision(movement, block) || Physics.BallBlockCollision(this, block)) {
                 RectF rect = block.getRectangle();
 
                 //Now we need to work out what side of the block we hit

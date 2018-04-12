@@ -6,6 +6,8 @@ import android.graphics.RectF;
 import com.imt3673.project.utils.LineSegment;
 import com.imt3673.project.utils.Vector2;
 
+import java.util.ArrayList;
+
 /**
  * Created by Muffinz on 12/04/2018.
  */
@@ -18,15 +20,15 @@ public class Physics {
      * https://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
      * @param ball
      * @param block
-     * @return
+     * @return true if collision
      */
     public static boolean BallBlockCollision(Ball ball, Block block){
         Vector2 circle = ball.getPosition();
         RectF rect = block.getRectangle();
         Vector2 circleDistance = new Vector2();
 
-        circleDistance.x = Math.abs(circle.x - rect.left);
-        circleDistance.y = Math.abs(circle.y - rect.bottom);
+        circleDistance.x = Math.abs(circle.x - rect.centerX());
+        circleDistance.y = Math.abs(circle.y - rect.centerY());
 
         if (circleDistance.x > (rect.width()/2 + ball.getRadius())) { return false; }
         if (circleDistance.y > (rect.height()/2 + ball.getRadius())) { return false; }
@@ -46,9 +48,19 @@ public class Physics {
      * https://stackoverflow.com/questions/99353/how-to-test-if-a-line-segment-intersects-an-axis-aligned-rectange-in-2d
      * @param line
      * @param block
-     * @return
+     * @return true if collision
      */
-    public static boolean LineSegmentBlockCollision(LineSegment line, Block block){
-       return false;
+    public static boolean LineSegmentBlockCollision(LineSegment line, Block block) {
+        Vector2[] corners = block.getCorners();
+        int total = 0;
+        int maxTotal = corners.length;
+        for (Vector2 corner : corners){
+            if (line.inBound(corner.x, corner.y)){
+                total += Math.signum(line.implicitEquation(corner.x, corner.y));
+            } else {
+                maxTotal--;
+            }
+        }
+        return total != maxTotal;
     }
 }
