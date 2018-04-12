@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.imt3673.project.main">
 
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
     <!--
     <supports-gl-texture android:name="GL_OES_compressed_ETC1_RGB8_texture" />
     <supports-gl-texture android:name="GL_OES_compressed_paletted_texture" />
     -->
-
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -21,14 +20,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- Restrict screen orientation
+        <!--
+        Restrict screen orientation
         <activity android:name="com.imt3673.project.main.MainActivity" android:screenOrientation="landscape">
         -->
-        <activity android:name="com.imt3673.project.main.MainActivity">
+        <activity android:name="com.imt3673.project.menu.StartupMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name="com.imt3673.project.menu.OptionsMenu"></activity>
     </application>
+
 </manifest>
