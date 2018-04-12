@@ -49,34 +49,36 @@ public class Level {
         int w = 0;
         int h = 0;
         int clr = type;
-        while (clr == type){ //Scan width of rect
-            level.setPixel(startX + w, startY, CLEAR);
+        while (clr == type && startX + w < level.getWidth()){ //Scan width of rect
             w++;
-            if (startX + w < level.getWidth()) {
-                clr = level.getPixel(startX + w, startY);
-            } else {
+            if (startX + w >= level.getWidth()){
                 break;
             }
+            clr = level.getPixel(startX + w, startY);
         }
 
         boolean fullRow = true;
         while (fullRow) { //Scan height of rect
-            for (x = startX; x < w; x++){
+            h++;
+
+            if (startY + h >= level.getHeight()){
+                break;
+            }
+
+            for (x = startX; x < startX + w; x++){
                 if (level.getPixel(x, startY + h) != type){
                     fullRow = false;
                 }
             }
-            h++;
-            if (startY + h < level.getHeight()) {
-                if (fullRow) {
-                    for (x = startX; x < w; x++) { //Clear row
-                        level.setPixel(x, startY + h, CLEAR);
-                    }
-                }
-            } else {
-                break;
+        }
+
+        for (x = startX; x < startX + w; x++){
+            for (y = startY; y < startY + h; y++){
+                level.setPixel(x, y, CLEAR);
             }
         }
+
+        Log.d(TAG, "Made block, width: " + w + " height: " + h + " pos: " + startX + "," + startY);
 
         int blockType;
         if (type == FINISH){
