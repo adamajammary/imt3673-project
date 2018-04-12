@@ -54,6 +54,7 @@ public class MediaManager {
     public Bitmap loadLevelPNG(String name){
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
+        options.inMutable = true;
         return BitmapFactory.decodeResource(
                 context.getResources(),
                 context.getResources().getIdentifier(

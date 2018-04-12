@@ -5,26 +5,33 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-// TODO - Finish this class
+import com.imt3673.project.utils.Vector2;
+
 /**
- * A box
+ * A rectangular block
  */
-public class Boundry extends GameObject{
+public class Block extends GameObject{
+    public static final int TYPE_OBSTACLE = 0;
+    public static final int TYPE_GOAL = 1;
+
+    private int type = 0;
     private RectF rectangle;
+
 
     /**
      * Creates a boundry box
      * @param width of box
      * @param height of box
      */
-    public Boundry(float width, float height){
-        final float gap = 10;
-        rectangle = new RectF(gap, gap, width - gap, height - gap);
+    public Block(Vector2 position, float width, float height, int type, int color){
+        this.position = position;
+        this.type = type;
+
+        rectangle = new RectF(position.x, position.y + height, position.x + width, position.y);
 
         paint = new Paint();
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(10);
-        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(color);
     }
 
     /**

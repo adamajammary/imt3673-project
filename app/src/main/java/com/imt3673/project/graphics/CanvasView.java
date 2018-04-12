@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.View;
 
 import com.imt3673.project.Objects.GameObject;
+import com.imt3673.project.Objects.Level;
 
 import java.util.ArrayList;
 
@@ -14,10 +16,12 @@ import java.util.ArrayList;
  * Canvas View - Custom canvas view used for drawing 2D graphics.
  */
 public class CanvasView extends View {
+    private static final String TAG = CanvasView.class.getName();
 
     private long        lastDrawTime = 0;
 
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
+    private Level level;
 
     /**
      * @param context Context
@@ -33,6 +37,15 @@ public class CanvasView extends View {
      */
     public void addGameObject(GameObject obj){
         gameObjects.add(obj);
+    }
+
+    /**
+     * Sets the level to draw
+     * @param level
+     */
+    public void setLevel(Level level) {
+        this.level = level;
+        Log.d(TAG, "Adding level");
     }
 
     /**
@@ -56,6 +69,9 @@ public class CanvasView extends View {
         // Clear the background
         canvas.drawColor(Color.WHITE);
 
+        if (level != null){
+            level.draw(canvas);
+        }
         for (GameObject obj : gameObjects){
             obj.draw(canvas);
         }
