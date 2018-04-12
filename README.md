@@ -1,5 +1,5 @@
 # imt3673-project
-IMT3673 Project - App Ball Game (Android, Java, OpenGL ES)
+IMT3673 Project - App Ball Game (Android, Java)
 
 ## App ball game - Game(3D/2D) (lab 3 expansion)
 * Code: lab3-expansion
