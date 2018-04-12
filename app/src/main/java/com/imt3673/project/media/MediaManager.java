@@ -1,6 +1,9 @@
 package com.imt3673.project.media;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Path;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 
@@ -41,6 +44,24 @@ public class MediaManager {
                 this.soundPool.load(this.context, resourceID, 1);
                 break;
         }
+    }
+
+    /**
+     * Loads a level PNG into a bitmap and returns it
+     * @param name name of level to load
+     * @return bitmap of level
+     */
+    public Bitmap loadLevelPNG(String name){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        return BitmapFactory.decodeResource(
+                context.getResources(),
+                context.getResources().getIdentifier(
+                        name,
+                        "raw",
+                        context.getPackageName()
+                ), options
+        );
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.imt3673.project.main;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -12,6 +14,7 @@ import android.view.WindowManager;
 
 import com.imt3673.project.Objects.Ball;
 import com.imt3673.project.Objects.Boundry;
+import com.imt3673.project.Objects.Level;
 import com.imt3673.project.graphics.CanvasView;
 import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
@@ -48,19 +51,6 @@ public class MainActivity extends AppCompatActivity {
         canvas = new CanvasView(this);
         setContentView(canvas);
 
-        canvas.post(new Runnable() {
-            @Override
-            public void run() { //So that we wait until the UI system is ready
-                int w = canvas.getWidth();
-                int h = canvas.getHeight();
-
-                ball = new Ball(new Vector2(w / 2, h / 2), w * 0.02f);
-                boundry = new Boundry(w, h);
-                canvas.addGameObject(ball);
-                canvas.addGameObject(boundry);
-            }
-        });
-
         this.sensorManager       = new SensorListenerManager(this);
         this.acceleratorListener = new AcceleratorListener();
         this.acceleratorSensor   = this.sensorManager.getSensor(Sensor.TYPE_ACCELEROMETER);
@@ -70,6 +60,22 @@ public class MainActivity extends AppCompatActivity {
         this.loadResources();
 
         lastUpdateTime = System.currentTimeMillis();
+
+        canvas.post(new Runnable() {
+            @Override
+            public void run() { //So that we wait until the UI system is ready
+                int w = canvas.getWidth();
+                int h = canvas.getHeight();
+
+                Level level = new Level();
+                level.buildFromPNG(mediaManager.loadLevelPNG("level1"), w, h);
+
+                ball = new Ball(new Vector2(w / 2, h / 2), w * 0.02f);
+                boundry = new Boundry(w, h);
+                canvas.addGameObject(ball);
+                canvas.addGameObject(boundry);
+            }
+        });
     }
 
     @Override
