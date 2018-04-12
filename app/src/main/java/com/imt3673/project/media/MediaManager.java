@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Path;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.widget.Toast;
 
 /**
  *
@@ -111,6 +112,14 @@ public class MediaManager {
                 this.stopSound(resourceID);
                 break;
         }
+    }
+
+    /**
+     * Makes a toast
+     * @param text to show
+     */
+    public void makeToast(String text, int len) {
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show();
     }
 
     /**

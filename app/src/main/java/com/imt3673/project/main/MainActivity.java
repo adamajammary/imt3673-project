@@ -1,8 +1,6 @@
 package com.imt3673.project.main;
 
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -12,13 +10,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.imt3673.project.Objects.Ball;
+import com.imt3673.project.Objects.Block;
 import com.imt3673.project.Objects.Level;
 import com.imt3673.project.graphics.CanvasView;
 import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
-import com.imt3673.project.graphics.GLView;
 import com.imt3673.project.sensors.HapticFeedbackManager;
 import com.imt3673.project.sensors.SensorListenerManager;
 import com.imt3673.project.utils.Vector2;
@@ -32,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private SensorListenerManager sensorManager;
 
     private CanvasView canvas;
-    int w;
-    int h ;
+    int canvasWidth;
+    int canvasHeight;
     private Boolean ready = false;
     private long lastUpdateTime = 0;
 
@@ -63,14 +62,15 @@ public class MainActivity extends AppCompatActivity {
         this.loadResources();
 
         lastUpdateTime = System.currentTimeMillis();
-
         canvas.post(new Runnable() {
             @Override
             public void run() { //So that we wait until the UI system is ready
-                w = canvas.getWidth();
-                h = canvas.getHeight();
-
-                new LoadLevel().execute();
+                canvasWidth = canvas.getWidth();
+                canvasHeight = canvas.getHeight();
+                if (canvasHeight != 0 && canvasWidth != 0){
+                    Log.d("MAIN", "canvasWidth: " + canvasWidth + " canvasHeight: " + canvasHeight);
+                    new LoadLevel().execute();
+                }
             }
         });
     }
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 lastUpdateTime = currentTime;
 
                 if (ready) { //Because we dont know when the graphics will be initialized
-                    //ball.physicsUpdate(sensorEvent.values, deltaTime, );
+                    ball.physicsUpdate(sensorEvent.values, deltaTime, level.getBlocks());
                     canvas.draw();
                 }
             }
@@ -133,10 +133,16 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            level = new Level();
-            level.buildFromPNG(mediaManager.loadLevelPNG("level1"), w, h);
+            try {
+                Thread.sleep(600);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-            ball = new Ball(new Vector2(w / 2, h / 2), w * 0.02f);
+            level = new Level();
+            level.buildFromPNG(mediaManager.loadLevelPNG("level1"), canvasWidth, canvasHeight);
+
+            ball = new Ball(new Vector2(canvasWidth / 2, canvasHeight / 2), canvasWidth * 0.02f);
 
             return null;
         }
@@ -149,8 +155,15 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void voids) {
             canvas.setLevel(level);
-            canvas.addGameObject(ball);
+            canvas.setBall(ball);
             ready = true;
+            /*
+            mediaManager.makeToast("" + level.getBlocks().size(),0);
+            mediaManager.makeToast("Canvas width: " + canvasWidth + " Canvas height: " + canvasHeight, 0);
+            mediaManager.makeToast("ball pos: " + ball.getPosition().toString(), 0);
+            for(Block block : level.getBlocks()){
+                mediaManager.makeToast("rect: " + block.getRectangle().toShortString(), 0);
+            } */
         }
     }
 }

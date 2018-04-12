@@ -4,11 +4,16 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.imt3673.project.Objects.Ball;
+import com.imt3673.project.Objects.Block;
 import com.imt3673.project.Objects.GameObject;
 import com.imt3673.project.Objects.Level;
+import com.imt3673.project.utils.Vector2;
 
 import java.util.ArrayList;
 
@@ -22,6 +27,7 @@ public class CanvasView extends View {
 
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
     private Level level;
+    private Ball ball;
 
     /**
      * @param context Context
@@ -49,6 +55,14 @@ public class CanvasView extends View {
     }
 
     /**
+     * Sets the ball
+     * @param ball
+     */
+    public void setBall(Ball ball){
+        this.ball = ball;
+    }
+
+    /**
      * Triggers a draw call
      */
     public void draw(){
@@ -69,11 +83,17 @@ public class CanvasView extends View {
         // Clear the background
         canvas.drawColor(Color.WHITE);
 
+        Vector2 cameraPos = new Vector2();
+        if (ball != null) {
+            cameraPos = new Vector2(ball.getPosition().x - canvas.getWidth() / 2, 0);
+            ball.draw(canvas, cameraPos);
+        }
+
         if (level != null){
-            level.draw(canvas);
+            level.draw(canvas, cameraPos);
         }
         for (GameObject obj : gameObjects){
-            obj.draw(canvas);
+            obj.draw(canvas, cameraPos);
         }
     }
 
