@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private SensorListenerManager sensorManager;
 
     private CanvasView canvas;
-    int canvasWidth;
-    int canvasHeight;
+    private static int canvasWidth;
+    private static int canvasHeight;
     private Boolean ready = false;
     private long lastUpdateTime = 0;
 
@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -94,6 +95,12 @@ public class MainActivity extends AppCompatActivity {
     private void loadResources() {
         this.mediaManager.loadResource(R.raw.ping_001, Constants.MEDIA_TYPE_SOUND);
     }
+
+
+    public static int getCanvasHeight() {
+        return canvasHeight;
+    }
+
 
     /**
      * Accelerator Sensor Listener

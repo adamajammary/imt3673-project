@@ -42,7 +42,7 @@ public class Level {
     /**
      * Size of one pixel in bitmap in world
      */
-    public float getPixelSize(){
+    public static float getPixelSize(){
         return pixelSize;
     }
 
@@ -56,7 +56,6 @@ public class Level {
         Log.d(TAG, "BUILD LEVEL! Width: " + level.getWidth() + " Height: " + level.getHeight());
         float scaling = phoneHeight / level.getHeight();
         pixelSize = scaling;
-        Block.cubeSize = scaling;
 
         for (int x = 0; x < level.getWidth(); x++){
             for (int y = 0; y < level.getHeight(); y++){

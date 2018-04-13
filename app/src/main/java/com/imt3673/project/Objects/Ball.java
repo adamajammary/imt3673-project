@@ -6,6 +6,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
+import com.imt3673.project.main.MainActivity;
 import com.imt3673.project.utils.LineSegment;
 import com.imt3673.project.utils.Vector2;
 
@@ -97,11 +98,15 @@ public class Ball extends GameObject {
         canvas.save();
 
         canvas.translate(viewPos.x, viewPos.y);
+
+        int cH = MainActivity.getCanvasHeight();
+
         Matrix m = new Matrix();
-        m.setTranslate(texture256scale, texture256scale);
-        m.postScale(radius/ texture256scale, radius/ texture256scale);
+        m.setScale(1f/256 * radius, 1f/256 * radius);
+        //m.postTranslate(radius, radius);
         //m.postRotate(42); // Use this for rotating the ball
         shader.setLocalMatrix(m);
+
         canvas.drawCircle(0, 0, radius, paint);
         canvas.restore();
     }

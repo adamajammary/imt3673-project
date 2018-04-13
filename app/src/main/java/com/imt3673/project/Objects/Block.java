@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 
 import com.imt3673.project.utils.Vector2;
@@ -23,7 +24,8 @@ public class Block extends GameObject{
     private int type = 0;
     private RectF rectangle;
     private Vector2[] corners;
-    public static float cubeSize;
+
+    Vector2 dims;
 
     /**
      * Creates a boundry box
@@ -42,6 +44,7 @@ public class Block extends GameObject{
         };
 
         rectangle = new RectF(position.x, position.y, position.x + width, position.y + height);
+        dims = new Vector2(width, height);
 
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
@@ -78,17 +81,20 @@ public class Block extends GameObject{
         Vector2 viewPos = Vector2.subtract(position, cameraPosition);
 
         canvas.save();
+        canvas.translate(-cameraPosition.x, -cameraPosition.y);
 
-        canvas.translate(viewPos.x, viewPos.y);
         Matrix m = new Matrix();
-        //m.setTranslate(texture256scale, texture256scale);
-        m.postScale(cubeSize/texture256scale * 0.5f, cubeSize/texture256scale * 0.5f);
+        m.postScale(1f/bitmap.getScaledWidth(canvas) * Level.getPixelSize(), 1f/bitmap.getScaledWidth(canvas) * Level.getPixelSize());
         shader.setLocalMatrix(m);
-        canvas.drawRect(Vector2.subtract(viewPos, rectangle), paint);
+        canvas.drawRect(Vector2.subtract(Vector2.zero, rectangle), paint);
 
         canvas.restore();
 
-        //canvas.drawRect(Vector2.subtract(cameraPosition, rectangle), paint);
+
+     //   Matrix m = new Matrix();
+     //   m.postScale(1f/bitmap.getScaledWidth(canvas) * Level.getPixelSize(), 1f/bitmap.getScaledWidth(canvas) * Level.getPixelSize());
+     //   shader.setLocalMatrix(m);
+     //   canvas.drawRect(Vector2.subtract(cameraPosition, rectangle), paint);
 
     }
 }

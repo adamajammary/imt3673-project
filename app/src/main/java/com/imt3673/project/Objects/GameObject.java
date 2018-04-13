@@ -22,8 +22,6 @@ public abstract class GameObject {
     protected Shader shader;
     protected Bitmap bitmap;
 
-    protected final int texture256scale = 335; // Used for scaling textures(256x256). I have NO CLUE why I have to scale by 335, and not 256....
-
     /**
      * gets the position
      * @return Vector2 position
