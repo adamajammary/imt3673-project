@@ -2,6 +2,8 @@ package com.imt3673.project.main;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -137,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
             level.buildFromPNG(levelBitMap, canvasWidth, canvasHeight);
 
             ball = new Ball(new Vector2(canvasWidth / 2, canvasHeight / 2), 0.25f * level.getPixelSize());
+            ball.setTexture(MainActivity.this, R.drawable.ball_tex);
 
             return null;
         }

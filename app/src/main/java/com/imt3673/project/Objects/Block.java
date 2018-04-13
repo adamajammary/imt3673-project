@@ -2,6 +2,7 @@ package com.imt3673.project.Objects;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
@@ -44,6 +45,12 @@ public class Block extends GameObject{
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(type);
+
+        // Update shader matrix
+        Matrix mtx = new Matrix();
+        //mtx.setTranslate(position.x, position.y);
+        //mtx.postScale(0.1f, 0.1f);
+        //shader.setLocalMatrix(mtx);
     }
 
     /**
@@ -72,6 +79,18 @@ public class Block extends GameObject{
 
     @Override
     public void draw(Canvas canvas, Vector2 cameraPosition){
+        Vector2 viewPos = Vector2.subtract(position, cameraPosition);
+        /*canvas.save();
+        canvas.translate(rectangle.left, rectangle.right);
+
+        Matrix mtx = new Matrix();
+        mtx.setScale(rectangle.width(), rectangle.height());
+        shader.setLocalMatrix(mtx);
+
+        canvas.drawRect(Vector2.subtract(cameraPosition, rectangle), paint);
+
+        canvas.restore();*/
+
         canvas.drawRect(Vector2.subtract(cameraPosition, rectangle), paint);
     }
 }
