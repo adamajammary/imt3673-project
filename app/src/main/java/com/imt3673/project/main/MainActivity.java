@@ -11,10 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.imt3673.project.Objects.Ball;
-import com.imt3673.project.Objects.Block;
 import com.imt3673.project.Objects.Level;
 import com.imt3673.project.graphics.CanvasView;
 import com.imt3673.project.media.Constants;
@@ -69,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
                 canvasWidth = canvas.getWidth();
                 canvasHeight = canvas.getHeight();
                 if (canvasHeight != 0 && canvasWidth != 0){
-                    Log.d("MAIN", "canvasWidth: " + canvasWidth + " canvasHeight: " + canvasHeight);
                     new LoadLevel().execute();
                 }
             }
@@ -135,12 +132,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            try {
-                Thread.sleep(600);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             level = new Level();
             Bitmap levelBitMap = mediaManager.loadLevelPNG("level1");
             level.buildFromPNG(levelBitMap, canvasWidth, canvasHeight);

@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.os.Build;
 
 import com.imt3673.project.utils.LineSegment;
 import com.imt3673.project.utils.Vector2;
@@ -12,7 +11,7 @@ import com.imt3673.project.utils.Vector2;
 import java.util.ArrayList;
 
 /**
- * Created by Muffinz on 09/04/2018.
+ * The ball that the player controls
  */
 public class Ball extends GameObject {
     private Vector2 velocity;
@@ -20,7 +19,7 @@ public class Ball extends GameObject {
 
     //Ball physics variables
     final float accelDelta = 4f; //Used for acceleration calculations
-    final float drag = 0.95f; //Used for slowing down ball when hitting wall
+    final float drag = 0.75f; //Used for slowing down ball when hitting wall
 
     /**
      * Constructs the ball
