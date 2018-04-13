@@ -23,6 +23,7 @@ public class Block extends GameObject{
     private int type = 0;
     private RectF rectangle;
     private Vector2[] corners;
+    public static float cubeSize;
 
     /**
      * Creates a boundry box
@@ -46,11 +47,6 @@ public class Block extends GameObject{
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(type);
 
-        // Update shader matrix
-        Matrix mtx = new Matrix();
-        //mtx.setTranslate(position.x, position.y);
-        //mtx.postScale(0.1f, 0.1f);
-        //shader.setLocalMatrix(mtx);
     }
 
     /**
@@ -80,17 +76,19 @@ public class Block extends GameObject{
     @Override
     public void draw(Canvas canvas, Vector2 cameraPosition){
         Vector2 viewPos = Vector2.subtract(position, cameraPosition);
-        /*canvas.save();
-        canvas.translate(rectangle.left, rectangle.right);
 
-        Matrix mtx = new Matrix();
-        mtx.setScale(rectangle.width(), rectangle.height());
-        shader.setLocalMatrix(mtx);
+        canvas.save();
 
-        canvas.drawRect(Vector2.subtract(cameraPosition, rectangle), paint);
+        canvas.translate(viewPos.x, viewPos.y);
+        Matrix m = new Matrix();
+        //m.setTranslate(texture256scale, texture256scale);
+        m.postScale(cubeSize/texture256scale * 0.5f, cubeSize/texture256scale * 0.5f);
+        shader.setLocalMatrix(m);
+        canvas.drawRect(Vector2.subtract(viewPos, rectangle), paint);
 
-        canvas.restore();*/
+        canvas.restore();
 
-        canvas.drawRect(Vector2.subtract(cameraPosition, rectangle), paint);
+        //canvas.drawRect(Vector2.subtract(cameraPosition, rectangle), paint);
+
     }
 }

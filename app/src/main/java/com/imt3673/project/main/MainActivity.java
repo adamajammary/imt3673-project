@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             level = new Level();
             Bitmap levelBitMap = mediaManager.loadLevelPNG("level1");
-            level.buildFromPNG(levelBitMap, canvasWidth, canvasHeight);
+            level.buildFromPNG(levelBitMap, canvasWidth, canvasHeight, MainActivity.this);
 
             ball = new Ball(new Vector2(canvasWidth / 2, canvasHeight / 2), 0.25f * level.getPixelSize());
             ball.setTexture(MainActivity.this, R.drawable.ball_tex);

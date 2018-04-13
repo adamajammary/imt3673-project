@@ -103,9 +103,6 @@ public class Ball extends GameObject {
         //m.postRotate(42); // Use this for rotating the ball
         shader.setLocalMatrix(m);
         canvas.drawCircle(0, 0, radius, paint);
-        //canvas.drawRect(-radius, -radius, radius, radius, paint);
         canvas.restore();
-
-
     }
 }

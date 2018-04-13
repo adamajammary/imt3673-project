@@ -1,10 +1,12 @@
 package com.imt3673.project.Objects;
 
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.Log;
 
+import com.imt3673.project.main.R;
 import com.imt3673.project.utils.Vector2;
 
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ public class Level {
     private static final String TAG = Level.class.getName();
 
     private ArrayList<Block> blocks = new ArrayList<>();
-    private float pixelSize;
+    private static float pixelSize;
 
     /**
      * Draws all blocks in level
@@ -50,18 +52,20 @@ public class Level {
      * @param phoneWidth width of canvas
      * @param phoneHeight height of canvas
      */
-    public void buildFromPNG(Bitmap level, int phoneWidth, int phoneHeight){
+    public void buildFromPNG(Bitmap level, int phoneWidth, int phoneHeight, Context context){
         Log.d(TAG, "BUILD LEVEL! Width: " + level.getWidth() + " Height: " + level.getHeight());
         float scaling = phoneHeight / level.getHeight();
         pixelSize = scaling;
+        Block.cubeSize = scaling;
 
         for (int x = 0; x < level.getWidth(); x++){
             for (int y = 0; y < level.getHeight(); y++){
                 int clr = level.getPixel(x, y);
-                if (clr == Block.TYPE_OBSTACLE){
-                    createRect(level, x, y, Block.TYPE_OBSTACLE, scaling);
-                } else if (clr == Block.TYPE_GOAL){
-                    createRect(level, x, y, Block.TYPE_GOAL, scaling);
+                if (clr == Block.TYPE_OBSTACLE) {
+                    createRect(level, x, y, Block.TYPE_OBSTACLE, scaling, context);
+                }
+                else if(clr == Block.TYPE_GOAL){
+                    createRect(level, x, y, Block.TYPE_GOAL, scaling, context);
                 }
             }
         }
@@ -74,13 +78,12 @@ public class Level {
      * @param level bitmap to use
      * @param x x coordinate of rect start
      * @param y y coordinate of rect start
-     * @param type type of rect
+     * @param type type of the block
      * @param scaling scaling to apply to rect
      */
-    private void createRect(Bitmap level, int x, int y, int type, float scaling){
+    private void createRect(Bitmap level, int x, int y, int type, float scaling, Context context){
         int startX = x;
         int startY = y;
-
         int w = 0;
         int h = 0;
         int clr = type;
@@ -113,11 +116,24 @@ public class Level {
             }
         }
 
+
+
+
         Log.d(TAG, "Made block, width: " + w + " height: " + h + " pos: " + startX + "," + startY);
 
         Vector2 pos = new Vector2(startX * scaling, startY * scaling);
         Block block = new Block(pos, w * scaling, h * scaling, type);
+        addBlockTexture(block, type, context);
         Log.d(TAG, "Scaled block: " + block.getRectangle().toShortString());
         blocks.add(block);
+    }
+
+    private void addBlockTexture(Block block, int type, Context context) {
+        if(type == Block.TYPE_OBSTACLE){
+            block.setTexture(context, R.drawable.wall_tex);
+        }
+        else if(type == Block.TYPE_GOAL){
+            block.setTexture(context, R.drawable.goal_tex);
+        }
     }
 }
