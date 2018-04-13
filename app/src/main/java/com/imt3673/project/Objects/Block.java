@@ -84,7 +84,7 @@ public class Block extends GameObject{
         canvas.translate(-cameraPosition.x, -cameraPosition.y);
 
         Matrix m = new Matrix();
-        m.postScale(1f/bitmap.getScaledWidth(canvas) * Level.getPixelSize(), 1f/bitmap.getScaledWidth(canvas) * Level.getPixelSize());
+        m.postScale(Level.getPixelSize()/bitmap.getScaledWidth(canvas), Level.getPixelSize()/bitmap.getScaledWidth(canvas));
         shader.setLocalMatrix(m);
         canvas.drawRect(Vector2.subtract(Vector2.zero, rectangle), paint);
 

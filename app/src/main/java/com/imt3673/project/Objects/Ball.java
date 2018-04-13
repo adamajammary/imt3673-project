@@ -95,16 +95,14 @@ public class Ball extends GameObject {
     @Override
     public void draw(Canvas canvas, Vector2 cameraPosition){
         Vector2 viewPos = Vector2.subtract(position, cameraPosition);
-        canvas.save();
 
+        canvas.save();
         canvas.translate(viewPos.x, viewPos.y);
 
-        int cH = MainActivity.getCanvasHeight();
-
         Matrix m = new Matrix();
-        m.setScale(1f/256 * radius, 1f/256 * radius);
-        //m.postTranslate(radius, radius);
-        //m.postRotate(42); // Use this for rotating the ball
+        m.setScale((radius * 2)/bitmap.getScaledWidth(canvas), (radius * 2)/bitmap.getScaledWidth(canvas));
+        m.postTranslate(radius, radius);
+        //m.postRotate(42); // Use this to rotate the ball
         shader.setLocalMatrix(m);
 
         canvas.drawCircle(0, 0, radius, paint);
