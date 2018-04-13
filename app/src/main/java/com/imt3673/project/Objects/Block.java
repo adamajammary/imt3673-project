@@ -78,23 +78,12 @@ public class Block extends GameObject{
 
     @Override
     public void draw(Canvas canvas, Vector2 cameraPosition){
-        Vector2 viewPos = Vector2.subtract(position, cameraPosition);
-
-        canvas.save();
-        canvas.translate(-cameraPosition.x, -cameraPosition.y);
-
         Matrix m = new Matrix();
         m.postScale(Level.getPixelSize()/bitmap.getScaledWidth(canvas), Level.getPixelSize()/bitmap.getScaledWidth(canvas));
+        m.postTranslate(-cameraPosition.x, -cameraPosition.y);
         shader.setLocalMatrix(m);
-        canvas.drawRect(Vector2.subtract(Vector2.zero, rectangle), paint);
-
-        canvas.restore();
 
 
-     //   Matrix m = new Matrix();
-     //   m.postScale(1f/bitmap.getScaledWidth(canvas) * Level.getPixelSize(), 1f/bitmap.getScaledWidth(canvas) * Level.getPixelSize());
-     //   shader.setLocalMatrix(m);
-     //   canvas.drawRect(Vector2.subtract(cameraPosition, rectangle), paint);
-
+        canvas.drawRect(Vector2.subtract(cameraPosition, rectangle), paint);
     }
 }
