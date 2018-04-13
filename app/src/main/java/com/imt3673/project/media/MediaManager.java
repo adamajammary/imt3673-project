@@ -20,7 +20,7 @@ public class MediaManager {
     private final Context   context;
     private MediaPlayer     mediaPlayer;
     private final SoundPool soundPool;
-    private final float Volume;
+    private float Volume;
 
     /**
      *
@@ -32,7 +32,8 @@ public class MediaManager {
 
         //Load user volume preference
         SharedPreferences settings = this.context.getSharedPreferences(com.imt3673.project.graphics.Constants.PREFERENCE_FILE, 0);
-        this.Volume =  settings.getFloat(com.imt3673.project.graphics.Constants.PREFERENCE_VOLUME_SLIDER,1.0f);
+        //Get volume from range 0-100 to 0.0f - 1.0f
+        this.Volume =  (settings.getInt(com.imt3673.project.graphics.Constants.PREFERENCE_VOLUME_SLIDER,1) / com.imt3673.project.graphics.Constants.VOLUME_RANGE);
     }
 
     /**
