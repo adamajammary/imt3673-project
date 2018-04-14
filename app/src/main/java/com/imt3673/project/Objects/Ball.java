@@ -2,9 +2,11 @@ package com.imt3673.project.Objects;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
+import com.imt3673.project.main.MainActivity;
 import com.imt3673.project.utils.LineSegment;
 import com.imt3673.project.utils.Vector2;
 
@@ -93,6 +95,16 @@ public class Ball extends GameObject {
     @Override
     public void draw(Canvas canvas, Vector2 cameraPosition){
         Vector2 viewPos = Vector2.subtract(position, cameraPosition);
+
+
+        Matrix m = new Matrix();
+        m.setScale((radius * 2)/bitmap.getScaledWidth(canvas), (radius * 2)/bitmap.getScaledWidth(canvas));
+        m.postTranslate(radius, radius);
+        m.postRotate(311); // Use this to rotate the ball
+        m.postTranslate(viewPos.x, viewPos.y);
+        shader.setLocalMatrix(m);
+
+
         canvas.drawCircle(viewPos.x, viewPos.y, radius, paint);
     }
 }

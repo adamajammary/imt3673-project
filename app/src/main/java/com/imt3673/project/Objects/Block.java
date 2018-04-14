@@ -2,7 +2,9 @@ package com.imt3673.project.Objects;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 
 import com.imt3673.project.utils.Vector2;
@@ -23,6 +25,8 @@ public class Block extends GameObject{
     private RectF rectangle;
     private Vector2[] corners;
 
+    Vector2 dims;
+
     /**
      * Creates a boundry box
      * @param width of box
@@ -40,10 +44,12 @@ public class Block extends GameObject{
         };
 
         rectangle = new RectF(position.x, position.y, position.x + width, position.y + height);
+        dims = new Vector2(width, height);
 
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(type);
+
     }
 
     /**
@@ -72,6 +78,12 @@ public class Block extends GameObject{
 
     @Override
     public void draw(Canvas canvas, Vector2 cameraPosition){
+        Matrix m = new Matrix();
+        m.postScale(Level.getPixelSize()/bitmap.getScaledWidth(canvas), Level.getPixelSize()/bitmap.getScaledWidth(canvas));
+        m.postTranslate(-cameraPosition.x, -cameraPosition.y);
+        shader.setLocalMatrix(m);
+
+
         canvas.drawRect(Vector2.subtract(cameraPosition, rectangle), paint);
     }
 }

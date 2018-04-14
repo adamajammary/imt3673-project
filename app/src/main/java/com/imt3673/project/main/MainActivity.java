@@ -2,6 +2,8 @@ package com.imt3673.project.main;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -30,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private SensorListenerManager sensorManager;
 
     private CanvasView canvas;
-    int canvasWidth;
-    int canvasHeight;
+    private static int canvasWidth;
+    private static int canvasHeight;
     private Boolean ready = false;
     private long lastUpdateTime = 0;
 
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -92,6 +95,12 @@ public class MainActivity extends AppCompatActivity {
     private void loadResources() {
         this.mediaManager.loadResource(R.raw.ping_001, Constants.MEDIA_TYPE_SOUND);
     }
+
+
+    public static int getCanvasHeight() {
+        return canvasHeight;
+    }
+
 
     /**
      * Accelerator Sensor Listener
@@ -134,9 +143,10 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             level = new Level();
             Bitmap levelBitMap = mediaManager.loadLevelPNG("level1");
-            level.buildFromPNG(levelBitMap, canvasWidth, canvasHeight);
+            level.buildFromPNG(levelBitMap, canvasWidth, canvasHeight, MainActivity.this);
 
             ball = new Ball(new Vector2(canvasWidth / 2, canvasHeight / 2), 0.25f * level.getPixelSize());
+            ball.setTexture(MainActivity.this, R.drawable.ball_tex);
 
             return null;
         }
