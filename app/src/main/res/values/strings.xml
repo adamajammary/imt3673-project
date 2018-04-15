@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">IMT3673 Project</string>
-    <string name="error_no_accel">Unfortunately this device does not have an accelerometer.</string>
-    <string name="error_no_vibrator">Unfortunately this device does not have a vibrator.</string>
+    <string name="error_no_accel">This device does not have an accelerometer.</string>
+    <string name="error_no_vibrator">This device does not have a vibrator.</string>
 </resources>
