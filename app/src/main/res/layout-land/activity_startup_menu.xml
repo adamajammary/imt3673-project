@@ -13,7 +13,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="212dp"
+        android:layout_marginTop="108dp"
         android:text="@string/menu_play_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         android:layout_height="52dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="8dp"
         android:text="@string/menu_options_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,22 +43,21 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/StartupMenu_option_btn"
-        app:layout_constraintVertical_bias="0.762" />
+        app:layout_constraintTop_toBottomOf="@+id/StartupMenu_option_btn" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="372dp"
-        android:layout_height="127dp"
+        android:layout_width="546dp"
+        android:layout_height="77dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/content_description_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.605"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.021"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/gravity_ball_menu_image" />
 </android.support.constraint.ConstraintLayout>
