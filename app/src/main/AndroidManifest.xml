@@ -18,17 +18,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- Restrict screen orientation -->
-        <!-- <activity android:name="com.imt3673.project.main.MainActivity" android:screenOrientation="landscape"> -->
-        <activity android:name="com.imt3673.project.main.MainActivity">
+        <!-- <activity android:name="com.imt3673.project.main.StartupMenu" android:screenOrientation="landscape"> -->
+        <activity android:name="com.imt3673.project.menu.StartupMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <activity android:name=".MainActivity" />
+        <activity android:name="com.imt3673.project.menu.OptionsMenu" />
+
         <!-- Google Play Games Services -->
         <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/app_id" />
-        <meta-data android:name="com.google.android.gms.version"      android:value="@integer/google_play_services_version"/>
+        <meta-data android:name="com.google.android.gms.version"      android:value="@integer/google_play_services_version" />
     </application>
 </manifest>

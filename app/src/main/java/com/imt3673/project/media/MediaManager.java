@@ -1,8 +1,16 @@
 package com.imt3673.project.media;
 
 import android.content.Context;
+
+import android.content.SharedPreferences;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Path;
+
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.widget.Toast;
 
 /**
  *
@@ -12,6 +20,7 @@ public class MediaManager {
     private final Context   context;
     private MediaPlayer     mediaPlayer;
     private final SoundPool soundPool;
+    private float Volume;
 
     /**
      *
@@ -20,6 +29,11 @@ public class MediaManager {
     public MediaManager(final Context context) {
         this.context   = context;
         this.soundPool = new SoundPool.Builder().setMaxStreams(2).build();
+
+        //Load user volume preference
+        SharedPreferences settings = this.context.getSharedPreferences(com.imt3673.project.graphics.Constants.PREFERENCE_FILE, 0);
+        //Get volume from range 0-100 to 0.0f - 1.0f
+        this.Volume =  (settings.getInt(com.imt3673.project.graphics.Constants.PREFERENCE_VOLUME_SLIDER,1) / com.imt3673.project.graphics.Constants.VOLUME_RANGE);
     }
 
     /**
@@ -41,6 +55,25 @@ public class MediaManager {
                 this.soundPool.load(this.context, resourceID, 1);
                 break;
         }
+    }
+
+    /**
+     * Loads a level PNG into a bitmap and returns it
+     * @param name name of level to load
+     * @return bitmap of level
+     */
+    public Bitmap loadLevelPNG(String name){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        options.inMutable = true;
+        return BitmapFactory.decodeResource(
+                context.getResources(),
+                context.getResources().getIdentifier(
+                        name,
+                        "raw",
+                        context.getPackageName()
+                ), options
+        );
     }
 
     /**
@@ -92,6 +125,14 @@ public class MediaManager {
     }
 
     /**
+     * Makes a toast
+     * @param text to show
+     */
+    public void makeToast(String text, int len) {
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show();
+    }
+
+    /**
      * Pauses the current music file.
      */
     private void pauseMusic() {
@@ -132,7 +173,7 @@ public class MediaManager {
      */
     private void playSound(final int resourceID) {
         this.soundPool.stop(resourceID);
-        this.soundPool.play(resourceID, 1.0f, 1.0f, 1, 0, 1.0f);
+        this.soundPool.play(resourceID, this.Volume, this.Volume, 1, 0, 1.0f);
     }
 
     /**

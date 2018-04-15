@@ -8,6 +8,7 @@ import java.util.Locale;
  * Class for a 2d Vector
  */
 public class Vector2 {
+    public static Vector2 zero = new Vector2(0,0);
     public float x;
     public float y;
 
@@ -64,6 +65,16 @@ public class Vector2 {
     }
 
     /**
+     * Subtracts in this manne: first - second
+     * @param first The first Vector2
+     * @param second The second Vector2
+     * @return Vector2 result
+     */
+    public static Vector2 subtract(Vector2 first, Vector2 second){
+        return new Vector2(first.x - second.x, first.y - second.y);
+    }
+
+    /**
      * Multiplies the vector with a float
      * @param first Vector2
      * @param number float
@@ -84,7 +95,23 @@ public class Vector2 {
                 rectf.left +  vector.x,
                 rectf.top +  vector.y,
                 rectf.right +  vector.x,
-                rectf.bottom+  vector.y
+                rectf.bottom +  vector.y
+        );
+    }
+
+
+    /**
+     * Subtracts a vector and a rect
+     * @param vector Vector to add
+     * @param rectf Rect to add
+     * @return RectF result
+     */
+    public static RectF subtract(Vector2 vector, RectF rectf){
+        return new RectF(
+                rectf.left -  vector.x,
+                rectf.top -  vector.y,
+                rectf.right -  vector.x,
+                rectf.bottom -  vector.y
         );
     }
 

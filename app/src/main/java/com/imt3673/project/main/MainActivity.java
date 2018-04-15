@@ -2,16 +2,18 @@ package com.imt3673.project.main;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.imt3673.project.Objects.Ball;
-import com.imt3673.project.Objects.Boundry;
+import com.imt3673.project.Objects.Level;
 import com.imt3673.project.graphics.CanvasView;
 import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
@@ -32,11 +34,14 @@ public class MainActivity extends AppCompatActivity {
     private ServicesManager       servicesManager;
 
     private CanvasView canvas;
-    private long lastUpdateTime;
+    private static int canvasWidth;
+    private static int canvasHeight;
+    private Boolean ready = false;
+    private long lastUpdateTime = 0;
 
     // Game Objects
     private Ball ball;
-    private Boundry boundry;
+    private Level level;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void init() {
         this.initWindow();
-        this.initCanvas();
 
         this.servicesManager     = new ServicesManager(this);
         this.sensorManager       = new SensorListenerManager(this);
@@ -82,27 +86,27 @@ public class MainActivity extends AppCompatActivity {
         this.mediaManager        = new MediaManager(this);
 
         this.loadResources();
-
-        //this.servicesManager.init();
+        this.initCanvasAndLevel();
     }
 
     /**
-     * Sets up the canvas settings and game objects.
+     * Sets up the canvas settings and loads the level.
      */
-    private void initCanvas() {
+    private void initCanvasAndLevel() {
         //setContentView(new GLView(this));
         this.canvas = new CanvasView(this);
         setContentView(this.canvas);
 
+        this.lastUpdateTime = System.currentTimeMillis();
+
         // So that we wait until the UI system is ready
         this.canvas.post(() -> {
-            int w = canvas.getWidth();
-            int h = canvas.getHeight();
+            this.canvasWidth = this.canvas.getWidth();
+            this.canvasHeight = this.canvas.getHeight();
 
-            ball = new Ball(new Vector2(w / 2, h / 2), w * 0.02f);
-            boundry = new Boundry(w, h);
-            canvas.addGameObject(ball);
-            canvas.addGameObject(boundry);
+            if (this.canvasHeight != 0 && this.canvasWidth != 0){
+                new LoadLevel().execute();
+            }
         });
     }
 
@@ -123,6 +127,12 @@ public class MainActivity extends AppCompatActivity {
         this.mediaManager.loadResource(R.raw.ping_001, Constants.MEDIA_TYPE_SOUND);
     }
 
+
+    public static int getCanvasHeight() {
+        return canvasHeight;
+    }
+
+
     /**
      * Accelerator Sensor Listener
      */
@@ -140,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
                 float deltaTime   = ((float)(currentTime - lastUpdateTime) / 1000.0f);
                 lastUpdateTime = currentTime;
 
-                if (ball != null) { //Because we dont know when the graphics will be initialized
-                    ball.physicsUpdate(sensorEvent.values, deltaTime, boundry.getRectangle());
+                if (ready) { //Because we dont know when the graphics will be initialized
+                    ball.physicsUpdate(sensorEvent.values, deltaTime, level.getBlocks());
                     canvas.draw();
                 }
             }
@@ -154,6 +164,34 @@ public class MainActivity extends AppCompatActivity {
          */
         @Override
         public void onAccuracyChanged(final Sensor sensor, int delta) {
+        }
+    }
+
+    //TODO - Have this task take level name as input
+    private class LoadLevel extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            level = new Level();
+            Bitmap levelBitMap = mediaManager.loadLevelPNG("level1");
+            level.buildFromPNG(levelBitMap, canvasWidth, canvasHeight, MainActivity.this);
+
+            ball = new Ball(new Vector2(canvasWidth / 2, canvasHeight / 2), 0.25f * level.getPixelSize());
+            ball.setTexture(MainActivity.this, R.drawable.ball_tex);
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... voids) {
+
+        }
+
+        @Override
+        protected void onPostExecute(Void voids) {
+            canvas.setLevel(level);
+            canvas.setBall(ball);
+            ready = true;
         }
     }
 }
