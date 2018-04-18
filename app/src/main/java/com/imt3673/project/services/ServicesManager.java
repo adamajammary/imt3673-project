@@ -129,7 +129,7 @@ public class ServicesManager {
 
         this.googleClient.silentSignIn().addOnCompleteListener((Task<GoogleSignInAccount> task) -> {
             // User is authenticated
-            if (task.isSuccessful() && this.isGoogleApiAvailable()) {
+            if (task.isSuccessful() && isGoogleApiAvailable()) {
                 googleAccount = task.getResult();
                 updatePlayer();
             // Open Google Sign-in (intent result will be handled in the main activity)
@@ -146,12 +146,16 @@ public class ServicesManager {
     public void authenticateHandleIntent(final int resultCode, final Intent data) {
         GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
 
-        if (result.isSuccess()) {
+        if (result.isSuccess())
             this.googleAccount = result.getSignInAccount();
 
-            if ((googleAccount != null) && isGoogleApiAvailable())
-                updatePlayer();
-        }
+        if ((this.googleAccount != null) && this.isGoogleApiAvailable())
+            this.updatePlayer();
+        // TODO: Handle user cancel, may not be needed if user must manually sign in/out in the options.
+        // Find a way to separate user cancel from auth fail.
+        // resultCode is -1 on success, and 0 on cancel, but also when it fails.
+        else
+            Log.d("ServicesManager", "authenticateHandleIntent: Failed to authenticate.");
     }
 
     /**
@@ -210,8 +214,11 @@ public class ServicesManager {
 
         // Set the player
         client.getCurrentPlayer().addOnCompleteListener((Task<Player> task) -> {
-            if (task.isSuccessful())
+            if (task.isSuccessful()) {
                 player = task.getResult();
+
+                Log.d("ServicesManager", "setPlayer: Authentication succeeded.");
+            }
         });
     }
 

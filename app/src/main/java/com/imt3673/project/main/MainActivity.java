@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         this.sensorManager.addListener(this.acceleratorListener, this.acceleratorSensor);
+
+        // TODO: maybe move the authentication to a manual login in options or something?
         this.servicesManager.init();
     }
 
