@@ -19,7 +19,9 @@ import java.util.Locale;
  */
 public class Timer extends GameObject{
 
-    private final float TEXT_SIZE = 50.0f;
+    private final int TEXT_SIZE = 15;
+    private final int TIMER_COLUMNS = 7;
+    private final int TIMER_COLUMN_POS = 6;
 
     private int minutes;
     private int seconds;
@@ -43,12 +45,12 @@ public class Timer extends GameObject{
    public Timer(Vector2 canvasSize, Handler timeHandler){
         this.reset();
 
-        position = new Vector2((canvasSize.x / 7) * 6 , TEXT_SIZE);
+        position = new Vector2((canvasSize.x / TIMER_COLUMNS) * TIMER_COLUMN_POS  , (canvasSize.y / TEXT_SIZE));
 
         paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL);
-        paint.setTextSize(TEXT_SIZE);
+        paint.setTextSize(canvasSize.y / TEXT_SIZE);
 
         this.handler = timeHandler;
     }
