@@ -13,6 +13,7 @@ import com.imt3673.project.Objects.Ball;
 import com.imt3673.project.Objects.Block;
 import com.imt3673.project.Objects.GameObject;
 import com.imt3673.project.Objects.Level;
+import com.imt3673.project.Objects.Timer;
 import com.imt3673.project.utils.Vector2;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class CanvasView extends View {
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
     private Level level;
     private Ball ball;
+    private Timer levelTimer;
 
     /**
      * @param context Context
@@ -35,6 +37,14 @@ public class CanvasView extends View {
     public CanvasView(final Context context) {
         super(context);
         setFocusable(true);
+    }
+
+    /**
+     * Sets timer to draw
+     * @param timer Timer object to be drawn
+     */
+    public void setTimer(Timer timer){
+        this.levelTimer = timer;
     }
 
     /**
@@ -92,6 +102,10 @@ public class CanvasView extends View {
         }
         for (GameObject obj : gameObjects){
             obj.draw(canvas, cameraPos);
+        }
+
+        if(levelTimer != null){
+            levelTimer.draw(canvas,cameraPos);
         }
     }
 

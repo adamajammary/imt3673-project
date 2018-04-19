@@ -8,12 +8,14 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.imt3673.project.Objects.Ball;
 import com.imt3673.project.Objects.Level;
+import com.imt3673.project.Objects.Timer;
 import com.imt3673.project.graphics.CanvasView;
 import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
@@ -42,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     // Game Objects
     private Ball ball;
     private Level level;
+
+    private Timer levelTimer;
+    private Handler timeHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         this.initWindow();
 
+        this.timeHandler         = new Handler();
         this.servicesManager     = new ServicesManager(this);
         this.sensorManager       = new SensorListenerManager(this);
         this.acceleratorListener = new AcceleratorListener();
@@ -128,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
     private void loadResources() {
         this.mediaManager.loadResource(R.raw.ping_001, Constants.MEDIA_TYPE_SOUND);
     }
-
 
     public static int getCanvasHeight() {
         return canvasHeight;
@@ -181,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
             ball = new Ball(new Vector2(canvasWidth / 2, canvasHeight / 2), 0.25f * level.getPixelSize());
             ball.setTexture(MainActivity.this, R.drawable.ball_tex);
 
+            levelTimer = new Timer(new Vector2(canvasWidth,canvasHeight), timeHandler);
+
             return null;
         }
 
@@ -193,6 +200,8 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Void voids) {
             canvas.setLevel(level);
             canvas.setBall(ball);
+            canvas.setTimer(levelTimer);
+            levelTimer.start();
             ready = true;
         }
     }
