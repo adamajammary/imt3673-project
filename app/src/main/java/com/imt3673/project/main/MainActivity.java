@@ -8,6 +8,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.view.WindowManager;
 
 import com.imt3673.project.Objects.Ball;
 import com.imt3673.project.Objects.Level;
+import com.imt3673.project.Objects.Timer;
 import com.imt3673.project.graphics.CanvasView;
 import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
@@ -41,10 +43,13 @@ public class MainActivity extends AppCompatActivity {
     private Ball ball;
     private Level level;
 
+    private Timer levelTimer;
+    private Handler timeHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        this.timeHandler = new Handler();
         // Set window fullscreen and remove title bar, and force landscape orientation
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -61,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         this.mediaManager        = new MediaManager(this);
 
         this.loadResources();
+
+
 
         lastUpdateTime = System.currentTimeMillis();
         canvas.post(new Runnable() {
@@ -148,6 +155,9 @@ public class MainActivity extends AppCompatActivity {
             ball = new Ball(new Vector2(canvasWidth / 2, canvasHeight / 2), 0.25f * level.getPixelSize());
             ball.setTexture(MainActivity.this, R.drawable.ball_tex);
 
+            levelTimer = new Timer(new Vector2(canvasWidth,canvasHeight), timeHandler);
+
+
             return null;
         }
 
@@ -160,6 +170,8 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Void voids) {
             canvas.setLevel(level);
             canvas.setBall(ball);
+            canvas.setTimer(levelTimer);
+            levelTimer.start();
             ready = true;
         }
     }
