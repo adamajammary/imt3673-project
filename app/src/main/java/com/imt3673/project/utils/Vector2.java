@@ -31,6 +31,47 @@ public class Vector2 {
     }
 
     /**
+     * Makes a copy of a vector
+     * @param copy vector to copy
+     */
+    public Vector2(Vector2 copy){
+        x = copy.x;
+        y = copy.y;
+    }
+
+    /**
+     * Gets the value for the axis
+     * @param axis axis to get
+     * @return x for axis == 0, y for axis == 1;
+     */
+    public float getAxis(int axis){
+        switch (axis){
+            case 0:
+                return x;
+            case 1:
+                return y;
+            default:
+                return 999999;
+        }
+    }
+
+    /**
+     * sets the value of an axis
+     * @param axis axis to set
+     * @param value value to set
+     */
+    public void setAxis(int axis, float value){
+        switch (axis){
+            case 0:
+                x = value;
+                break;
+            case 1:
+                y = value;
+                break;
+        }
+    }
+
+    /**
      * Calculates the length of the vector
      * @return float length
      */

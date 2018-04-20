@@ -1,5 +1,6 @@
 package com.imt3673.project.main;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -16,17 +17,19 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.imt3673.project.Objects.Ball;
+import com.imt3673.project.Objects.BallCollision;
+import com.imt3673.project.Objects.Block;
 import com.imt3673.project.Objects.Level;
 import com.imt3673.project.Objects.Timer;
 import com.imt3673.project.graphics.CanvasView;
 import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
+import com.imt3673.project.menu.StartupMenu;
 import com.imt3673.project.sensors.HapticFeedbackManager;
 import com.imt3673.project.sensors.SensorListenerManager;
 import com.imt3673.project.utils.Vector2;
 
 public class MainActivity extends AppCompatActivity {
-
     private AcceleratorListener   acceleratorListener;
     private Sensor                acceleratorSensor;
     private HapticFeedbackManager hapticManager;
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 canvasWidth = canvas.getWidth();
                 canvasHeight = canvas.getHeight();
                 if (canvasHeight != 0 && canvasWidth != 0){
-                    new LoadLevel().execute();
+                    new LoadLevel().execute(getIntent().getStringExtra("level"));
                 }
             }
         });
@@ -108,6 +111,19 @@ public class MainActivity extends AppCompatActivity {
         return canvasHeight;
     }
 
+    /**
+     * This gets called when the ball hits the goal
+     */
+    private void goalReached(){
+        onBackPressed();
+    }
+
+    /**
+     * Called to give feedback when colliding
+     */
+    private void collisionFeedBack(){
+        hapticManager.vibrate(250);
+    }
 
     /**
      * Accelerator Sensor Listener
@@ -127,8 +143,16 @@ public class MainActivity extends AppCompatActivity {
                 lastUpdateTime = currentTime;
 
                 if (ready) { //Because we dont know when the graphics will be initialized
-                    ball.physicsUpdate(sensorEvent.values, deltaTime, level.getBlocks());
+                    BallCollision hit = ball.physicsUpdate(sensorEvent.values, deltaTime, level.getBlocks());
                     canvas.draw();
+
+                    if (hit.blockType != Block.TYPE_CLEAR && hit.magnitude > 250){
+                       collisionFeedBack();
+                    }
+
+                    if (hit.blockType == Block.TYPE_GOAL){
+                        goalReached();
+                    }
                 }
             }
         }
@@ -143,16 +167,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //TODO - Have this task take level name as input
-    private class LoadLevel extends AsyncTask<Void, Void, Void> {
+    private class LoadLevel extends AsyncTask<String, Void, Void> {
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Void doInBackground(String... strings) {
             level = new Level();
-            Bitmap levelBitMap = mediaManager.loadLevelPNG("level1");
-            level.buildFromPNG(levelBitMap, canvasWidth, canvasHeight, MainActivity.this);
+            Bitmap levelBitMap = mediaManager.loadLevelPNG(strings[0]);
+            level.buildFromPNG(levelBitMap, canvasHeight, MainActivity.this);
 
-            ball = new Ball(new Vector2(canvasWidth / 2, canvasHeight / 2), 0.25f * level.getPixelSize());
+            ball = new Ball(new Vector2(level.getSpawnPoint()), canvasHeight);
             ball.setTexture(MainActivity.this, R.drawable.ball_tex);
 
             levelTimer = new Timer(new Vector2(canvasWidth,canvasHeight), timeHandler);

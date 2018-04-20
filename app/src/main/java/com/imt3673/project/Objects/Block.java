@@ -9,6 +9,9 @@ import android.graphics.RectF;
 
 import com.imt3673.project.utils.Vector2;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A rectangular block
  * The position is "baked" into the rectangle.
@@ -19,13 +22,21 @@ public class Block extends GameObject{
     public static final int TYPE_CLEAR = Color.WHITE;
     public static final int TYPE_OBSTACLE = Color.BLACK;
     public static final int TYPE_GOAL = Color.GREEN;
+    public static final int TYPE_SPAWN = Color.BLUE;
+    public static final Map<Integer, Integer> TYPE_VALUES;
+    static
+    {
+        TYPE_VALUES = new HashMap<Integer, Integer>();
+        TYPE_VALUES.put(TYPE_CLEAR, 0);
+        TYPE_VALUES.put(TYPE_OBSTACLE, 1);
+        TYPE_VALUES.put(TYPE_GOAL, 2);
+        TYPE_VALUES.put(TYPE_SPAWN, -1);
+    }
 
 
     private int type = 0;
     private RectF rectangle;
     private Vector2[] corners;
-
-    Vector2 dims;
 
     /**
      * Creates a boundry box
@@ -44,12 +55,10 @@ public class Block extends GameObject{
         };
 
         rectangle = new RectF(position.x, position.y, position.x + width, position.y + height);
-        dims = new Vector2(width, height);
 
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(type);
-
     }
 
     /**
@@ -82,7 +91,6 @@ public class Block extends GameObject{
         m.postScale(Level.getPixelSize()/bitmap.getScaledWidth(canvas), Level.getPixelSize()/bitmap.getScaledWidth(canvas));
         m.postTranslate(-cameraPosition.x, -cameraPosition.y);
         shader.setLocalMatrix(m);
-
 
         canvas.drawRect(Vector2.subtract(cameraPosition, rectangle), paint);
     }
