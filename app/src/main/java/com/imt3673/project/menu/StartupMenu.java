@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.imt3673.project.main.MainActivity;
 import com.imt3673.project.main.R;
 import com.imt3673.project.services.GooglePlayService;
 
