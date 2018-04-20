@@ -9,6 +9,9 @@ import android.graphics.RectF;
 
 import com.imt3673.project.utils.Vector2;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A rectangular block
  * The position is "baked" into the rectangle.
@@ -19,6 +22,14 @@ public class Block extends GameObject{
     public static final int TYPE_CLEAR = Color.WHITE;
     public static final int TYPE_OBSTACLE = Color.BLACK;
     public static final int TYPE_GOAL = Color.GREEN;
+    public static final Map<Integer, Integer> TYPE_VALUES;
+    static
+    {
+        TYPE_VALUES = new HashMap<Integer, Integer>();
+        TYPE_VALUES.put(TYPE_CLEAR, 0);
+        TYPE_VALUES.put(TYPE_OBSTACLE, 1);
+        TYPE_VALUES.put(TYPE_GOAL, 2);
+    }
 
 
     private int type = 0;

@@ -1,5 +1,6 @@
 package com.imt3673.project.main;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -16,17 +17,19 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.imt3673.project.Objects.Ball;
+import com.imt3673.project.Objects.BallCollision;
+import com.imt3673.project.Objects.Block;
 import com.imt3673.project.Objects.Level;
 import com.imt3673.project.Objects.Timer;
 import com.imt3673.project.graphics.CanvasView;
 import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
+import com.imt3673.project.menu.StartupMenu;
 import com.imt3673.project.sensors.HapticFeedbackManager;
 import com.imt3673.project.sensors.SensorListenerManager;
 import com.imt3673.project.utils.Vector2;
 
 public class MainActivity extends AppCompatActivity {
-
     private AcceleratorListener   acceleratorListener;
     private Sensor                acceleratorSensor;
     private HapticFeedbackManager hapticManager;
@@ -108,6 +111,19 @@ public class MainActivity extends AppCompatActivity {
         return canvasHeight;
     }
 
+    /**
+     * This gets called when the ball hits the goal
+     */
+    private void goalReached(){
+        onBackPressed();
+    }
+
+    /**
+     * Called to give feedback when colliding
+     */
+    private void collisionFeedBack(){
+        hapticManager.vibrate(250);
+    }
 
     /**
      * Accelerator Sensor Listener
@@ -127,8 +143,16 @@ public class MainActivity extends AppCompatActivity {
                 lastUpdateTime = currentTime;
 
                 if (ready) { //Because we dont know when the graphics will be initialized
-                    ball.physicsUpdate(sensorEvent.values, deltaTime, level.getBlocks());
+                    BallCollision hit = ball.physicsUpdate(sensorEvent.values, deltaTime, level.getBlocks());
                     canvas.draw();
+
+                    if (hit.blockType != Block.TYPE_CLEAR && hit.magnitude > 250){
+                       collisionFeedBack();
+                    }
+
+                    if (hit.blockType == Block.TYPE_GOAL){
+                        goalReached();
+                    }
                 }
             }
         }

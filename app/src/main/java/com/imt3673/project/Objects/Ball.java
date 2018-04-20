@@ -4,9 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.RectF;
 
-import com.imt3673.project.main.MainActivity;
 import com.imt3673.project.utils.LineSegment;
 import com.imt3673.project.utils.Vector2;
 
@@ -51,21 +49,24 @@ public class Ball extends GameObject {
      * Does the physics update for ball.
      * @param accelData xyz acceleration data
      * @param blocks all blocks the ball can collide with
+     * @return what the ball collided with
      */
-    public void physicsUpdate(final float[] accelData, float deltaTime, ArrayList<Block> blocks){
+    public BallCollision physicsUpdate(final float[] accelData, float deltaTime, ArrayList<Block> blocks){
         //zFactor helps reduce acceleration when the phone is put flat on a table
         float zFactor = 1 - (Math.abs(accelData[2]) / (Math.abs(accelData[0]) + Math.abs(accelData[1]) + Math.abs(accelData[2])));
         velocity = Vector2.add(velocity, new Vector2(accelData[1] * accelDelta * zFactor, accelData[0] * accelDelta * zFactor));
-        physicsUpdateAxis(0, deltaTime, blocks);
-        physicsUpdateAxis(1, deltaTime, blocks);
+        BallCollision hit1 = physicsUpdateAxis(0, deltaTime, blocks);
+        BallCollision hit2 = physicsUpdateAxis(1, deltaTime, blocks);
+
+        return (hit1.greater(hit2)) ? hit1 : hit2;
     }
 
     /**
      * Does velocity and position calculations for an axis
      * @param axis axis to update for
-*      @return if there was a collision
+     * @return what the ball collided with
      */
-    private boolean physicsUpdateAxis(int axis, float deltaTime, ArrayList<Block> blocks){
+    private BallCollision physicsUpdateAxis(int axis, float deltaTime, ArrayList<Block> blocks){
         Vector2 oldPos = new Vector2(position);
         position.setAxis(axis, position.getAxis(axis) + velocity.getAxis(axis) * deltaTime);
 
@@ -74,13 +75,18 @@ public class Ball extends GameObject {
         for(Block block : blocks) {
             //The first function checks if we passed through a block, the second if we are intersecting it
             if (Physics.BallBlockCollision(this, block) || Physics.LineSegmentBlockCollision(movement, block)) {
+
+                BallCollision collision = new BallCollision();
+                collision.blockType = block.getType();
+                collision.magnitude = Math.abs(velocity.getAxis(axis));
+
                 position.setAxis(axis, oldPos.getAxis(axis));
                 velocity.setAxis(axis, -velocity.getAxis(axis) * drag);
 
-                return true;
+                return collision;
             }
         }
-        return false;
+        return new BallCollision();
     }
 
     /**
