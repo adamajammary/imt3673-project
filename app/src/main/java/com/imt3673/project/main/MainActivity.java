@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 canvasWidth = canvas.getWidth();
                 canvasHeight = canvas.getHeight();
                 if (canvasHeight != 0 && canvasWidth != 0){
-                    new LoadLevel().execute();
+                    new LoadLevel().execute(getIntent().getStringExtra("level"));
                 }
             }
         });
@@ -167,14 +167,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //TODO - Have this task take level name as input
-    private class LoadLevel extends AsyncTask<Void, Void, Void> {
+    private class LoadLevel extends AsyncTask<String, Void, Void> {
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Void doInBackground(String... strings) {
             level = new Level();
-            Bitmap levelBitMap = mediaManager.loadLevelPNG("level1");
-            level.buildFromPNG(levelBitMap, canvasWidth, canvasHeight, MainActivity.this);
+            Bitmap levelBitMap = mediaManager.loadLevelPNG(strings[0]);
+            level.buildFromPNG(levelBitMap, canvasHeight, MainActivity.this);
 
             ball = new Ball(new Vector2(level.getSpawnPoint()), canvasHeight);
             ball.setTexture(MainActivity.this, R.drawable.ball_tex);

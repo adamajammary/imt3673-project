@@ -32,7 +32,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name="com.imt3673.project.menu.OptionsMenu"></activity>
+        <activity android:name="com.imt3673.project.menu.OptionsMenu" />
+        <activity android:name="com.imt3673.project.menu.LevelChooser"></activity>
     </application>
 
 </manifest>

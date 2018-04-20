@@ -59,10 +59,9 @@ public class Level {
     /**
      * Builds level from a bitmap
      * @param level bitmap to use
-     * @param phoneWidth width of canvas
      * @param phoneHeight height of canvas
      */
-    public void buildFromPNG(Bitmap level, int phoneWidth, int phoneHeight, Context context){
+    public void buildFromPNG(Bitmap level, int phoneHeight, Context context){
         Log.d(TAG, "BUILD LEVEL! Width: " + level.getWidth() + " Height: " + level.getHeight());
         float scaling = phoneHeight / level.getHeight();
         pixelSize = scaling;
@@ -141,7 +140,7 @@ public class Level {
      */
     private void addBlockTexture(Block block, int type, Context context) {
         if(type == Block.TYPE_OBSTACLE){
-            block.setTexture(context, R.drawable.wall_tex);
+            block.setTexture(context, R.drawable.wall_tex_32x32);
         }
         else if(type == Block.TYPE_GOAL){
             block.setTexture(context, R.drawable.goal_tex);

@@ -38,8 +38,6 @@ public class Block extends GameObject{
     private RectF rectangle;
     private Vector2[] corners;
 
-    Vector2 dims;
-
     /**
      * Creates a boundry box
      * @param width of box
@@ -57,12 +55,10 @@ public class Block extends GameObject{
         };
 
         rectangle = new RectF(position.x, position.y, position.x + width, position.y + height);
-        dims = new Vector2(width, height);
 
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(type);
-
     }
 
     /**
@@ -95,7 +91,6 @@ public class Block extends GameObject{
         m.postScale(Level.getPixelSize()/bitmap.getScaledWidth(canvas), Level.getPixelSize()/bitmap.getScaledWidth(canvas));
         m.postTranslate(-cameraPosition.x, -cameraPosition.y);
         shader.setLocalMatrix(m);
-
 
         canvas.drawRect(Vector2.subtract(cameraPosition, rectangle), paint);
     }
