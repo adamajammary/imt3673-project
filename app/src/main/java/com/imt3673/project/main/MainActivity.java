@@ -1,6 +1,5 @@
 package com.imt3673.project.main;
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.hardware.Sensor;
@@ -21,10 +20,7 @@ import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
 import com.imt3673.project.sensors.HapticFeedbackManager;
 import com.imt3673.project.sensors.SensorListenerManager;
-import com.imt3673.project.services.ServicesManager;
 import com.imt3673.project.utils.Vector2;
-
-import static com.imt3673.project.services.Constants.GOOGLE_SIGNIN_RESULT;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private HapticFeedbackManager hapticManager;
     private MediaManager          mediaManager;
     private SensorListenerManager sensorManager;
-    private ServicesManager       servicesManager;
 
     private CanvasView canvas;
     private static int canvasWidth;
@@ -65,18 +60,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         this.sensorManager.addListener(this.acceleratorListener, this.acceleratorSensor);
-
-        // TODO: maybe move the authentication to a manual login in options or something?
-        this.servicesManager.init();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Sign-In to the Google Play Games Services
-        if (requestCode == GOOGLE_SIGNIN_RESULT)
-            this.servicesManager.authenticateHandleIntent(resultCode, data);
     }
 
     /**
@@ -86,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         this.initWindow();
 
         this.timeHandler         = new Handler();
-        this.servicesManager     = new ServicesManager(this);
         this.sensorManager       = new SensorListenerManager(this);
         this.acceleratorListener = new AcceleratorListener();
         this.acceleratorSensor   = this.sensorManager.getSensor(Sensor.TYPE_ACCELEROMETER);
@@ -193,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onProgressUpdate(Void... voids) {
-
         }
 
         @Override

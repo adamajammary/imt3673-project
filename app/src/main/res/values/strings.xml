@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">IMT3673 Project</string>
+    <string name="error_authentication">Failed to authenticate with Google Play Games Services.</string>
     <string name="error_no_accel">This device does not have an accelerometer.</string>
     <string name="error_no_vibrator">This device does not have a vibrator.</string>
     <string name="menu_play_button">PLAY</string>
     <string name="menu_options_button">OPTIONS</string>
+    <string name="menu_signIn_button">SIGN IN (GOOGLE PLAY)</string>
+    <string name="menu_signOut_button">SIGN OUT (GOOGLE PLAY)</string>
     <string name="menu_exit_button">EXIT</string>
     <string name="option_menu_volume_label">Volume</string>
     <string name="option_menu_vibrate_box">Vibrate</string>
