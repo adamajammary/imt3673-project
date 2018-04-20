@@ -68,14 +68,20 @@ public class StartupMenu extends AppCompatActivity {
      * Updates the button label and functionality based on Google Play authentication status.
      */
     public Void updateGooglePlayButton() {
-        Button googlePlayBtn = findViewById(R.id.StartupMenu_googlePlay_btn);
+        Button googlePlayBtn  = findViewById(R.id.StartupMenu_googlePlay_btn);
+        Button leaderboardBtn = findViewById(R.id.StartupMenu_googlePlayLeaderboard_btn);
 
         if (!this.googlePlayService.isSignedIn()) {
             googlePlayBtn.setText(R.string.menu_signIn_button);
             googlePlayBtn.setOnClickListener((View v) -> googlePlayService.signIn());
+
+            leaderboardBtn.setEnabled(false);
         } else {
             googlePlayBtn.setText(R.string.menu_signOut_button);
             googlePlayBtn.setOnClickListener((View v) -> googlePlayService.signOut(() -> updateGooglePlayButton()));
+
+            leaderboardBtn.setEnabled(true);
+            leaderboardBtn.setOnClickListener((View v) -> googlePlayService.showLeaderboard());
         }
 
         return null;
