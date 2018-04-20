@@ -53,7 +53,7 @@ public class StartupMenu extends AppCompatActivity {
      */
     private void initButtons() {
         //Play button
-        (findViewById(R.id.StartupMenu_play_btn)).setOnClickListener(v -> startActivity( new Intent(this, MainActivity.class)));
+        (findViewById(R.id.StartupMenu_play_btn)).setOnClickListener(v -> startActivity( new Intent(this, LevelChooser.class)));
 
         //Options button
         (findViewById(R.id.StartupMenu_option_btn)).setOnClickListener(v -> startActivity(new Intent(this, OptionsMenu.class)));

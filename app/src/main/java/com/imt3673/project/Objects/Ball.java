@@ -4,9 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.RectF;
 
-import com.imt3673.project.main.MainActivity;
 import com.imt3673.project.utils.LineSegment;
 import com.imt3673.project.utils.Vector2;
 
@@ -20,17 +18,19 @@ public class Ball extends GameObject {
     private float radius;
 
     //Ball physics variables
-    final float accelDelta = 4f; //Used for acceleration calculations
-    final float drag = 0.75f; //Used for slowing down ball when hitting wall
+    private float accelDelta; //Used for acceleration calculations
+    private final float drag = 0.75f; //Used for slowing down ball when hitting wall
 
     /**
      * Constructs the ball
      * @param position position of ball
-     * @param radius radius of ball
+     * @param phoneHeight
      */
-    public Ball(Vector2 position, float radius){
+    public Ball(Vector2 position, int phoneHeight){
         this.position = position;
-        this.radius = radius;
+        this.radius = phoneHeight * 0.025f; //Make radius 2.5% of phone height
+
+        accelDelta = phoneHeight * 0.005f; //Make acceleration scale with phone size too
         velocity = new Vector2(); //Defaults to zero
 
         paint = new Paint();
@@ -51,41 +51,44 @@ public class Ball extends GameObject {
      * Does the physics update for ball.
      * @param accelData xyz acceleration data
      * @param blocks all blocks the ball can collide with
+     * @return what the ball collided with
      */
-    public void physicsUpdate(final float[] accelData, float deltaTime, ArrayList<Block> blocks){
+    public BallCollision physicsUpdate(final float[] accelData, float deltaTime, ArrayList<Block> blocks){
         //zFactor helps reduce acceleration when the phone is put flat on a table
         float zFactor = 1 - (Math.abs(accelData[2]) / (Math.abs(accelData[0]) + Math.abs(accelData[1]) + Math.abs(accelData[2])));
         velocity = Vector2.add(velocity, new Vector2(accelData[1] * accelDelta * zFactor, accelData[0] * accelDelta * zFactor));
-        Vector2 oldPos = position;
-        position = Vector2.add(position, Vector2.mult(velocity, deltaTime));
+        BallCollision hit1 = physicsUpdateAxis(0, deltaTime, blocks);
+        BallCollision hit2 = physicsUpdateAxis(1, deltaTime, blocks);
+
+        return (hit1.greater(hit2)) ? hit1 : hit2;
+    }
+
+    /**
+     * Does velocity and position calculations for an axis
+     * @param axis axis to update for
+     * @return what the ball collided with
+     */
+    private BallCollision physicsUpdateAxis(int axis, float deltaTime, ArrayList<Block> blocks){
+        Vector2 oldPos = new Vector2(position);
+        position.setAxis(axis, position.getAxis(axis) + velocity.getAxis(axis) * deltaTime);
 
         LineSegment movement = new LineSegment(oldPos, position);
 
         for(Block block : blocks) {
             //The first function checks if we passed through a block, the second if we are intersecting it
-            if (Physics.LineSegmentBlockCollision(movement, block) || Physics.BallBlockCollision(this, block)) {
-                RectF rect = block.getRectangle();
+            if (Physics.BallBlockCollision(this, block) || Physics.LineSegmentBlockCollision(movement, block)) {
 
-                //Now we need to work out what side of the block we hit
-                float xd1 = Math.abs(position.x - rect.left);
-                float xd2 = Math.abs(position.x - rect.right);
-                float xDist = (xd1 < xd2) ? xd1 : xd2; //The distance between ball and block in x dir
-                float yd1 = Math.abs(position.y - rect.bottom);
-                float yd2 = Math.abs(position.y - rect.top);
-                float yDist = (yd1 < yd2) ? yd1 : yd2; //The distance between ball and block in y dir
+                BallCollision collision = new BallCollision();
+                collision.blockType = block.getType();
+                collision.magnitude = Math.abs(velocity.getAxis(axis));
 
-                if (xDist < yDist){ //Collision in X dir
-                    velocity.x = -velocity.x * drag;
-                    position.x = oldPos.x;
-                } else { //Collision in y dir
-                    velocity.y = -velocity.y * drag;
-                    position.y = oldPos.y;
-                }
+                position.setAxis(axis, oldPos.getAxis(axis));
+                velocity.setAxis(axis, -velocity.getAxis(axis) * drag);
 
-                //TODO - Trigger user feedback (sound/vibration(If we want that ofc))
-                break;
+                return collision;
             }
         }
+        return new BallCollision();
     }
 
     /**

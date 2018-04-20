@@ -4,6 +4,7 @@ package com.imt3673.project.Objects;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.Log;
 
 import com.imt3673.project.main.R;
@@ -19,6 +20,7 @@ public class Level {
 
     private ArrayList<Block> blocks = new ArrayList<>();
     private static float pixelSize;
+    private Vector2 spawnPoint;
 
     /**
      * Draws all blocks in level
@@ -29,6 +31,14 @@ public class Level {
         for(Block block : blocks){
             block.draw(canvas, cameraPosition);
         }
+    }
+
+    /**
+     * Gets the spawn point for the level
+     * @return Vector2 spawnPoint
+     */
+    public Vector2 getSpawnPoint(){
+        return spawnPoint;
     }
 
     /**
@@ -49,10 +59,9 @@ public class Level {
     /**
      * Builds level from a bitmap
      * @param level bitmap to use
-     * @param phoneWidth width of canvas
      * @param phoneHeight height of canvas
      */
-    public void buildFromPNG(Bitmap level, int phoneWidth, int phoneHeight, Context context){
+    public void buildFromPNG(Bitmap level, int phoneHeight, Context context){
         Log.d(TAG, "BUILD LEVEL! Width: " + level.getWidth() + " Height: " + level.getHeight());
         float scaling = phoneHeight / level.getHeight();
         pixelSize = scaling;
@@ -62,14 +71,13 @@ public class Level {
                 int clr = level.getPixel(x, y);
                 if (clr == Block.TYPE_OBSTACLE) {
                     createRect(level, x, y, Block.TYPE_OBSTACLE, scaling, context);
-                }
-                else if(clr == Block.TYPE_GOAL){
+                } else if(clr == Block.TYPE_GOAL){
                     createRect(level, x, y, Block.TYPE_GOAL, scaling, context);
+                } else if (clr == Block.TYPE_SPAWN){
+                    addSpawnPoint(level, x, y, scaling);
                 }
             }
         }
-
-        //blocks.add(new Block(new Vector2(), 100, 100, Color.BLACK));
     }
 
     /**
@@ -115,9 +123,6 @@ public class Level {
             }
         }
 
-
-
-
         Log.d(TAG, "Made block, width: " + w + " height: " + h + " pos: " + startX + "," + startY);
 
         Vector2 pos = new Vector2(startX * scaling, startY * scaling);
@@ -127,12 +132,30 @@ public class Level {
         blocks.add(block);
     }
 
+    /**
+     * Adds texture to block
+     * @param block block to texture
+     * @param type type of the block
+     * @param context context
+     */
     private void addBlockTexture(Block block, int type, Context context) {
         if(type == Block.TYPE_OBSTACLE){
-            block.setTexture(context, R.drawable.wall_tex);
+            block.setTexture(context, R.drawable.wall_tex_32x32);
         }
         else if(type == Block.TYPE_GOAL){
             block.setTexture(context, R.drawable.goal_tex);
         }
+    }
+
+    /**
+     * Adds a spawn point
+     * @param level Bitmap of level
+     * @param x coordinate
+     * @param y coordinate
+     * @param scaling scaling for level
+     */
+    private void addSpawnPoint(Bitmap level, int x, int y, float scaling){
+        spawnPoint = new Vector2(x * scaling, y * scaling);
+        level.setPixel(x, y, Block.TYPE_CLEAR);
     }
 }
