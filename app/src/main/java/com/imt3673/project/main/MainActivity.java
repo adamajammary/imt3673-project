@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
             Bitmap levelBitMap = mediaManager.loadLevelPNG("level1");
             level.buildFromPNG(levelBitMap, canvasWidth, canvasHeight, MainActivity.this);
 
-            ball = new Ball(new Vector2(canvasWidth / 2, canvasHeight / 2), 0.25f * level.getPixelSize());
+            ball = new Ball(new Vector2(level.getSpawnPoint()), canvasHeight);
             ball.setTexture(MainActivity.this, R.drawable.ball_tex);
 
             levelTimer = new Timer(new Vector2(canvasWidth,canvasHeight), timeHandler);

@@ -18,17 +18,19 @@ public class Ball extends GameObject {
     private float radius;
 
     //Ball physics variables
-    final float accelDelta = 4f; //Used for acceleration calculations
-    final float drag = 0.75f; //Used for slowing down ball when hitting wall
+    private float accelDelta; //Used for acceleration calculations
+    private final float drag = 0.75f; //Used for slowing down ball when hitting wall
 
     /**
      * Constructs the ball
      * @param position position of ball
-     * @param radius radius of ball
+     * @param phoneHeight
      */
-    public Ball(Vector2 position, float radius){
+    public Ball(Vector2 position, int phoneHeight){
         this.position = position;
-        this.radius = radius;
+        this.radius = phoneHeight * 0.025f; //Make radius 2.5% of phone height
+
+        accelDelta = phoneHeight * 0.005f; //Make acceleration scale with phone size too
         velocity = new Vector2(); //Defaults to zero
 
         paint = new Paint();
