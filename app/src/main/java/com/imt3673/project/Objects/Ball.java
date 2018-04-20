@@ -56,36 +56,31 @@ public class Ball extends GameObject {
         //zFactor helps reduce acceleration when the phone is put flat on a table
         float zFactor = 1 - (Math.abs(accelData[2]) / (Math.abs(accelData[0]) + Math.abs(accelData[1]) + Math.abs(accelData[2])));
         velocity = Vector2.add(velocity, new Vector2(accelData[1] * accelDelta * zFactor, accelData[0] * accelDelta * zFactor));
-        Vector2 oldPos = position;
-        position = Vector2.add(position, Vector2.mult(velocity, deltaTime));
+        physicsUpdateAxis(0, deltaTime, blocks);
+        physicsUpdateAxis(1, deltaTime, blocks);
+    }
+
+    /**
+     * Does velocity and position calculations for an axis
+     * @param axis axis to update for
+*      @return if there was a collision
+     */
+    private boolean physicsUpdateAxis(int axis, float deltaTime, ArrayList<Block> blocks){
+        Vector2 oldPos = new Vector2(position);
+        position.setAxis(axis, position.getAxis(axis) + velocity.getAxis(axis) * deltaTime);
 
         LineSegment movement = new LineSegment(oldPos, position);
 
         for(Block block : blocks) {
             //The first function checks if we passed through a block, the second if we are intersecting it
-            if (Physics.LineSegmentBlockCollision(movement, block) || Physics.BallBlockCollision(this, block)) {
-                RectF rect = block.getRectangle();
+            if (Physics.BallBlockCollision(this, block) || Physics.LineSegmentBlockCollision(movement, block)) {
+                position.setAxis(axis, oldPos.getAxis(axis));
+                velocity.setAxis(axis, -velocity.getAxis(axis) * drag);
 
-                //Now we need to work out what side of the block we hit
-                float xd1 = Math.abs(position.x - rect.left);
-                float xd2 = Math.abs(position.x - rect.right);
-                float xDist = (xd1 < xd2) ? xd1 : xd2; //The distance between ball and block in x dir
-                float yd1 = Math.abs(position.y - rect.bottom);
-                float yd2 = Math.abs(position.y - rect.top);
-                float yDist = (yd1 < yd2) ? yd1 : yd2; //The distance between ball and block in y dir
-
-                if (xDist < yDist){ //Collision in X dir
-                    velocity.x = -velocity.x * drag;
-                    position.x = oldPos.x;
-                } else { //Collision in y dir
-                    velocity.y = -velocity.y * drag;
-                    position.y = oldPos.y;
-                }
-
-                //TODO - Trigger user feedback (sound/vibration(If we want that ofc))
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     /**

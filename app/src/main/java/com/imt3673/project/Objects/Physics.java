@@ -1,17 +1,13 @@
 package com.imt3673.project.Objects;
 
-import android.graphics.LinearGradient;
 import android.graphics.RectF;
 
 import com.imt3673.project.utils.LineSegment;
 import com.imt3673.project.utils.Vector2;
 
-import java.util.ArrayList;
-
 /**
  * Created by Muffinz on 12/04/2018.
  */
-
 public class Physics {
 
     /**
@@ -35,11 +31,13 @@ public class Physics {
 
         if (circleDistance.x <= (rect.width()/2)) { return true; }
         if (circleDistance.y <= (rect.height()/2)) { return true; }
-
+        //return false;
+        ///*
         float cornerDistance_sq = (float)Math.pow(circleDistance.x - rect.width()/2, 2) +
                 (float)Math.pow(circleDistance.y - rect.height()/2,2 );
 
         return (cornerDistance_sq <= (Math.pow(ball.getRadius(), 2)));
+        //*/
     }
 
     /**
@@ -61,6 +59,7 @@ public class Physics {
                 maxTotal--;
             }
         }
+
         return total != maxTotal;
     }
 }
