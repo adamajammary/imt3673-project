@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.imt3673.project.database.AppDatabase;
+import com.imt3673.project.database.HighScore;
 import com.imt3673.project.main.MainActivity;
 import com.imt3673.project.main.R;
 import com.imt3673.project.menu.LevelInfo;
@@ -26,12 +28,14 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
 
     private final Activity mContext;
     private ArrayList<LevelInfo> mLevelsInfo;
+    private AppDatabase mDatabase;
 
-    public LevelChooserListAdapter(Activity context, ArrayList<LevelInfo> levelInfo) {
+    public LevelChooserListAdapter(Activity context, ArrayList<LevelInfo> levelInfo, AppDatabase db) {
         super(context, 0,levelInfo);
 
         this.mContext = context;
         this.mLevelsInfo = levelInfo;
+        this.mDatabase = db;
 
     }
 
@@ -77,6 +81,18 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
                 mContext.startActivity(intent);
             }
         });
+
+        List<HighScore> dbScores = this.mDatabase.highScoreDao().getAllScoresFromLevelSorted(levelInfo.getLevelId());
+        ArrayList<String> bestTimes = new ArrayList<>();
+
+        int i = 0;
+        for(HighScore score : dbScores){
+            String scorePlacement;
+            scorePlacement = ++i + ".      " + score.getLevelTime();
+            bestTimes.add(scorePlacement);
+        }
+
+        viewHolder.highScoreList.setAdapter(new ArrayAdapter<String>(mContext,android.R.layout.simple_list_item_1,bestTimes));
 
         return convertView;
     }
