@@ -15,30 +15,23 @@ import java.util.ArrayList;
 
 public class LevelChooser extends AppCompatActivity {
 
+    private LevelChooserListAdapter listAdapter;
     private ListView levelListView;
-    private ArrayList<String> levelsList = new ArrayList<>();
-    private ArrayAdapter<String> adapter;
+    private ArrayList<LevelInfo> levels;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_chooser);
 
-        levelsList.add("level1");
-        levelsList.add("level2");
+        this.levels = new ArrayList<>();
+
+        this.levels.add(new LevelInfo("Level 1","level1","00:20:00","00:40:00","01:00:00"));
+        this.levels.add(new LevelInfo("Level 2","level2","00:20:00","00:40:00","01:00:00"));
 
         levelListView = findViewById(R.id.lv_levels);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, levelsList);
-        levelListView.setAdapter(adapter);
-
-        levelListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String levelName = levelsList.get(position);
-                Intent intent = new Intent(view.getContext(), MainActivity.class);
-                intent.putExtra("level", levelName);
-                startActivity(intent);
-            }
-        });
+        this.listAdapter = new LevelChooserListAdapter(this,this.levels);
+        levelListView.setAdapter(this.listAdapter);
     }
 }
