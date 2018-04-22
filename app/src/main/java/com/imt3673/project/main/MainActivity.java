@@ -21,6 +21,8 @@ import com.imt3673.project.Objects.BallCollision;
 import com.imt3673.project.Objects.Block;
 import com.imt3673.project.Objects.Level;
 import com.imt3673.project.Objects.Timer;
+import com.imt3673.project.database.AppDatabase;
+import com.imt3673.project.database.HighScore;
 import com.imt3673.project.graphics.CanvasView;
 import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private HapticFeedbackManager hapticManager;
     private MediaManager          mediaManager;
     private SensorListenerManager sensorManager;
+    private AppDatabase           database;
+    private String currentLevelName;
 
     private CanvasView canvas;
     private static int canvasWidth;
@@ -53,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.timeHandler = new Handler();
+        this.database = AppDatabase.getAppDatabase(this);
+        this.currentLevelName = getIntent().getStringExtra("level");
         // Set window fullscreen and remove title bar, and force landscape orientation
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -115,7 +121,20 @@ public class MainActivity extends AppCompatActivity {
      * This gets called when the ball hits the goal
      */
     private void goalReached(){
+        saveTimeToDb();
         onBackPressed();
+    }
+
+    /**
+     * Saves time to database
+     */
+    private void saveTimeToDb() {
+        this.levelTimer.stop();
+        HighScore score = new HighScore();
+        score.setLevelName(this.currentLevelName);
+        score.setLevelTime(this.levelTimer.getTime());
+        this.database.highScoreDao().insertAll(score);
+        this.levelTimer.reset();
     }
 
     /**

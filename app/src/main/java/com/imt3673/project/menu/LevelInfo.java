@@ -1,9 +1,12 @@
 package com.imt3673.project.menu;
 
+/**
+ * Class that holds all the information about a level
+ */
 public class LevelInfo {
-    private String levelId;
-    private String levelHeader;
 
+    private String levelHeader;
+    private String levelId;
     private String goldTime;
     private String silverTime;
     private String bronzeTime;

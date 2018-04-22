@@ -17,6 +17,10 @@ import com.imt3673.project.main.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * LevelChooser activity
+ * Holds a list with all the levels.
+ */
 public class LevelChooser extends AppCompatActivity {
 
     private LevelChooserListAdapter listAdapter;
@@ -29,34 +33,9 @@ public class LevelChooser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_chooser);
 
-     //  AppDatabase database = AppDatabase.getAppDatabase(this);
-
-       //database.highScoreDao().deleteAll();
-
-
-   //  HighScore scoren = new HighScore();
-   //  scoren.setLevelName("level2");
-   //  scoren.setLevelTime("000100");
-
-   //   database.highScoreDao().insertAll(scoren);
-
-    //   HighScore score_two = new HighScore();
-    //   score.setLevelName("level1");
-    //   score.setLevelTime(001000);
-    //   database.highScoreDao().insertAll(score_two);
-
-     //  List<HighScore> list = database.highScoreDao().getAllScoresFromLevelSorted("level1");
-
-     //  for(HighScore score : list){
-
-     //      Log.i("LEVELCHOOSER","name: " + score.getLevelName() + ". time: " + score.getLevelTime());
-     //  }
-
-
-
-
         this.levels = new ArrayList<>();
 
+        // Add this with a new level
         this.levels.add(new LevelInfo("Level 1","level1","00:20:00","00:40:00","01:00:00"));
         this.levels.add(new LevelInfo("Level 2","level2","00:20:00","00:40:00","01:00:00"));
 

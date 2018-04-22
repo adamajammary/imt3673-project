@@ -7,6 +7,9 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.util.Log;
 
+/**
+ * The application database.
+ */
 @Database(entities = {HighScore.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase{
     String TAG = getClass().getName();
