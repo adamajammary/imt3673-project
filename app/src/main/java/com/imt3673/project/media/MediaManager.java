@@ -54,8 +54,6 @@ public class MediaManager {
             case Constants.MEDIA_TYPE_SOUND:
                 this.soundPool.load(this.context, resourceID, 1);
                 break;
-            case Constants.MEDIA_TYPE_IMAGE:
-
         }
     }
 

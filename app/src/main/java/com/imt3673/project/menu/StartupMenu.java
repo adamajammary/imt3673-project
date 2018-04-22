@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.imt3673.project.main.R;
+import com.imt3673.project.media.TextureManager;
 import com.imt3673.project.services.GooglePlayService;
 
 import static com.imt3673.project.services.Constants.GOOGLE_SIGNIN_RESULT;
@@ -30,6 +31,8 @@ public class StartupMenu extends AppCompatActivity {
             getSupportActionBar().hide();
 
         this.googlePlayService = new GooglePlayService(this);
+
+        TextureManager.init(this);
     }
 
     @Override

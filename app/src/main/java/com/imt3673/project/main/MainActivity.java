@@ -21,6 +21,7 @@ import com.imt3673.project.Objects.Timer;
 import com.imt3673.project.graphics.CanvasView;
 import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
+import com.imt3673.project.media.TextureManager;
 import com.imt3673.project.media.TextureSet;
 import com.imt3673.project.sensors.HapticFeedbackManager;
 import com.imt3673.project.sensors.SensorListenerManager;
@@ -168,12 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(String... strings) {
-            TextureSet textureSet = new TextureSet(
-                    BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.ball_tex),
-                    BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.ground_tex),
-                    BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.wall_tex),
-                    BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.goal_tex)
-            );
+            TextureSet textureSet = TextureManager.getTextureSet("default");
 
             level = new Level();
             level.setTextureSet(textureSet);
