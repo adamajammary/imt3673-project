@@ -58,7 +58,6 @@ public class Block extends GameObject{
 
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(type);
     }
 
     /**

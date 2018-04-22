@@ -5,9 +5,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.util.Log;
 
 import com.imt3673.project.main.R;
+import com.imt3673.project.media.TextureSet;
 import com.imt3673.project.utils.Vector2;
 
 import java.util.ArrayList;
@@ -18,9 +20,11 @@ import java.util.ArrayList;
 public class Level {
     private static final String TAG = Level.class.getName();
 
+    private Block background;
     private ArrayList<Block> blocks = new ArrayList<>();
     private static float pixelSize;
     private Vector2 spawnPoint;
+    private TextureSet textureSet;
 
     /**
      * Draws all blocks in level
@@ -65,6 +69,8 @@ public class Level {
         Log.d(TAG, "BUILD LEVEL! Width: " + level.getWidth() + " Height: " + level.getHeight());
         float scaling = phoneHeight / level.getHeight();
         pixelSize = scaling;
+
+        addBackground(context, new PointF(level.getWidth() * scaling, level.getHeight() * scaling));
 
         for (int x = 0; x < level.getWidth(); x++){
             for (int y = 0; y < level.getHeight(); y++){
@@ -140,10 +146,10 @@ public class Level {
      */
     private void addBlockTexture(Block block, int type, Context context) {
         if(type == Block.TYPE_OBSTACLE){
-            block.setTexture(context, R.drawable.wall_tex_32x32);
+            block.setTexture(context, textureSet, TextureSet.WALL_TEX);
         }
         else if(type == Block.TYPE_GOAL){
-            block.setTexture(context, R.drawable.goal_tex);
+            block.setTexture(context, textureSet, TextureSet.GOAL_TEX);
         }
     }
 
@@ -157,5 +163,25 @@ public class Level {
     private void addSpawnPoint(Bitmap level, int x, int y, float scaling){
         spawnPoint = new Vector2(x * scaling, y * scaling);
         level.setPixel(x, y, Block.TYPE_CLEAR);
+    }
+
+    /**
+     * Set up the background block
+     */
+    private void addBackground(Context context, PointF levelDims){
+        background = new Block(Vector2.zero, levelDims.x, levelDims.y, Block.TYPE_CLEAR);
+        background.setTexture(context, textureSet, TextureSet.FLOOR_TEX);
+    }
+
+    /**
+     * Set the texture set
+     * @param textureSet texture set
+     */
+    public void setTextureSet(TextureSet textureSet) {
+        this.textureSet = textureSet;
+    }
+
+    public Block getBackground() {
+        return background;
     }
 }

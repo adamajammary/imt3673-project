@@ -1,0 +1,6 @@
+<resources>
+    <integer name="google_play_services_version">12211000</integer>
+
+    <string name="app_id">1068450677468</string>
+    <string name="leaderboard_id">CgkI3IX-pIwfEAIQAQ</string>
+</resources>

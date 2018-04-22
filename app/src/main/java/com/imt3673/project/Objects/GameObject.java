@@ -11,6 +11,7 @@ import android.graphics.PointF;
 import android.graphics.Shader;
 
 import com.imt3673.project.main.R;
+import com.imt3673.project.media.TextureSet;
 import com.imt3673.project.utils.Vector2;
 
 /**
@@ -40,10 +41,12 @@ public abstract class GameObject {
     /**
      * Sets the texture for the gameobject
      * @param context context
-     * @param textureid textureID
+     * @param textureSet textureSet
+     * @param textureType textureType
      */
-    public void setTexture(Context context, int textureid){
-        bitmap = BitmapFactory.decodeResource(context.getResources(), textureid);
+    public void setTexture(Context context, TextureSet textureSet, int textureType){
+        //bitmap = BitmapFactory.decodeResource(context.getResources(), textureid);
+        bitmap = textureSet.getTexture(textureType);
         shader = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         paint.setShader(shader);
     }
