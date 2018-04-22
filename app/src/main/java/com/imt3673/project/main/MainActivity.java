@@ -2,6 +2,7 @@ package com.imt3673.project.main;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -20,6 +21,8 @@ import com.imt3673.project.Objects.Timer;
 import com.imt3673.project.graphics.CanvasView;
 import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
+import com.imt3673.project.media.TextureManager;
+import com.imt3673.project.media.TextureSet;
 import com.imt3673.project.sensors.HapticFeedbackManager;
 import com.imt3673.project.sensors.SensorListenerManager;
 import com.imt3673.project.utils.Vector2;
@@ -166,12 +169,15 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(String... strings) {
+            TextureSet textureSet = TextureManager.getTextureSet("default");
+
             level = new Level();
+            level.setTextureSet(textureSet);
             Bitmap levelBitMap = mediaManager.loadLevelPNG(strings[0]);
             level.buildFromPNG(levelBitMap, canvasHeight, MainActivity.this);
 
             ball = new Ball(new Vector2(level.getSpawnPoint()), canvasHeight);
-            ball.setTexture(MainActivity.this, R.drawable.ball_tex);
+            ball.setTexture(MainActivity.this, textureSet, TextureSet.BALL_TEX);
 
             levelTimer = new Timer(new Vector2(canvasWidth,canvasHeight), timeHandler);
 
