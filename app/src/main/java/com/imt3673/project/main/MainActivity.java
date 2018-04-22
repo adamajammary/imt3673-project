@@ -1,18 +1,14 @@
 package com.imt3673.project.main;
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.graphics.PointF;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -24,7 +20,6 @@ import com.imt3673.project.Objects.Timer;
 import com.imt3673.project.graphics.CanvasView;
 import com.imt3673.project.media.Constants;
 import com.imt3673.project.media.MediaManager;
-import com.imt3673.project.menu.StartupMenu;
 import com.imt3673.project.sensors.HapticFeedbackManager;
 import com.imt3673.project.sensors.SensorListenerManager;
 import com.imt3673.project.utils.Vector2;

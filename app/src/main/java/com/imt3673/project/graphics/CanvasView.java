@@ -88,8 +88,6 @@ public class CanvasView extends View {
 
         this.lastDrawTime = currentTime;
 
-        // TODO: Update objects (Think object updates should be event based, such as per sensor event)
-
         // Clear the background
         canvas.drawColor(Color.WHITE);
 
