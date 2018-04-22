@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.util.Log;
 
 import com.imt3673.project.main.R;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 public class Level {
     private static final String TAG = Level.class.getName();
 
+    private Block background;
     private ArrayList<Block> blocks = new ArrayList<>();
     private static float pixelSize;
     private Vector2 spawnPoint;
@@ -67,6 +69,8 @@ public class Level {
         Log.d(TAG, "BUILD LEVEL! Width: " + level.getWidth() + " Height: " + level.getHeight());
         float scaling = phoneHeight / level.getHeight();
         pixelSize = scaling;
+
+        addBackground(context, new PointF(level.getWidth() * scaling, level.getHeight() * scaling));
 
         for (int x = 0; x < level.getWidth(); x++){
             for (int y = 0; y < level.getHeight(); y++){
@@ -161,7 +165,23 @@ public class Level {
         level.setPixel(x, y, Block.TYPE_CLEAR);
     }
 
+    /**
+     * Set up the background block
+     */
+    private void addBackground(Context context, PointF levelDims){
+        background = new Block(Vector2.zero, levelDims.x, levelDims.y, Block.TYPE_CLEAR);
+        background.setTexture(context, textureSet, TextureSet.FLOOR_TEX);
+    }
+
+    /**
+     * Set the texture set
+     * @param textureSet texture set
+     */
     public void setTextureSet(TextureSet textureSet) {
         this.textureSet = textureSet;
+    }
+
+    public Block getBackground() {
+        return background;
     }
 }

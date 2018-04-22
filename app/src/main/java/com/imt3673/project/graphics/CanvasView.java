@@ -92,12 +92,20 @@ public class CanvasView extends View {
         canvas.drawColor(Color.WHITE);
 
         Vector2 cameraPos = new Vector2();
-        if (ball != null) {
+
+        if (ball != null) { // Update camera position
             cameraPos = new Vector2(ball.getPosition().x - canvas.getWidth() / 2, 0);
+        }
+
+        if(level != null){ // Draw background
+            level.getBackground().draw(canvas, cameraPos);
+        }
+
+        if (ball != null) { // Draw ball
             ball.draw(canvas, cameraPos);
         }
 
-        if (level != null){
+        if (level != null){ // Draw level objects
             level.draw(canvas, cameraPos);
         }
         for (GameObject obj : gameObjects){

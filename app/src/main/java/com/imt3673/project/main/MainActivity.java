@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(String... strings) {
             TextureSet textureSet = new TextureSet(
                     BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.ball_tex),
-                    null,
+                    BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.ground_tex),
                     BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.wall_tex),
                     BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.goal_tex)
             );
