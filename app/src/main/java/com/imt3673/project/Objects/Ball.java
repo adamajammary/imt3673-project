@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.RectF;
+import android.util.Pair;
 
 import com.imt3673.project.utils.LineSegment;
 import com.imt3673.project.utils.Vector2;
@@ -53,12 +55,12 @@ public class Ball extends GameObject {
      * @param blocks all blocks the ball can collide with
      * @return what the ball collided with
      */
-    public BallCollision physicsUpdate(final float[] accelData, float deltaTime, ArrayList<Block> blocks){
+    public BallCollision physicsUpdate(final float[] accelData, float deltaTime, ArrayList<Pair<RectF, ArrayList<Block>>> collisionGroups){
         //zFactor helps reduce acceleration when the phone is put flat on a table
         float zFactor = 1 - (Math.abs(accelData[2]) / (Math.abs(accelData[0]) + Math.abs(accelData[1]) + Math.abs(accelData[2])));
         velocity = Vector2.add(velocity, new Vector2(accelData[1] * accelDelta * zFactor, accelData[0] * accelDelta * zFactor));
-        BallCollision hit1 = physicsUpdateAxis(0, deltaTime, blocks);
-        BallCollision hit2 = physicsUpdateAxis(1, deltaTime, blocks);
+        BallCollision hit1 = physicsUpdateAxis(0, deltaTime, collisionGroups);
+        BallCollision hit2 = physicsUpdateAxis(1, deltaTime, collisionGroups);
 
         return (hit1.greater(hit2)) ? hit1 : hit2;
     }
@@ -68,24 +70,28 @@ public class Ball extends GameObject {
      * @param axis axis to update for
      * @return what the ball collided with
      */
-    private BallCollision physicsUpdateAxis(int axis, float deltaTime, ArrayList<Block> blocks){
+    private BallCollision physicsUpdateAxis(int axis, float deltaTime,  ArrayList<Pair<RectF, ArrayList<Block>>> collisionGroups){
         Vector2 oldPos = new Vector2(position);
         position.setAxis(axis, position.getAxis(axis) + velocity.getAxis(axis) * deltaTime);
 
         LineSegment movement = new LineSegment(oldPos, position);
 
-        for(Block block : blocks) {
-            //The first function checks if we passed through a block, the second if we are intersecting it
-            if (Physics.BallBlockCollision(this, block) || Physics.LineSegmentBlockCollision(movement, block)) {
+        for (Pair<RectF, ArrayList<Block>> collisionGroup : collisionGroups) {
+            if (Physics.BallBlockCollision(this, collisionGroup.first)) { //Figure out if ball is inside collision group
+                for (Block block : collisionGroup.second) {
+                    //The first function checks if we passed through a block, the second if we are intersecting it
+                    if (Physics.BallBlockCollision(this, block.getRectangle()) || Physics.LineSegmentBlockCollision(movement, block)) {
 
-                BallCollision collision = new BallCollision();
-                collision.blockType = block.getType();
-                collision.magnitude = Math.abs(velocity.getAxis(axis));
+                        BallCollision collision = new BallCollision();
+                        collision.blockType = block.getType();
+                        collision.magnitude = Math.abs(velocity.getAxis(axis));
 
-                position.setAxis(axis, oldPos.getAxis(axis));
-                velocity.setAxis(axis, -velocity.getAxis(axis) * drag);
+                        position.setAxis(axis, oldPos.getAxis(axis));
+                        velocity.setAxis(axis, -velocity.getAxis(axis) * drag);
 
-                return collision;
+                        return collision;
+                    }
+                }
             }
         }
         return new BallCollision();

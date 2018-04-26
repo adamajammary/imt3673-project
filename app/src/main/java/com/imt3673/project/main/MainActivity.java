@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                 lastUpdateTime = currentTime;
 
                 if (ready) { //Because we dont know when the graphics will be initialized
-                    BallCollision hit = ball.physicsUpdate(sensorEvent.values, deltaTime, level.getBlocks());
+                    BallCollision hit = ball.physicsUpdate(sensorEvent.values, deltaTime, level.getCollisionGroups());
                     canvas.draw();
 
                     if (hit.blockType != Block.TYPE_CLEAR && hit.magnitude > 250){

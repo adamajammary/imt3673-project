@@ -6,7 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
+import android.util.Pair;
 
 import com.imt3673.project.main.R;
 import com.imt3673.project.media.TextureSet;
@@ -22,6 +25,8 @@ public class Level {
 
     private Block background;
     private ArrayList<Block> blocks = new ArrayList<>();
+    private ArrayList<Pair<RectF, ArrayList<Block>>> collisionGroups = new ArrayList<>();
+    private final int collisionGroupLen = 10;
     private static float pixelSize;
     private Vector2 spawnPoint;
     private TextureSet textureSet;
@@ -54,6 +59,14 @@ public class Level {
     }
 
     /**
+     * Gets the collision groups
+     * @return ArrayList<Pair<RectF, ArrayList<Block>>>  collisionGroups
+     */
+    public ArrayList<Pair<RectF, ArrayList<Block>>> getCollisionGroups(){
+        return collisionGroups;
+    }
+
+    /**
      * Size of one pixel in bitmap in world
      */
     public static float getPixelSize(){
@@ -71,6 +84,7 @@ public class Level {
         pixelSize = scaling;
 
         addBackground(context, new PointF(level.getWidth() * scaling, level.getHeight() * scaling));
+        createCollisionGroups(level, scaling);
 
         for (int x = 0; x < level.getWidth(); x++){
             for (int y = 0; y < level.getHeight(); y++){
@@ -83,6 +97,21 @@ public class Level {
                     addSpawnPoint(level, x, y, scaling);
                 }
             }
+        }
+    }
+
+    private void createCollisionGroups(Bitmap level, float scaling){
+        int start = 0;
+        while (start < level.getWidth()){
+            RectF rect = new RectF(
+                    start * scaling,
+                    0,
+                    (start + collisionGroupLen) * scaling,
+                    level.getHeight() * scaling
+            );
+            Pair<RectF, ArrayList<Block>> collisionGroup = new Pair<>(rect, new ArrayList<>());
+            collisionGroups.add(collisionGroup);
+            start += collisionGroupLen;
         }
     }
 
@@ -136,6 +165,11 @@ public class Level {
         addBlockTexture(block, type, context);
         Log.d(TAG, "Scaled block: " + block.getRectangle().toShortString());
         blocks.add(block);
+        for (Pair<RectF, ArrayList<Block>> collisionGroup : collisionGroups){
+            if (RectF.intersects(block.getRectangle(), collisionGroup.first)){
+                collisionGroup.second.add(block);
+            }
+        }
     }
 
     /**

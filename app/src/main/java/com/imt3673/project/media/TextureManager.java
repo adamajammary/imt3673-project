@@ -23,8 +23,8 @@ public class TextureManager {
         textureSets = new HashMap<>();
         textureSets.put("default", new TextureSet(
                 BitmapFactory.decodeResource(context.getResources(), R.drawable.ball_tex),
-                BitmapFactory.decodeResource(context.getResources(), R.drawable.ground_tex),
-                BitmapFactory.decodeResource(context.getResources(), R.drawable.wall_tex),
+                BitmapFactory.decodeResource(context.getResources(), R.drawable.ground_tex_32x32),
+                BitmapFactory.decodeResource(context.getResources(), R.drawable.wall_tex_32x32),
                 BitmapFactory.decodeResource(context.getResources(), R.drawable.goal_tex)
         ));
     }
