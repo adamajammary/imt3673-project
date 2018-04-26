@@ -23,6 +23,8 @@ public class Block extends GameObject{
     public static final int TYPE_OBSTACLE = Color.BLACK;
     public static final int TYPE_GOAL = Color.GREEN;
     public static final int TYPE_SPAWN = Color.BLUE;
+    public static final int TYPE_HOLE = Color.CYAN;
+    public static final int TYPE_GFLIP = Color.DKGRAY;
     public static final Map<Integer, Integer> TYPE_VALUES;
     static
     {
@@ -30,6 +32,7 @@ public class Block extends GameObject{
         TYPE_VALUES.put(TYPE_CLEAR, 0);
         TYPE_VALUES.put(TYPE_OBSTACLE, 1);
         TYPE_VALUES.put(TYPE_GOAL, 2);
+        TYPE_VALUES.put(TYPE_HOLE, 3);
         TYPE_VALUES.put(TYPE_SPAWN, -1);
     }
 

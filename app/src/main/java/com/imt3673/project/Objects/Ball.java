@@ -81,15 +81,29 @@ public class Ball extends GameObject {
                 BallCollision collision = new BallCollision();
                 collision.blockType = block.getType();
                 collision.magnitude = Math.abs(velocity.getAxis(axis));
+                collision.blockPosition = block.getPosition();
 
-                position.setAxis(axis, oldPos.getAxis(axis));
-                velocity.setAxis(axis, -velocity.getAxis(axis) * drag);
+                if(block.getType() != Block.TYPE_HOLE){
+                    position.setAxis(axis, oldPos.getAxis(axis));
+                    velocity.setAxis(axis, -velocity.getAxis(axis) * drag);
+                }
 
                 return collision;
             }
         }
         return new BallCollision();
     }
+
+
+    /**
+     * Sets the position of the ball and sets velocity to 0
+     * @param pos
+     */
+    public void setPosition(Vector2 pos){
+        position = pos;
+        velocity = Vector2.zero;
+    }
+
 
     /**
      * Draws the ball to the canvas

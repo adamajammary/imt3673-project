@@ -1,10 +1,13 @@
 package com.imt3673.project.Objects;
 
+import com.imt3673.project.utils.Vector2;
+
 /**
  * Contains information about a collision between the ball and a block
  */
 public class BallCollision {
     public int blockType = Block.TYPE_CLEAR;
+    public Vector2 blockPosition;
     public float magnitude; //A measure of how "hard" the collision was
 
     /**

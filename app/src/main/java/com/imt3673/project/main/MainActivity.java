@@ -170,6 +170,9 @@ public class MainActivity extends AppCompatActivity {
 
                     if (hit.blockType == Block.TYPE_GOAL){
                         goalReached();
+                    } else if(hit.blockType == Block.TYPE_HOLE){
+                        if(Vector2.distance(hit.blockPosition, ball.getPosition()) < Level.getPixelSize() * 0.5f);
+                        ball.setPosition(level.getSpawnPoint());
                     }
                 }
             }

@@ -50,5 +50,4 @@ public abstract class GameObject {
         shader = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         paint.setShader(shader);
     }
-
 }

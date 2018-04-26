@@ -81,6 +81,8 @@ public class Level {
                     createRect(level, x, y, Block.TYPE_GOAL, scaling, context);
                 } else if (clr == Block.TYPE_SPAWN){
                     addSpawnPoint(level, x, y, scaling);
+                } else if (clr == Block.TYPE_HOLE){
+                    createRect(level, x, y, Block.TYPE_HOLE, scaling, context);
                 }
             }
         }
@@ -150,6 +152,9 @@ public class Level {
         }
         else if(type == Block.TYPE_GOAL){
             block.setTexture(context, textureSet, TextureSet.GOAL_TEX);
+        }
+        else if(type == Block.TYPE_HOLE){
+            block.setTexture(context, textureSet, TextureSet.HOLE_TEX);
         }
     }
 
