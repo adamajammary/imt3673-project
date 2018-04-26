@@ -33,6 +33,12 @@ public class LevelChooser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_chooser);
 
+        //Log.i("LEVEL CHOOSER", "ON CREATE");
+
+        // hide actionbar
+        if(getSupportActionBar() != null)
+            getSupportActionBar().hide();
+
         this.levels = new ArrayList<>();
 
         // Add this with a new level
@@ -43,4 +49,5 @@ public class LevelChooser extends AppCompatActivity {
         this.listAdapter = new LevelChooserListAdapter(this,this.levels, AppDatabase.getAppDatabase(this));
         levelListView.setAdapter(this.listAdapter);
     }
+
 }

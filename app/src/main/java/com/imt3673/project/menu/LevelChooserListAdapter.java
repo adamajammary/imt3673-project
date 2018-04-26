@@ -44,7 +44,6 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
         this.mContext = context;
         this.mLevelsInfo = levelInfo;
         this.mDatabase = db;
-
     }
 
     @NonNull
@@ -60,17 +59,7 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
             convertView = inflater.inflate(R.layout.level_chooser_item, parent, false);
 
             viewHolder = new ViewHolder();
-            // Initialize ViewHolder
-            viewHolder.levelName = convertView.findViewById(R.id.level_id_label);
-            viewHolder.goldTime = convertView.findViewById(R.id.level_gold_time);
-            viewHolder.silverTime = convertView.findViewById(R.id.level_silver_time);
-            viewHolder.bronzeTime = convertView.findViewById(R.id.level_bronze_time);
-            viewHolder.highScoreList = convertView.findViewById(R.id.level_score_list);
-            viewHolder.startButton = convertView.findViewById(R.id.level_start_button);
-            viewHolder.goldStar = convertView.findViewById(R.id.level_gold_star);
-            viewHolder.silverStar = convertView.findViewById(R.id.level_silver_star);
-            viewHolder.bronzeStar = convertView.findViewById(R.id.level_bronze_star);
-
+            initViewHolder(convertView, viewHolder);
             convertView.setTag(viewHolder);
 
         } else {
@@ -94,31 +83,56 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
             }
         });
 
+        handleBestTimesAndStars(viewHolder, levelInfo);
+
+        return convertView;
+    }
+
+    /**
+     * Initialize ViewHolder for level_chooser_item
+     * @param convertView view
+     * @param viewHolder ViewHolder for level_chooser_item
+     */
+    private void initViewHolder(@Nullable View convertView, ViewHolder viewHolder) {
+        viewHolder.levelName = convertView.findViewById(R.id.level_id_label);
+        viewHolder.goldTime = convertView.findViewById(R.id.level_gold_time);
+        viewHolder.silverTime = convertView.findViewById(R.id.level_silver_time);
+        viewHolder.bronzeTime = convertView.findViewById(R.id.level_bronze_time);
+        viewHolder.highScoreList = convertView.findViewById(R.id.level_score_list);
+        viewHolder.startButton = convertView.findViewById(R.id.level_start_button);
+        viewHolder.goldStar = convertView.findViewById(R.id.level_gold_star);
+        viewHolder.silverStar = convertView.findViewById(R.id.level_silver_star);
+        viewHolder.bronzeStar = convertView.findViewById(R.id.level_bronze_star);
+    }
+
+
+    /**
+     * Populate higscore list and displays time based on Best time
+     * @param viewHolder holds all the level_chooser_item views
+     * @param levelInfo object containing level info
+     */
+    private void handleBestTimesAndStars(ViewHolder viewHolder, LevelInfo levelInfo) {
         // Populate list with HighScores
-        List<HighScore> dbScores = this.mDatabase.highScoreDao().getAllScoresFromLevelSorted(levelInfo.getLevelId());
+        List<HighScore> dbScores = this.mDatabase.highScoreDao().getTopScoresFromLevelSorted(levelInfo.getLevelId());
         ArrayList<String> bestTimes = new ArrayList<>();
 
         // Display stars based on time
         if(!dbScores.isEmpty()){
             HighScore currentHighScore = dbScores.get(0);
             String currentScore = currentHighScore.getLevelTime().replace(":","");
-            Log.i("ADAPTER", "current score = " + currentScore);
 
             if(Integer.parseInt(currentScore) < Integer.parseInt(levelInfo.getGoldTime().replace(":",""))){
                 viewHolder.goldStar.setVisibility(View.VISIBLE);
                 viewHolder.silverStar.setVisibility(View.VISIBLE);
                 viewHolder.bronzeStar.setVisibility(View.VISIBLE);
-                Log.i("ADAPTER", "GOLD");
 
             }
             else if(Integer.parseInt(currentScore) < Integer.parseInt(levelInfo.getSilverTime().replace(":",""))){
                 viewHolder.silverStar.setVisibility(View.VISIBLE);
                 viewHolder.bronzeStar.setVisibility(View.VISIBLE);
-                Log.i("ADAPTER", "SILVER");
             }
             else if(Integer.parseInt(currentScore) < Integer.parseInt(levelInfo.getBronzeTime().replace(":",""))){
                 viewHolder.bronzeStar.setVisibility(View.VISIBLE);
-                Log.i("ADAPTER", "BRONSE");
             }
 
             int i = 0;
@@ -133,8 +147,6 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
 
             viewHolder.highScoreList.setAdapter(new ArrayAdapter<String>(mContext,android.R.layout.simple_list_item_1,bestTimes));
         }
-        
-        return convertView;
     }
 
     /**

@@ -19,8 +19,8 @@ public interface HighScoreDao {
     @Query("SELECT * FROM high_score")
     List<HighScore> getAll();
 
-    @Query("SELECT * FROM high_score WHERE level_name LIKE :levelName ORDER BY level_time ASC") //TODO add return number of entries
-    List<HighScore> getAllScoresFromLevelSorted(String levelName);
+    @Query("SELECT * FROM high_score WHERE level_name LIKE :levelName ORDER BY level_time ASC LIMIT 3")
+    List<HighScore> getTopScoresFromLevelSorted(String levelName);
 
     @Insert
     void insertAll(HighScore... highScores);

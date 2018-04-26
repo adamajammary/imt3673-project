@@ -57,8 +57,9 @@ public class MainActivity extends AppCompatActivity {
         this.timeHandler = new Handler();
         this.database = AppDatabase.getAppDatabase(this);
         this.currentLevelName = getIntent().getStringExtra("level");
+
         // Set window fullscreen and remove title bar, and force landscape orientation
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+       // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 

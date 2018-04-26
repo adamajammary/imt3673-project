@@ -9,10 +9,10 @@ import android.util.Log;
 
 /**
  * The application database.
+ * https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9
  */
 @Database(entities = {HighScore.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase{
-    String TAG = getClass().getName();
 
     private static  AppDatabase INSTANCE;
 
@@ -23,7 +23,7 @@ public abstract class AppDatabase extends RoomDatabase{
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(),AppDatabase.class,"high_score_database")
                     .allowMainThreadQueries() // TODO fix
                     .build();
-            Log.i("Appdatabase","creating inctance");
+            Log.i("AppDatabase","creating inctance");
         }
         return INSTANCE;
     }
