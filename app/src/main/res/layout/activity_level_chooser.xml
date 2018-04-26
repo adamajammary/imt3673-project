@@ -5,16 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/metal_background_menu_image"
     tools:context="com.imt3673.project.menu.LevelChooser">
 
 
     <TextView
         android:id="@+id/txt_level_chooser_title"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="97dp"
         android:layout_weight="1"
         android:text="@string/level_chooser_title"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/lv_levels"

@@ -3,9 +3,11 @@ package com.imt3673.project.menu;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.imt3673.project.database.AppDatabase;
 import com.imt3673.project.main.R;
 import com.imt3673.project.media.TextureManager;
 import com.imt3673.project.services.GooglePlayService;
@@ -90,4 +92,10 @@ public class StartupMenu extends AppCompatActivity {
         return null;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppDatabase.destroyInstance();
+        Log.i("StartupMenu","Clean up database");
+    }
 }

@@ -14,4 +14,10 @@
     <string name="option_menu_save_button">SAVE</string>
     <string name="content_description_background">Metal background for startup menu and option menu</string>
     <string name="level_chooser_title">Choose Level</string>
+    <string name="level_start_button">Start</string>
+    <string name="level_gold">Gold</string>
+    <string name="level_silver">Silver</string>
+    <string name="level_bronsze">Bronze</string>
+    <string name="level_best_time">Best Time</string>
+
 </resources>
