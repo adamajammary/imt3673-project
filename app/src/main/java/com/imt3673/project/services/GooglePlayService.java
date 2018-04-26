@@ -3,8 +3,10 @@ package com.imt3673.project.services;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 
@@ -24,6 +26,10 @@ import com.google.android.gms.games.PlayersClient;
 import com.google.android.gms.tasks.Task;
 import com.imt3673.project.main.R;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 /**
@@ -35,7 +41,7 @@ public class GooglePlayService {
     private GoogleSignInAccount         googleAccount;
     private final GoogleApiAvailability googleApiAvailability;
     private LeaderboardsClient          leaderboardsClient;
-    private String                      leaderboardID;
+    private Map<String, String>         leaderboards = new HashMap<>();
     private Player                      player;
 
     /**
@@ -112,7 +118,6 @@ public class GooglePlayService {
     }
 
     /**
-     * TODO: Set view after creating a view (if we decide to use custom popup views)
      * Assigns the specified resource view to be used for popups like achievements etc.
      * @param resourceID Resource ID of the view
      */
@@ -125,14 +130,13 @@ public class GooglePlayService {
     }
 
     /**
-     * TODO: Link to menu/options
      * Displays the leaderboard UI.
      */
     public void showLeaderboard() {
-        this.leaderboardsClient.getLeaderboardIntent(this.leaderboardID)
-            .addOnSuccessListener((Intent intent) -> ((Activity)context).startActivityForResult(
-                intent, Constants.LEADERBOARD_UI
-            ));
+        ArrayList<String> levels = new ArrayList<>(this.leaderboards.keySet());
+        Collections.sort(levels, (String a, String b) -> a.compareTo(b));
+
+        this.selectLevel(levels);
     }
 
     /**
@@ -152,12 +156,13 @@ public class GooglePlayService {
     }
 
     /**
-     * TODO: Call when the game ends to update the score on the leaderboard
-     * Updates the current leaderboard with the specified score for the current user.
-     * @param score User score
+     * Updates the current leaderboard with the specified time for the current user.
+     * https://developers.google.com/android/reference/com/google/android/gms/games/LeaderboardsClient
+     * @param level Level Name (ID)
+     * @param time Time (in milliseconds) used to complete the level
      */
-    public void updateLeaderboard(final long score) {
-        this.leaderboardsClient.submitScore(this.leaderboardID, score);
+    public void updateLeaderboard(final String level, final long time) {
+        this.leaderboardsClient.submitScore(this.leaderboards.get(level), time);
     }
 
     /**
@@ -188,9 +193,10 @@ public class GooglePlayService {
      */
     private void cleanup(Callable<Void> cleanupFunction) {
         this.googleAccount      = null;
-        this.leaderboardID      = "";
         this.leaderboardsClient = null;
         this.player             = null;
+
+        this.leaderboards.clear();
 
         try {
             cleanupFunction.call();
@@ -221,10 +227,37 @@ public class GooglePlayService {
     }
 
     /**
+     * Displays a list of levels the user can select from.
+     * @param levels List of levels
+     */
+    private void selectLevel(final ArrayList<String> levels) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this.context);
+
+        dialog.setTitle(R.string.level_chooser_title);
+        dialog.setIcon(R.mipmap.ic_launcher);
+
+        dialog.setItems(
+            levels.toArray(new CharSequence[levels.size()]),
+            (DialogInterface d, int i) -> {
+                showLeaderboard(levels.get(i));
+                d.dismiss();
+            }
+        );
+
+        dialog.show();
+    }
+
+    /**
+     * TODO: Uncomment new levels added (levels list is only available in the LevelChooser activity)
      * Sets the leaderboard for the current user account.
      */
     private void setLeaderboard() {
-        this.leaderboardID      = this.context.getString(R.string.leaderboard_id);
+        this.leaderboards.put("level1", this.context.getString(R.string.leaderboard_level1));
+        this.leaderboards.put("level2", this.context.getString(R.string.leaderboard_level2));
+        //this.leaderboards.put("level3", this.context.getString(R.string.leaderboard_level3));
+        //this.leaderboards.put("level4", this.context.getString(R.string.leaderboard_level4));
+        //this.leaderboards.put("level5", this.context.getString(R.string.leaderboard_level5));
+
         this.leaderboardsClient = Games.getLeaderboardsClient(this.context, this.googleAccount);
     }
 
@@ -241,6 +274,16 @@ public class GooglePlayService {
                 player = task.getResult();
             }
         });
+    }
+
+    /**
+     * Displays the leaderboard UI for the specified level.
+     */
+    private void showLeaderboard(final String level) {
+        this.leaderboardsClient.getLeaderboardIntent(this.leaderboards.get(level))
+            .addOnSuccessListener((Intent intent) -> ((Activity)context).startActivityForResult(
+                intent, Constants.LEADERBOARD_UI
+            ));
     }
 
     /**

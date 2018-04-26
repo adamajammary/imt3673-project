@@ -98,6 +98,13 @@ public class Timer extends GameObject{
     }
 
     /**
+     * @return The time in milliseconds
+     */
+    public long getTimeMilliseconds(){
+        return this.millisecondsTime;
+    }
+
+    /**
      * Create a runnable timer
      * updates the time string with new time
      */
