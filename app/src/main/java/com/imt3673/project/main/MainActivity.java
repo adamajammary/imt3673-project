@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.imt3673.project.Objects.Ball;
@@ -143,8 +144,18 @@ public class MainActivity extends AppCompatActivity {
     private void saveTimeToGooglePlay() {
         GooglePlayService googlePlayService = new GooglePlayService(this);
 
-        if (googlePlayService.isSignedIn())
+        if (googlePlayService.isSignedIn()) {
+
+            // TODO: Remove
+            Log.e("MainActivity", "saveTimeToGooglePlay: USER IS SIGNED IN");
+
             googlePlayService.updateLeaderboard(this.currentLevelName, this.levelTimer.getTimeMilliseconds());
+        } else {
+
+            // TODO: Remove
+            Log.e("MainActivity", "saveTimeToGooglePlay: USER IS NOT SIGNED IN");
+
+        }
     }
 
     /**

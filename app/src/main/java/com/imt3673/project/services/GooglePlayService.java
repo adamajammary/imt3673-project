@@ -162,6 +162,12 @@ public class GooglePlayService {
      * @param time Time (in milliseconds) used to complete the level
      */
     public void updateLeaderboard(final String level, final long time) {
+
+        // TODO: Remove
+        Log.e("GooglePlayService", "updateLeaderboard: UPLOADING SCORE TO GOOGLE PLAY");
+        Log.e("GooglePlayService", "updateLeaderboard: level=" + level);
+        Log.e("GooglePlayService", "updateLeaderboard: time=" + time);
+
         this.leaderboardsClient.submitScore(this.leaderboards.get(level), time);
     }
 
@@ -280,6 +286,12 @@ public class GooglePlayService {
      * Displays the leaderboard UI for the specified level.
      */
     private void showLeaderboard(final String level) {
+
+        // TODO: Remove
+        Log.e("GooglePlayService", "showLeaderboard: STARTING LEADERBOARD ACTIVITY");
+        Log.e("GooglePlayService", "showLeaderboard: level_name=" + level);
+        Log.e("GooglePlayService", "showLeaderboard: level_id=" + leaderboards.get(level));
+
         this.leaderboardsClient.getLeaderboardIntent(this.leaderboards.get(level))
             .addOnSuccessListener((Intent intent) -> ((Activity)context).startActivityForResult(
                 intent, Constants.LEADERBOARD_UI
