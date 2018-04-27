@@ -239,8 +239,8 @@ public class GooglePlayService {
         dialog.setItems(
             levels.toArray(new CharSequence[levels.size()]),
             (DialogInterface d, int i) -> {
-                showLeaderboard(levels.get(i));
                 d.dismiss();
+                showLeaderboard(levels.get(i));
             }
         );
 
