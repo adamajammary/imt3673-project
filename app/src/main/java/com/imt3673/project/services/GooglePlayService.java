@@ -23,6 +23,7 @@ import com.google.android.gms.games.GamesClient;
 import com.google.android.gms.games.LeaderboardsClient;
 import com.google.android.gms.games.Player;
 import com.google.android.gms.games.PlayersClient;
+import com.google.android.gms.games.leaderboard.ScoreSubmissionData;
 import com.google.android.gms.tasks.Task;
 import com.imt3673.project.main.R;
 
@@ -165,10 +166,23 @@ public class GooglePlayService {
 
         // TODO: Remove
         Log.e("GooglePlayService", "updateLeaderboard: UPLOADING SCORE TO GOOGLE PLAY");
-        Log.e("GooglePlayService", "updateLeaderboard: level=" + level);
+        Log.e("GooglePlayService", "updateLeaderboard: level_name=" + level);
+        Log.e("GooglePlayService", "updateLeaderboard: level_id=" + leaderboards.get(level));
         Log.e("GooglePlayService", "updateLeaderboard: time=" + time);
 
-        this.leaderboardsClient.submitScore(this.leaderboards.get(level), time);
+        //this.leaderboardsClient.submitScore(this.leaderboards.get(level), time);
+
+        this.leaderboardsClient.submitScoreImmediate(this.leaderboards.get(level), time)
+            .addOnSuccessListener((ScoreSubmissionData result) -> {
+                Log.e("GooglePlayService", "updateLeaderboard::addOnSuccessListener: result=" + result);
+            })
+            .addOnCompleteListener((Task<ScoreSubmissionData> task) -> {
+                Log.e("GooglePlayService", "updateLeaderboard::addOnCompleteListener: isComplete=" + task.isComplete());
+            })
+            .addOnFailureListener((Exception e) -> {
+                Log.e("GooglePlayService", "updateLeaderboard::addOnFailureListener: e=" + e);
+                Log.e("GooglePlayService", "updateLeaderboard::addOnFailureListener: e.getMessage=" + e.getMessage());
+            });
     }
 
     /**
@@ -292,10 +306,26 @@ public class GooglePlayService {
         Log.e("GooglePlayService", "showLeaderboard: level_name=" + level);
         Log.e("GooglePlayService", "showLeaderboard: level_id=" + leaderboards.get(level));
 
-        this.leaderboardsClient.getLeaderboardIntent(this.leaderboards.get(level))
+        /*this.leaderboardsClient.getLeaderboardIntent(this.leaderboards.get(level))
             .addOnSuccessListener((Intent intent) -> ((Activity)context).startActivityForResult(
                 intent, Constants.LEADERBOARD_UI
-            ));
+            ));*/
+
+
+
+        this.leaderboardsClient.getLeaderboardIntent(this.leaderboards.get(level))
+            .addOnSuccessListener((Intent intent) -> {
+                Log.e("GooglePlayService", "showLeaderboard::addOnSuccessListener: intent=" + intent);
+                ((Activity) context).startActivityForResult(intent, Constants.LEADERBOARD_UI);
+            })
+            .addOnCompleteListener((Task<Intent> task) -> {
+                Log.e("GooglePlayService", "showLeaderboard::addOnCompleteListener: isComplete=" + task.isComplete());
+            })
+            .addOnFailureListener((Exception e) -> {
+                Log.e("GooglePlayService", "showLeaderboard::addOnFailureListener: e=" + e);
+                Log.e("GooglePlayService", "showLeaderboard::addOnFailureListener: e.getMessage=" + e.getMessage());
+            });
+
     }
 
     /**
