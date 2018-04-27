@@ -10,8 +10,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.imt3673.project.Objects.Ball;
 import com.imt3673.project.Objects.BallCollision;
@@ -81,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         canvas.post(new Runnable() {
             @Override
             public void run() { //So that we wait until the UI system is ready
+
                 canvasWidth = canvas.getWidth();
                 canvasHeight = canvas.getHeight();
                 if (canvasHeight != 0 && canvasWidth != 0){
@@ -120,15 +125,31 @@ public class MainActivity extends AppCompatActivity {
      * This gets called when the ball hits the goal
      */
     private void goalReached(){
+        setContentView(R.layout.win_screen);
+        this.levelTimer.stop();
+        this.sensorManager.removeListener(this.acceleratorListener);
+        ((TextView)findViewById(R.id.win_screen_time_view)).setText(this.levelTimer.getTime());
+        Log.i("MAINACTIVITY"," thread id = " + Thread.currentThread().getId());
+        Button doneBtn = findViewById(R.id.win_screen_button);
+
         saveTimeToDb();
-        onBackPressed();
+
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+                }
+         });
+
+        doneBtn.setVisibility(View.VISIBLE);
+
     }
 
     /**
      * Saves time to database
      */
     private void saveTimeToDb() {
-        this.levelTimer.stop();
+     //   this.levelTimer.stop();
         HighScore score = new HighScore();
         score.setLevelName(this.currentLevelName);
         score.setLevelTime(this.levelTimer.getTime());
