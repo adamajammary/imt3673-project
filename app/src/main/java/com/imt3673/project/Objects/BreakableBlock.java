@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 
+import com.imt3673.project.media.TextureManager;
+import com.imt3673.project.media.TextureSet;
 import com.imt3673.project.utils.Vector2;
 
 /**
@@ -12,6 +14,8 @@ import com.imt3673.project.utils.Vector2;
 public class BreakableBlock extends Block {
     private boolean broken = false;
     private Vector2 velocity;
+
+    private TextureSet textureSet;
 
     private float timer;
     private final float brokenTTL = 1f;
@@ -26,10 +30,11 @@ public class BreakableBlock extends Block {
      * @param width of box
      * @param height of box
      */
-    public BreakableBlock(Vector2 position, float width, float height, int type){
+    public BreakableBlock(Vector2 position, float width, float height, int type, TextureSet textureSet){
         super(position, width, height, type);
         this.width = width;
         this.height = height;
+        this.textureSet = textureSet;
     }
 
     /**
@@ -40,6 +45,7 @@ public class BreakableBlock extends Block {
         if (!broken){
             broken = true;
             velocity = breakVel;
+            setTexture(textureSet, TextureSet.CRATEDAMAGED_TEX);
         }
     }
 

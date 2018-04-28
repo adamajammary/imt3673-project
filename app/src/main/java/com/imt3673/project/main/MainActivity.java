@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
             level = new Level();
             level.setTextureSet(textureSet);
             Bitmap levelBitMap = mediaManager.loadLevelPNG(strings[0]);
-            level.buildFromPNG(levelBitMap, canvasHeight, MainActivity.this);
+            level.buildFromPNG(levelBitMap, canvasHeight);
 
             ball = new Ball(new Vector2(level.getSpawnPoint()), canvasHeight);
             ball.setTexture(textureSet, TextureSet.BALL_TEX);

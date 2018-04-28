@@ -88,7 +88,9 @@ public class Ball extends GameObject {
                         collision.magnitude = Math.abs(velocity.getAxis(axis));
 
                         if (block.getType() == Block.TYPE_BREAKABLE){
-                            breakBlock(axis, ((BreakableBlock)block), collisionGroups);
+                            if (collision.magnitude > 250) {
+                                breakBlock(axis, ((BreakableBlock) block), collisionGroups);
+                            }
                         }
 
                         position.setAxis(axis, oldPos.getAxis(axis));

@@ -96,12 +96,12 @@ public class Level {
      * @param level bitmap to use
      * @param phoneHeight height of canvas
      */
-    public void buildFromPNG(Bitmap level, int phoneHeight, Context context){
+    public void buildFromPNG(Bitmap level, int phoneHeight){
         Log.d(TAG, "BUILD LEVEL! Width: " + level.getWidth() + " Height: " + level.getHeight());
         float scaling = phoneHeight / level.getHeight();
         pixelSize = scaling;
 
-        addBackground(context, new PointF(level.getWidth() * scaling, level.getHeight() * scaling));
+        addBackground(new PointF(level.getWidth() * scaling, level.getHeight() * scaling));
         createCollisionGroups(level, scaling);
 
         for (int x = 0; x < level.getWidth(); x++){
@@ -109,13 +109,21 @@ public class Level {
                 int clr = level.getPixel(x, y);
                 if (clr == Block.TYPE_SPAWN){
                     addSpawnPoint(level, x, y, scaling);
+                } else if (clr == Block.TYPE_BREAKABLE){
+                    createRect(x, y, 1, 1, clr, scaling);
+                    level.setPixel(x, y, Block.TYPE_CLEAR);
                 } else if (clr != Block.TYPE_CLEAR){
-                    createRect(level, x, y, clr, scaling, context);
+                    createRect(level, x, y, clr, scaling);
                 }
             }
         }
     }
 
+    /**
+     * Creates all collision groups for level
+     * @param level bitmap of level
+     * @param scaling scaling to use
+     */
     private void createCollisionGroups(Bitmap level, float scaling){
         int start = 0;
         while (start < level.getWidth()){
@@ -139,7 +147,7 @@ public class Level {
      * @param type type of the block
      * @param scaling scaling to apply to rect
      */
-    private void createRect(Bitmap level, int x, int y, int type, float scaling, Context context){
+    private void createRect(Bitmap level, int x, int y, int type, float scaling){
         int startX = x;
         int startY = y;
         int w = 0;
@@ -174,17 +182,29 @@ public class Level {
             }
         }
 
+        createRect(startX, startY, w, h, type, scaling);
+    }
 
-        Vector2 pos = new Vector2(startX * scaling, startY * scaling);
+    /**
+     * Creates a rect
+     * @param x x pos
+     * @param y y pos
+     * @param w width
+     * @param h height
+     * @param type type of block
+     * @param scaling scaling to use
+     */
+    private void createRect(int x, int y, int w, int h, int type, float scaling){
+        Vector2 pos = new Vector2(x * scaling, y * scaling);
         Block block;
         if (type == Block.TYPE_BREAKABLE) {
-            block = new BreakableBlock(pos, w * scaling, h * scaling, type);
+            block = new BreakableBlock(pos, w * scaling, h * scaling, type, textureSet);
             breakableBlocks.add((BreakableBlock)block);
         } else {
             block = new Block(pos, w * scaling, h * scaling, type);
         }
 
-        addBlockTexture(block, type, context);
+        addBlockTexture(block, type);
         blocks.add(block);
         for (Pair<RectF, ArrayList<Block>> collisionGroup : collisionGroups){
             if (RectF.intersects(block.getRectangle(), collisionGroup.first)){
@@ -197,9 +217,8 @@ public class Level {
      * Adds texture to block
      * @param block block to texture
      * @param type type of the block
-     * @param context context
      */
-    private void addBlockTexture(Block block, int type, Context context) {
+    private void addBlockTexture(Block block, int type) {
         if(type == Block.TYPE_OBSTACLE){
             block.setTexture(textureSet, TextureSet.WALL_TEX);
         }
@@ -207,7 +226,7 @@ public class Level {
             block.setTexture(textureSet, TextureSet.GOAL_TEX);
         }
         else if (type == Block.TYPE_BREAKABLE){
-            block.setTexture(textureSet, TextureSet.CRATEDAMAGED_TEX);
+            block.setTexture(textureSet, TextureSet.CRATE_TEX);
         }
     }
 
@@ -226,7 +245,7 @@ public class Level {
     /**
      * Set up the background block
      */
-    private void addBackground(Context context, PointF levelDims){
+    private void addBackground(PointF levelDims){
         background = new Block(Vector2.zero, levelDims.x, levelDims.y, Block.TYPE_CLEAR);
         background.setTexture(textureSet, TextureSet.FLOOR_TEX);
     }
