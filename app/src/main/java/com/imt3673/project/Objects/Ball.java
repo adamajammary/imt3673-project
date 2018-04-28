@@ -78,13 +78,18 @@ public class Ball extends GameObject {
 
         for (Pair<RectF, ArrayList<Block>> collisionGroup : collisionGroups) {
             if (Physics.BallBlockCollision(this, collisionGroup.first)) { //Figure out if ball is inside collision group
-                for (Block block : collisionGroup.second) {
+                for (int i = 0; i < collisionGroup.second.size(); i++) {
+                    Block block = collisionGroup.second.get(i);
                     //The first function checks if we passed through a block, the second if we are intersecting it
                     if (Physics.BallBlockCollision(this, block.getRectangle()) || Physics.LineSegmentBlockCollision(movement, block)) {
 
                         BallCollision collision = new BallCollision();
                         collision.blockType = block.getType();
                         collision.magnitude = Math.abs(velocity.getAxis(axis));
+
+                        if (block.getType() == Block.TYPE_BREAKABLE){
+                            breakBlock(axis, ((BreakableBlock)block), collisionGroups);
+                        }
 
                         position.setAxis(axis, oldPos.getAxis(axis));
                         velocity.setAxis(axis, -velocity.getAxis(axis) * drag);
@@ -95,6 +100,21 @@ public class Ball extends GameObject {
             }
         }
         return new BallCollision();
+    }
+
+    /**
+     * Breaks a breakable block
+     * @param axis axis that broke it
+     * @param block block in question
+     * @param collisionGroups all collision groups (for removing the block)
+     */
+    private void breakBlock(int axis, BreakableBlock block, ArrayList<Pair<RectF, ArrayList<Block>>> collisionGroups){
+        Vector2 breakVel = new Vector2();
+        breakVel.setAxis(axis, velocity.getAxis(axis) * 0.25f);
+        block.breakBlock(breakVel);
+        for (Pair<RectF, ArrayList<Block>> collisionGroup : collisionGroups) {
+            collisionGroup.second.remove(block);
+        }
     }
 
     /**

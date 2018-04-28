@@ -15,6 +15,9 @@ import com.imt3673.project.main.R;
 import com.imt3673.project.media.TextureSet;
 import com.imt3673.project.utils.Vector2;
 
+import org.w3c.dom.Text;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -25,6 +28,7 @@ public class Level {
 
     private Block background;
     private ArrayList<Block> blocks = new ArrayList<>();
+    private ArrayList<BreakableBlock> breakableBlocks = new ArrayList<>();
     private ArrayList<Pair<RectF, ArrayList<Block>>> collisionGroups = new ArrayList<>();
     private final int collisionGroupLen = 20;
     private static float pixelSize;
@@ -39,6 +43,20 @@ public class Level {
     public void draw(Canvas canvas, Vector2 cameraPosition){
         for(Block block : blocks){
             block.draw(canvas, cameraPosition);
+        }
+    }
+
+    /**
+     * Updates the level
+     * @param deltaTime
+     */
+    public void update(float deltaTime){
+        for (int i = 0; i < breakableBlocks.size(); i++){
+            if (breakableBlocks.get(i).update(deltaTime)){
+                blocks.remove(breakableBlocks.get(i));
+                breakableBlocks.remove(i);
+                i--;
+            }
         }
     }
 
@@ -89,12 +107,10 @@ public class Level {
         for (int x = 0; x < level.getWidth(); x++){
             for (int y = 0; y < level.getHeight(); y++){
                 int clr = level.getPixel(x, y);
-                if (clr == Block.TYPE_OBSTACLE) {
-                    createRect(level, x, y, Block.TYPE_OBSTACLE, scaling, context);
-                } else if(clr == Block.TYPE_GOAL){
-                    createRect(level, x, y, Block.TYPE_GOAL, scaling, context);
-                } else if (clr == Block.TYPE_SPAWN){
+                if (clr == Block.TYPE_SPAWN){
                     addSpawnPoint(level, x, y, scaling);
+                } else if (clr != Block.TYPE_CLEAR){
+                    createRect(level, x, y, clr, scaling, context);
                 }
             }
         }
@@ -158,12 +174,17 @@ public class Level {
             }
         }
 
-        Log.d(TAG, "Made block, width: " + w + " height: " + h + " pos: " + startX + "," + startY);
 
         Vector2 pos = new Vector2(startX * scaling, startY * scaling);
-        Block block = new Block(pos, w * scaling, h * scaling, type);
+        Block block;
+        if (type == Block.TYPE_BREAKABLE) {
+            block = new BreakableBlock(pos, w * scaling, h * scaling, type);
+            breakableBlocks.add((BreakableBlock)block);
+        } else {
+            block = new Block(pos, w * scaling, h * scaling, type);
+        }
+
         addBlockTexture(block, type, context);
-        Log.d(TAG, "Scaled block: " + block.getRectangle().toShortString());
         blocks.add(block);
         for (Pair<RectF, ArrayList<Block>> collisionGroup : collisionGroups){
             if (RectF.intersects(block.getRectangle(), collisionGroup.first)){
@@ -180,10 +201,13 @@ public class Level {
      */
     private void addBlockTexture(Block block, int type, Context context) {
         if(type == Block.TYPE_OBSTACLE){
-            block.setTexture(context, textureSet, TextureSet.WALL_TEX);
+            block.setTexture(textureSet, TextureSet.WALL_TEX);
         }
         else if(type == Block.TYPE_GOAL){
-            block.setTexture(context, textureSet, TextureSet.GOAL_TEX);
+            block.setTexture(textureSet, TextureSet.GOAL_TEX);
+        }
+        else if (type == Block.TYPE_BREAKABLE){
+            block.setTexture(textureSet, TextureSet.CRATEDAMAGED_TEX);
         }
     }
 
@@ -204,7 +228,7 @@ public class Level {
      */
     private void addBackground(Context context, PointF levelDims){
         background = new Block(Vector2.zero, levelDims.x, levelDims.y, Block.TYPE_CLEAR);
-        background.setTexture(context, textureSet, TextureSet.FLOOR_TEX);
+        background.setTexture(textureSet, TextureSet.FLOOR_TEX);
     }
 
     /**
