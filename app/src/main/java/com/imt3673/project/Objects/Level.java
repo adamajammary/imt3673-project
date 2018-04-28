@@ -26,7 +26,7 @@ public class Level {
     private Block background;
     private ArrayList<Block> blocks = new ArrayList<>();
     private ArrayList<Pair<RectF, ArrayList<Block>>> collisionGroups = new ArrayList<>();
-    private final int collisionGroupLen = 10;
+    private final int collisionGroupLen = 20;
     private static float pixelSize;
     private Vector2 spawnPoint;
     private TextureSet textureSet;
