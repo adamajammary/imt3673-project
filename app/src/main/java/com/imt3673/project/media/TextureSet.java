@@ -14,18 +14,21 @@ public class TextureSet {
     public final static int FLOOR_TEX = 1;
     public final static int WALL_TEX = 2;
     public final static int GOAL_TEX = 3;
-    public final static int BREAKABLE_WALL_TEX = 4;
-    public final static int WALL_FRAGMENT_1_TEX = 5;
-    public final static int WALL_FRAGMENT_2_TEX = 6;
-    public final static int WALL_FRAGMENT_3_TEX = 7;
-    public final static int WALL_FRAGMENT_4_TEX = 8;
+    public final static int COIN_TEX = 4;
+    public final static int CRATE_TEX = 5;
+    public final static int CRATEDAMAGED_TEX = 6;
+    public final static int PORTAL_TEX = 7;
 
-    public TextureSet(Bitmap ballTex, Bitmap floorTex, Bitmap wallTex, Bitmap goalTex){
+    public TextureSet(Bitmap ballTex, Bitmap floorTex, Bitmap wallTex, Bitmap goalTex, Bitmap coin, Bitmap crate, Bitmap damagedCrate, Bitmap portal){
         textures = new Bitmap[]{
                 ballTex,
                 floorTex,
                 wallTex,
-                goalTex
+                goalTex,
+                coin,
+                crate,
+                damagedCrate,
+                portal
         };
     }
 
