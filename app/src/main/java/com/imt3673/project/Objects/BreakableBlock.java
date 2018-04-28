@@ -86,28 +86,13 @@ public class BreakableBlock extends Block {
      * Draws the ball to the canvas
      * @param canvas draw target canvas
      */
-    /**
     @Override
     public void draw(Canvas canvas, Vector2 cameraPosition){
-        Vector2 viewPos = Vector2.subtract(position, cameraPosition);
-
-
-        Matrix m = new Matrix();
-        m.setScale((radius * 2)/bitmap.getScaledWidth(canvas), (radius * 2)/bitmap.getScaledWidth(canvas));
-        m.postTranslate(radius, radius);
-        m.postRotate(311); // Use this to rotate the ball
-        m.postTranslate(viewPos.x, viewPos.y);
-        shader.setLocalMatrix(m);
-
-
-        canvas.drawCircle(viewPos.x, viewPos.y, radius, paint);
-
         Matrix m = new Matrix();
         m.postScale(Level.getPixelSize()/bitmap.getScaledWidth(canvas), Level.getPixelSize()/bitmap.getScaledWidth(canvas));
-        m.postTranslate(-cameraPosition.x, -cameraPosition.y);
+        m.postTranslate(position.x - cameraPosition.x, position.y - cameraPosition.y);
         shader.setLocalMatrix(m);
 
         canvas.drawRect(Vector2.subtract(cameraPosition, rectangle), paint);
     }
-    */
 }
