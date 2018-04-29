@@ -161,9 +161,9 @@ public class Vector2 {
         );
     }
 
+
     @Override
     public String toString(){
         return String.format(new Locale("NO"),"(%f, %f)", x, y);
     }
-
 }

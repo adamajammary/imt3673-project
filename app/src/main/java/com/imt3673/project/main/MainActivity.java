@@ -177,15 +177,13 @@ public class MainActivity extends AppCompatActivity {
                     level.update(deltaTime);
                     canvas.draw();
 
-                    if (hit.blockType != Block.TYPE_CLEAR && hit.magnitude > 250){
+
+                    if (hit.blockType != Block.TYPE_CLEAR && hit.magnitude > 250 && hit.blockType != Block.TYPE_HOLE){
                        collisionFeedBack();
                     }
 
                     if (hit.blockType == Block.TYPE_GOAL){
                         goalReached();
-                    } else if(hit.blockType == Block.TYPE_HOLE){
-                        if(Vector2.distance(hit.blockPosition, ball.getPosition()) < Level.getPixelSize() * 0.5f);
-                        ball.setPosition(level.getSpawnPoint());
                     }
                 }
             }

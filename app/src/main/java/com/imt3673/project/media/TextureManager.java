@@ -31,7 +31,7 @@ public class TextureManager {
                 BitmapFactory.decodeResource(context.getResources(), R.drawable.crate_damaged),
                 BitmapFactory.decodeResource(context.getResources(), R.drawable.portal),
                 BitmapFactory.decodeResource(context.getResources(), R.drawable.hole)
-        ));
+                ));
     }
 
     /**

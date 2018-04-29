@@ -82,6 +82,14 @@ public class Block extends GameObject{
     }
 
     /**
+     * Returns the center of the block
+     * @return Vector2 center
+     */
+    public Vector2 getCenter() {
+        return new Vector2(rectangle.centerX(), rectangle.centerY());
+    }
+
+    /**
      * Returns the type of the block
      * @return int type
      */

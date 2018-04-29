@@ -101,15 +101,16 @@ public class CanvasView extends View {
             level.getBackground().draw(canvas, cameraPos);
         }
 
-        if (ball != null) { // Draw ball
-            ball.draw(canvas, cameraPos);
-        }
-
         if (level != null){ // Draw level objects
             level.draw(canvas, cameraPos);
         }
+
         for (GameObject obj : gameObjects){
             obj.draw(canvas, cameraPos);
+        }
+
+        if (ball != null) { // Draw ball
+            ball.draw(canvas, cameraPos);
         }
 
         if(levelTimer != null){

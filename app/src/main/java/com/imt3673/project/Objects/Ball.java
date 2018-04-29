@@ -11,6 +11,7 @@ import com.imt3673.project.utils.LineSegment;
 import com.imt3673.project.utils.Vector2;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * The ball that the player controls
@@ -19,9 +20,12 @@ public class Ball extends GameObject {
     private Vector2 velocity;
     private float radius;
 
+    private Vector2 spawnPoint;
+
     //Ball physics variables
     private float accelDelta; //Used for acceleration calculations
     private final float drag = 0.75f; //Used for slowing down ball when hitting wall
+    private boolean reversePhysics = false; // Used to flip acceleration data while physics are "flipped"
 
     /**
      * Constructs the ball
@@ -30,6 +34,7 @@ public class Ball extends GameObject {
      */
     public Ball(Vector2 position, int phoneHeight){
         this.position = position;
+        this.spawnPoint = new Vector2(position);
         this.radius = phoneHeight * 0.025f; //Make radius 2.5% of phone height
 
         accelDelta = phoneHeight * 0.005f; //Make acceleration scale with phone size too
@@ -52,13 +57,19 @@ public class Ball extends GameObject {
     /**
      * Does the physics update for ball.
      * @param accelData xyz acceleration data
-     * @param blocks all blocks the ball can collide with
+     * @param collisionGroups
      * @return what the ball collided with
      */
     public BallCollision physicsUpdate(final float[] accelData, float deltaTime, ArrayList<Pair<RectF, ArrayList<Block>>> collisionGroups){
+        if(reversePhysics){
+            accelData[0] = -accelData[0];
+            accelData[1] = -accelData[1];
+            accelData[2] = -accelData[2];
+        }
         //zFactor helps reduce acceleration when the phone is put flat on a table
         float zFactor = 1 - (Math.abs(accelData[2]) / (Math.abs(accelData[0]) + Math.abs(accelData[1]) + Math.abs(accelData[2])));
         velocity = Vector2.add(velocity, new Vector2(accelData[1] * accelDelta * zFactor, accelData[0] * accelDelta * zFactor));
+
         BallCollision hit1 = physicsUpdateAxis(0, deltaTime, collisionGroups);
         BallCollision hit2 = physicsUpdateAxis(1, deltaTime, collisionGroups);
 
@@ -86,7 +97,6 @@ public class Ball extends GameObject {
                         BallCollision collision = new BallCollision();
                         collision.blockType = block.getType();
                         collision.magnitude = Math.abs(velocity.getAxis(axis));
-                        collision.blockPosition = block.getPosition();
 
                         if (block.getType() == Block.TYPE_BREAKABLE){
                             if (collision.magnitude > 250) {
@@ -94,8 +104,24 @@ public class Ball extends GameObject {
                             }
                         }
 
-                        position.setAxis(axis, oldPos.getAxis(axis));
-                        velocity.setAxis(axis, -velocity.getAxis(axis) * drag);
+
+                        if(collision.blockType == Block.TYPE_HOLE){
+                            if(Vector2.distance(block.getCenter(), getPosition()) < Level.getPixelSize() * 0.25f){
+                                setPosition(new Vector2(spawnPoint));
+                            }
+                            else {
+                                Vector2 fall = Vector2.subtract(block.getCenter(), getPosition());
+                                float force = 1 - fall.magnitude() / Level.getPixelSize();
+                                fall = fall.normalized();
+                                fall.x *= force;
+                                fall.y *= force;
+                                velocity = Vector2.add(velocity, fall);
+                            }
+                        }
+                        else {
+                            position.setAxis(axis, oldPos.getAxis(axis));
+                            velocity.setAxis(axis, -velocity.getAxis(axis) * drag);
+                        }
 
                         return collision;
                     }
@@ -113,6 +139,13 @@ public class Ball extends GameObject {
     public void setPosition(Vector2 pos){
         position = pos;
         velocity = Vector2.zero;
+    }
+
+    /**
+     * Flips the reversePhysics variable
+     */
+    public void flipPhysics(){
+        reversePhysics = !reversePhysics;
     }
 
 
