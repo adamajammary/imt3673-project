@@ -15,12 +15,11 @@ public class Physics {
      * Based on answer by e.James in thread:
      * https://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
      * @param ball
-     * @param block
+     * @param rect
      * @return true if collision
      */
-    public static boolean BallBlockCollision(Ball ball, Block block){
+    public static boolean BallBlockCollision(Ball ball, RectF rect){
         Vector2 circle = ball.getPosition();
-        RectF rect = block.getRectangle();
         Vector2 circleDistance = new Vector2();
 
         circleDistance.x = Math.abs(circle.x - rect.centerX());
@@ -31,13 +30,11 @@ public class Physics {
 
         if (circleDistance.x <= (rect.width()/2)) { return true; }
         if (circleDistance.y <= (rect.height()/2)) { return true; }
-        //return false;
-        ///*
+
         float cornerDistance_sq = (float)Math.pow(circleDistance.x - rect.width()/2, 2) +
                 (float)Math.pow(circleDistance.y - rect.height()/2,2 );
 
         return (cornerDistance_sq <= (Math.pow(ball.getRadius(), 2)));
-        //*/
     }
 
     /**

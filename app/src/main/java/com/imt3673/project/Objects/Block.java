@@ -25,21 +25,23 @@ public class Block extends GameObject{
     public static final int TYPE_SPAWN = Color.BLUE;
     public static final int TYPE_HOLE = Color.CYAN;
     public static final int TYPE_GFLIP = Color.DKGRAY;
+    public static final int TYPE_BREAKABLE = Color.RED;
     public static final Map<Integer, Integer> TYPE_VALUES;
     static
     {
         TYPE_VALUES = new HashMap<Integer, Integer>();
         TYPE_VALUES.put(TYPE_CLEAR, 0);
         TYPE_VALUES.put(TYPE_OBSTACLE, 1);
-        TYPE_VALUES.put(TYPE_GOAL, 2);
+        TYPE_VALUES.put(TYPE_BREAKABLE, 2);
         TYPE_VALUES.put(TYPE_HOLE, 3);
+        TYPE_VALUES.put(TYPE_GOAL, 4);
         TYPE_VALUES.put(TYPE_SPAWN, -1);
     }
 
 
-    private int type = 0;
-    private RectF rectangle;
-    private Vector2[] corners;
+    protected int type = 0;
+    protected RectF rectangle;
+    protected Vector2[] corners;
 
     /**
      * Creates a boundry box
