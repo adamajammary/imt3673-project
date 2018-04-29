@@ -310,7 +310,8 @@ public class MainActivity extends AppCompatActivity {
                     level.update(deltaTime);
                     canvas.draw();
 
-                    if (hit.blockType != Block.TYPE_CLEAR && hit.magnitude > 250){
+
+                    if (hit.blockType != Block.TYPE_CLEAR && hit.magnitude > 250 && hit.blockType != Block.TYPE_HOLE){
                        collisionFeedBack();
                     }
 

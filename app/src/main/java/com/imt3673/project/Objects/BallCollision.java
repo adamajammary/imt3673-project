@@ -1,6 +1,5 @@
 package com.imt3673.project.Objects;
 
-import com.imt3673.project.utils.Vector2;
 
 /**
  * Contains information about a collision between the ball and a block
