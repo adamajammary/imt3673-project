@@ -273,7 +273,7 @@ public class GooglePlayService {
     private void setLeaderboard() {
         this.leaderboards.put("level1", this.context.getString(R.string.leaderboard_level1));
         this.leaderboards.put("level2", this.context.getString(R.string.leaderboard_level2));
-        //this.leaderboards.put("level3", this.context.getString(R.string.leaderboard_level3));
+        this.leaderboards.put("level3", this.context.getString(R.string.leaderboard_level3));
         //this.leaderboards.put("level4", this.context.getString(R.string.leaderboard_level4));
         //this.leaderboards.put("level5", this.context.getString(R.string.leaderboard_level5));
 
