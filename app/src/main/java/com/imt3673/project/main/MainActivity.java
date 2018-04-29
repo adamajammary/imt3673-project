@@ -1,7 +1,11 @@
 package com.imt3673.project.main;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,6 +19,8 @@ import android.view.View;
 import android.view.Window;
 
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -168,6 +174,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.win_screen);
         ((TextView)findViewById(R.id.win_screen_time_view)).setText(this.levelTimer.getTime());
 
+        TextView goldTime = findViewById(R.id.times_to_beat_gold);
+        goldTime.setText(this.goldTime);
+        TextView silverTime = findViewById(R.id.times_to_beat_silver);
+        silverTime.setText(this.silverTime);
+        TextView bronzeTime = findViewById(R.id.times_to_beat_bronze);
+        bronzeTime.setText(this.bronzeTime);
+
+        this.animateBigStar();
+
         // Display and animate stars earned
         String newTime = this.levelTimer.getTime().replace(":","");
 
@@ -178,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
         float rotation = 360f;
         int   duration = 2000;
 
+        // Check times and animate stars
         if(Integer.parseInt(newTime) < Integer.parseInt(this.goldTime.replace(":",""))){
             goldStar.setVisibility(View.VISIBLE);
             goldStar.animate().rotationBy(rotation).setDuration(duration);
@@ -185,17 +201,63 @@ public class MainActivity extends AppCompatActivity {
             silverStar.animate().rotationBy(rotation).setDuration(duration);
             bronzeStar.setVisibility(View.VISIBLE);
             bronzeStar.animate().rotationBy(rotation).setDuration(duration);
+
+            goldTime.setTextColor(Color.GREEN);
+            silverTime.setTextColor(Color.GREEN);
+            bronzeTime.setTextColor(Color.GREEN);
         }
         else if(Integer.parseInt(newTime) < Integer.parseInt(this.silverTime.replace(":",""))){
             silverStar.setVisibility(View.VISIBLE);
             silverStar.animate().rotationBy(rotation).setDuration(duration);
             bronzeStar.setVisibility(View.VISIBLE);
             bronzeStar.animate().rotationBy(rotation).setDuration(duration);
+
+            silverTime.setTextColor(Color.GREEN);
+            bronzeTime.setTextColor(Color.GREEN);
         }
         else if(Integer.parseInt(newTime) < Integer.parseInt(this.bronzeTime.replace(":",""))){
             bronzeStar.setVisibility(View.VISIBLE);
             bronzeStar.animate().rotationBy(rotation).setDuration(duration);
+            bronzeTime.setTextColor(Color.GREEN);
         }
+    }
+
+    /**
+     * Animate the big star containing the time in the win screen
+     */
+    private void animateBigStar() {
+        ImageView bigStar = findViewById(R.id.win_screen_big_star);
+
+        Animator scaleDown = AnimatorInflater.loadAnimator(this, R.animator.scale_down_animation);
+        scaleDown.setTarget(bigStar);
+
+        Animator scaleUp = AnimatorInflater.loadAnimator(this, R.animator.scale_up_animation);
+        scaleUp.setTarget(bigStar);
+
+        AnimatorSet setScaleDownAndUp = new AnimatorSet();
+        setScaleDownAndUp.playSequentially(scaleDown, scaleUp);
+        setScaleDownAndUp.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                setScaleDownAndUp.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        setScaleDownAndUp.start();
     }
 
     /**
