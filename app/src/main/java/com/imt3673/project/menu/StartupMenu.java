@@ -48,13 +48,8 @@ public class StartupMenu extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Sign-In to the Google Play Games Services
-        if (requestCode == GOOGLE_SIGNIN_RESULT) {
+        if (requestCode == GOOGLE_SIGNIN_RESULT)
             this.googlePlayService.authenticateHandleIntent(resultCode, data);
-        } else {
-            Log.e("StartupMenu", "onActivityResult: requestCode=" + requestCode);
-            Log.e("StartupMenu", "onActivityResult: resultCode=" + resultCode);
-            Log.e("StartupMenu", "onActivityResult: data=" + data);
-        }
     }
 
     /**

@@ -144,18 +144,8 @@ public class MainActivity extends AppCompatActivity {
     private void saveTimeToGooglePlay() {
         GooglePlayService googlePlayService = new GooglePlayService(this);
 
-        if (googlePlayService.isSignedIn()) {
-
-            // TODO: Remove
-            Log.e("MainActivity", "saveTimeToGooglePlay: USER IS SIGNED IN");
-
+        if (googlePlayService.isSignedIn())
             googlePlayService.updateLeaderboard(this.currentLevelName, this.levelTimer.getTimeMilliseconds());
-        } else {
-
-            // TODO: Remove
-            Log.e("MainActivity", "saveTimeToGooglePlay: USER IS NOT SIGNED IN");
-
-        }
     }
 
     /**

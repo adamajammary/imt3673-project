@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -43,6 +44,7 @@ public class GooglePlayService {
     private final GoogleApiAvailability googleApiAvailability;
     private LeaderboardsClient          leaderboardsClient;
     private Map<String, String>         leaderboards = new HashMap<>();
+    private final String                LOG_TAG      = GooglePlayService.class.getName();
     private Player                      player;
 
     /**
@@ -64,8 +66,10 @@ public class GooglePlayService {
         if (result.isSuccess())
             this.googleAccount = result.getSignInAccount();
 
-        if (!this.isSignedIn())
-            Log.w("GooglePlayService", context.getString(R.string.error_authentication));
+        if (!this.isSignedIn()) {
+            Toast.makeText(context, context.getString(R.string.error_authentication), Toast.LENGTH_LONG).show();
+            Log.w(LOG_TAG, context.getString(R.string.error_authentication));
+        }
     }
 
     /**
@@ -107,8 +111,7 @@ public class GooglePlayService {
         boolean signedIn;
 
         // Try to re-use existing user account if possible before authenticating the user.
-        if (this.googleAccount == null)
-            this.googleAccount = GoogleSignIn.getLastSignedInAccount(this.context);
+        this.googleAccount = GoogleSignIn.getLastSignedInAccount(this.context);
 
         signedIn = ((this.googleAccount != null) && this.isGoogleApiAvailable());
 
@@ -163,25 +166,19 @@ public class GooglePlayService {
      * @param time Time (in milliseconds) used to complete the level
      */
     public void updateLeaderboard(final String level, final long time) {
-
-        // TODO: Remove
-        Log.e("GooglePlayService", "updateLeaderboard: UPLOADING SCORE TO GOOGLE PLAY");
-        Log.e("GooglePlayService", "updateLeaderboard: level_name=" + level);
-        Log.e("GooglePlayService", "updateLeaderboard: level_id=" + leaderboards.get(level));
-        Log.e("GooglePlayService", "updateLeaderboard: time=" + time);
-
-        //this.leaderboardsClient.submitScore(this.leaderboards.get(level), time);
-
+        // TODO: Show a dialog asking the user if they want to submit to Google Play?
+        // Notes:
+        // - May get annoying after each level?
+        // - Currently we try to upload if they are signed in, otherwise not.
+        // - Alternatively we could ask the user in options, an save the answer locally.
         this.leaderboardsClient.submitScoreImmediate(this.leaderboards.get(level), time)
-            .addOnSuccessListener((ScoreSubmissionData result) -> {
-                Log.e("GooglePlayService", "updateLeaderboard::addOnSuccessListener: result=" + result);
-            })
             .addOnCompleteListener((Task<ScoreSubmissionData> task) -> {
-                Log.e("GooglePlayService", "updateLeaderboard::addOnCompleteListener: isComplete=" + task.isComplete());
-            })
-            .addOnFailureListener((Exception e) -> {
-                Log.e("GooglePlayService", "updateLeaderboard::addOnFailureListener: e=" + e);
-                Log.e("GooglePlayService", "updateLeaderboard::addOnFailureListener: e.getMessage=" + e.getMessage());
+                if (task.isSuccessful()) {
+                    Toast.makeText(context, context.getString(R.string.gp_submit_score_success), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, context.getString(R.string.gp_submit_score_fail), Toast.LENGTH_LONG).show();
+                    Log.w(LOG_TAG, task.getException());
+                }
             });
     }
 
@@ -197,8 +194,10 @@ public class GooglePlayService {
             if (task.isSuccessful() && isGoogleApiAvailable()) {
                 googleAccount = task.getResult();
 
-                if (!this.isSignedIn())
-                    Log.w("GooglePlayService", context.getString(R.string.error_authentication));
+                if (!this.isSignedIn()) {
+                    Toast.makeText(context, context.getString(R.string.error_authentication), Toast.LENGTH_LONG).show();
+                    Log.w(LOG_TAG, context.getString(R.string.error_authentication));
+                }
 
                 updatePlayer();
             // Open Google Sign-in (intent result will be handled in the calling activity)
@@ -221,7 +220,7 @@ public class GooglePlayService {
         try {
             cleanupFunction.call();
         } catch (Exception e) {
-            Log.w("GooglePlayService", e);
+            Log.w(LOG_TAG, e);
         }
     }
 
@@ -300,32 +299,15 @@ public class GooglePlayService {
      * Displays the leaderboard UI for the specified level.
      */
     private void showLeaderboard(final String level) {
-
-        // TODO: Remove
-        Log.e("GooglePlayService", "showLeaderboard: STARTING LEADERBOARD ACTIVITY");
-        Log.e("GooglePlayService", "showLeaderboard: level_name=" + level);
-        Log.e("GooglePlayService", "showLeaderboard: level_id=" + leaderboards.get(level));
-
-        /*this.leaderboardsClient.getLeaderboardIntent(this.leaderboards.get(level))
-            .addOnSuccessListener((Intent intent) -> ((Activity)context).startActivityForResult(
-                intent, Constants.LEADERBOARD_UI
-            ));*/
-
-
-
         this.leaderboardsClient.getLeaderboardIntent(this.leaderboards.get(level))
-            .addOnSuccessListener((Intent intent) -> {
-                Log.e("GooglePlayService", "showLeaderboard::addOnSuccessListener: intent=" + intent);
-                ((Activity) context).startActivityForResult(intent, Constants.LEADERBOARD_UI);
-            })
             .addOnCompleteListener((Task<Intent> task) -> {
-                Log.e("GooglePlayService", "showLeaderboard::addOnCompleteListener: isComplete=" + task.isComplete());
-            })
-            .addOnFailureListener((Exception e) -> {
-                Log.e("GooglePlayService", "showLeaderboard::addOnFailureListener: e=" + e);
-                Log.e("GooglePlayService", "showLeaderboard::addOnFailureListener: e.getMessage=" + e.getMessage());
+                if (task.isSuccessful()) {
+                    ((Activity)context).startActivityForResult(task.getResult(), Constants.LEADERBOARD_UI);
+                } else {
+                    Toast.makeText(context, context.getString(R.string.gp_show_leaderboard_fail), Toast.LENGTH_LONG).show();
+                    Log.w(LOG_TAG, task.getException());
+                }
             });
-
     }
 
     /**
