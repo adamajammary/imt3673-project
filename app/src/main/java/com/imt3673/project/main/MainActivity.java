@@ -173,7 +173,8 @@ public class MainActivity extends AppCompatActivity {
                 lastUpdateTime = currentTime;
 
                 if (ready) { //Because we dont know when the graphics will be initialized
-                    BallCollision hit = ball.physicsUpdate(sensorEvent.values, deltaTime, level.getBlocks());
+                    BallCollision hit = ball.physicsUpdate(sensorEvent.values, deltaTime, level.getCollisionGroups());
+                    level.update(deltaTime);
                     canvas.draw();
 
                     if (hit.blockType != Block.TYPE_CLEAR && hit.magnitude > 250){
@@ -206,10 +207,10 @@ public class MainActivity extends AppCompatActivity {
             level = new Level();
             level.setTextureSet(textureSet);
             Bitmap levelBitMap = mediaManager.loadLevelPNG(strings[0]);
-            level.buildFromPNG(levelBitMap, canvasHeight, MainActivity.this);
+            level.buildFromPNG(levelBitMap, canvasHeight);
 
             ball = new Ball(new Vector2(level.getSpawnPoint()), canvasHeight);
-            ball.setTexture(MainActivity.this, textureSet, TextureSet.BALL_TEX);
+            ball.setTexture(textureSet, TextureSet.BALL_TEX);
 
             levelTimer = new Timer(new Vector2(canvasWidth,canvasHeight), timeHandler);
 
