@@ -30,9 +30,9 @@ public class Block extends GameObject{
     {
         TYPE_VALUES = new HashMap<Integer, Integer>();
         TYPE_VALUES.put(TYPE_CLEAR, 0);
-        TYPE_VALUES.put(TYPE_HOLE, 1);
-        TYPE_VALUES.put(TYPE_OBSTACLE, 2);
-        TYPE_VALUES.put(TYPE_BREAKABLE, 3);
+        TYPE_VALUES.put(TYPE_OBSTACLE, 1);
+        TYPE_VALUES.put(TYPE_BREAKABLE, 2);
+        TYPE_VALUES.put(TYPE_HOLE, 3);
         TYPE_VALUES.put(TYPE_GOAL, 4);
         TYPE_VALUES.put(TYPE_SPAWN, -1);
     }

@@ -106,25 +106,15 @@ public class Ball extends GameObject {
 
 
                         if(collision.blockType == Block.TYPE_HOLE){
-                            if(Vector2.distance(block.getCenter(), getPosition()) < Level.getPixelSize() * 0.25f){
-                                setPosition(new Vector2(spawnPoint));
-                            }
-                            else {
-                                Vector2 fall = Vector2.subtract(block.getCenter(), getPosition());
-                                float force = 1 - fall.magnitude() / Level.getPixelSize();
-                                fall = fall.normalized();
-                                fall.x *= force;
-                                fall.y *= force;
-                                velocity.x += fall.x;
-                                velocity.y += fall.y;
-                            }
+                            holeTrigger(block);
+                            // No return if block type is TYPE_HOLE because holes act as triggers instead of colliders
                         }
                         else {
                             position.setAxis(axis, oldPos.getAxis(axis));
                             velocity.setAxis(axis, -velocity.getAxis(axis) * drag);
+                            return collision;
                         }
 
-                        return collision;
                     }
                 }
             }
@@ -143,10 +133,24 @@ public class Ball extends GameObject {
     }
 
     /**
-     * Flips the reversePhysics variable
+     * Function to run when inside the collider block of a hole
+     *
+     * Resets the player position if close enough to hole center
+     * "Pulls" the ball towards the center if not close enough
      */
-    public void flipPhysics(){
-        reversePhysics = !reversePhysics;
+    public void holeTrigger(Block block){
+        if(Vector2.distance(block.getCenter(), getPosition()) < Level.getPixelSize() * 0.35f){
+            setPosition(new Vector2(spawnPoint));
+        }
+        else {
+            Vector2 fall = Vector2.subtract(block.getCenter(), getPosition());
+            float force = 1 - fall.magnitude() / Level.getPixelSize();
+            fall = fall.normalized();
+            fall.x *= force * 5;
+            fall.y *= force * 5;
+            velocity.x += fall.x;
+            velocity.y += fall.y;
+        }
     }
 
 
