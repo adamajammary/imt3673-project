@@ -45,6 +45,7 @@ public class LevelChooser extends AppCompatActivity {
         this.levels.add(new LevelInfo("Level 1","level1","00:20:00","00:40:00","01:00:00"));
         this.levels.add(new LevelInfo("Level 2","level2","00:20:00","00:40:00","01:00:00"));
         this.levels.add(new LevelInfo("Level 3","level3","00:20:00","00:40:00","01:00:00"));
+        this.levels.add(new LevelInfo("Level 4","level4","00:20:00","00:40:00","01:00:00"));
 
         levelListView = findViewById(R.id.lv_levels);
         this.listAdapter = new LevelChooserListAdapter(this,this.levels, AppDatabase.getAppDatabase(this));

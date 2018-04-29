@@ -95,6 +95,11 @@ public class Vector2 {
         return Vector2.mult(this, 1 / magnitude());
     }
 
+
+    public static float distance(Vector2 v1, Vector2 v2) {
+        return Vector2.subtract(v1, v2).magnitude();
+    }
+
     /**
      * Adds two vectors together
      * @param first The first Vector2
@@ -155,6 +160,7 @@ public class Vector2 {
                 rectf.bottom -  vector.y
         );
     }
+
 
     @Override
     public String toString(){

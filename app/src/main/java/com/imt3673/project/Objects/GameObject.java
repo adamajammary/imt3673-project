@@ -43,10 +43,9 @@ public abstract class GameObject {
      * @param textureSet textureSet
      * @param textureType textureType
      */
-    public void setTexture( TextureSet textureSet, int textureType){
+    public void setTexture(TextureSet textureSet, int textureType){
         bitmap = textureSet.getTexture(textureType);
         shader = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         paint.setShader(shader);
     }
-
 }

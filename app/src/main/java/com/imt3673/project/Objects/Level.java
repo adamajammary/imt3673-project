@@ -109,6 +109,8 @@ public class Level {
                 int clr = level.getPixel(x, y);
                 if (clr == Block.TYPE_SPAWN){
                     addSpawnPoint(level, x, y, scaling);
+                } else if (clr == Block.TYPE_HOLE){
+                    createRect(level, x, y, Block.TYPE_HOLE, scaling);
                 } else if (clr == Block.TYPE_BREAKABLE){
                     createRect(x, y, 1, 1, clr, scaling);
                     level.setPixel(x, y, Block.TYPE_CLEAR);
@@ -227,6 +229,9 @@ public class Level {
         }
         else if (type == Block.TYPE_BREAKABLE){
             block.setTexture(textureSet, TextureSet.CRATE_TEX);
+        }
+        else if(type == Block.TYPE_HOLE){
+            block.setTexture(textureSet, TextureSet.HOLE_TEX);
         } else {
             Log.d(TAG, "" + x + " " + y);
             Log.d(TAG, "WHAT " + type);
