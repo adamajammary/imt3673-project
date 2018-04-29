@@ -79,6 +79,9 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 intent.putExtra("level", mLevelsInfo.get(position).getLevelId());
+                intent.putExtra("gold_time",levelInfo.getGoldTime());
+                intent.putExtra("silver_time",levelInfo.getSilverTime());
+                intent.putExtra("bronze_time",levelInfo.getBronzeTime());
                 mContext.startActivity(intent);
             }
         });

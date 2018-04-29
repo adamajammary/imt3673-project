@@ -1,7 +1,11 @@
 package com.imt3673.project.main;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -10,7 +14,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import android.view.View;
+import android.view.Window;
+
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.imt3673.project.Objects.Ball;
 import com.imt3673.project.Objects.BallCollision;
@@ -37,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private SensorListenerManager sensorManager;
     private AppDatabase           database;
     private String currentLevelName;
+    private String goldTime;
+    private String silverTime;
+    private String bronzeTime;
 
     private CanvasView canvas;
     private static int canvasWidth;
@@ -49,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private Level level;
 
     private Timer levelTimer;
+
+
     private Handler timeHandler;
 
     @Override
@@ -57,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
         this.timeHandler = new Handler();
         this.database = AppDatabase.getAppDatabase(this);
         this.currentLevelName = getIntent().getStringExtra("level");
+        this.goldTime = getIntent().getStringExtra("gold_time");
+        this.silverTime = getIntent().getStringExtra("silver_time");
+        this.bronzeTime = getIntent().getStringExtra("bronze_time");
 
         // Set window fullscreen and remove title bar, and force landscape orientation
        // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -81,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         canvas.post(new Runnable() {
             @Override
             public void run() { //So that we wait until the UI system is ready
+
                 canvasWidth = canvas.getWidth();
                 canvasHeight = canvas.getHeight();
                 if (canvasHeight != 0 && canvasWidth != 0){
@@ -120,11 +142,122 @@ public class MainActivity extends AppCompatActivity {
      */
     private void goalReached(){
         this.levelTimer.stop();
+        this.sensorManager.removeListener(this.acceleratorListener);
+
+        this.displayWinScreen();
         this.saveTimeToDb();
         this.saveTimeToGooglePlay();
+        this.displayLevelChooserButton();
         this.levelTimer.reset();
+    }
 
-        onBackPressed();
+    /**
+     * Display level chooser button in win screen
+     */
+    private void displayLevelChooserButton() {
+        Button doneBtn = findViewById(R.id.win_screen_button);
+
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+                }
+         });
+
+        doneBtn.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Displays win screen with time and stars earned.
+     */
+    private void displayWinScreen() {
+        setContentView(R.layout.win_screen);
+        ((TextView)findViewById(R.id.win_screen_time_view)).setText(this.levelTimer.getTime());
+
+        TextView goldTime = findViewById(R.id.times_to_beat_gold);
+        goldTime.setText(this.goldTime);
+        TextView silverTime = findViewById(R.id.times_to_beat_silver);
+        silverTime.setText(this.silverTime);
+        TextView bronzeTime = findViewById(R.id.times_to_beat_bronze);
+        bronzeTime.setText(this.bronzeTime);
+
+        this.animateBigStar();
+
+        // Display and animate stars earned
+        String newTime = this.levelTimer.getTime().replace(":","");
+
+        ImageView goldStar = findViewById(R.id.win_gold_star);
+        ImageView silverStar = findViewById(R.id.win_silver_star);
+        ImageView bronzeStar = findViewById(R.id.win_bronze_star);
+
+        float rotation = 360f;
+        int   duration = 2000;
+
+        // Check times and animate stars
+        if(Integer.parseInt(newTime) < Integer.parseInt(this.goldTime.replace(":",""))){
+            goldStar.setVisibility(View.VISIBLE);
+            goldStar.animate().rotationBy(rotation).setDuration(duration);
+            silverStar.setVisibility(View.VISIBLE);
+            silverStar.animate().rotationBy(rotation).setDuration(duration);
+            bronzeStar.setVisibility(View.VISIBLE);
+            bronzeStar.animate().rotationBy(rotation).setDuration(duration);
+
+            goldTime.setTextColor(Color.GREEN);
+            silverTime.setTextColor(Color.GREEN);
+            bronzeTime.setTextColor(Color.GREEN);
+        }
+        else if(Integer.parseInt(newTime) < Integer.parseInt(this.silverTime.replace(":",""))){
+            silverStar.setVisibility(View.VISIBLE);
+            silverStar.animate().rotationBy(rotation).setDuration(duration);
+            bronzeStar.setVisibility(View.VISIBLE);
+            bronzeStar.animate().rotationBy(rotation).setDuration(duration);
+
+            silverTime.setTextColor(Color.GREEN);
+            bronzeTime.setTextColor(Color.GREEN);
+        }
+        else if(Integer.parseInt(newTime) < Integer.parseInt(this.bronzeTime.replace(":",""))){
+            bronzeStar.setVisibility(View.VISIBLE);
+            bronzeStar.animate().rotationBy(rotation).setDuration(duration);
+            bronzeTime.setTextColor(Color.GREEN);
+        }
+    }
+
+    /**
+     * Animate the big star containing the time in the win screen
+     */
+    private void animateBigStar() {
+        ImageView bigStar = findViewById(R.id.win_screen_big_star);
+
+        Animator scaleDown = AnimatorInflater.loadAnimator(this, R.animator.scale_down_animation);
+        scaleDown.setTarget(bigStar);
+
+        Animator scaleUp = AnimatorInflater.loadAnimator(this, R.animator.scale_up_animation);
+        scaleUp.setTarget(bigStar);
+
+        AnimatorSet setScaleDownAndUp = new AnimatorSet();
+        setScaleDownAndUp.playSequentially(scaleDown, scaleUp);
+        setScaleDownAndUp.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                setScaleDownAndUp.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        setScaleDownAndUp.start();
     }
 
     /**
