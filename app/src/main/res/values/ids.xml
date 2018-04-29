@@ -1,6 +1,9 @@
 <resources>
-    <integer name="google_play_services_version">12211000</integer>
-
     <string name="app_id">1068450677468</string>
-    <string name="leaderboard_id">CgkI3IX-pIwfEAIQAQ</string>
+    <integer name="google_play_services_version">12451000</integer>
+    <string name="leaderboard_level1">CgkI3IX-pIwfEAIQAQ</string>
+    <string name="leaderboard_level2">CgkI3IX-pIwfEAIQAg</string>
+    <string name="leaderboard_level3">CgkI3IX-pIwfEAIQAw</string>
+    <string name="leaderboard_level4">CgkI3IX-pIwfEAIQBA</string>
+    <string name="leaderboard_level5">CgkI3IX-pIwfEAIQBQ</string>
 </resources>

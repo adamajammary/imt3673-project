@@ -2,7 +2,6 @@ package com.imt3673.project.main;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -10,7 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Window;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.imt3673.project.Objects.Ball;
@@ -27,6 +26,7 @@ import com.imt3673.project.media.TextureManager;
 import com.imt3673.project.media.TextureSet;
 import com.imt3673.project.sensors.HapticFeedbackManager;
 import com.imt3673.project.sensors.SensorListenerManager;
+import com.imt3673.project.services.GooglePlayService;
 import com.imt3673.project.utils.Vector2;
 
 public class MainActivity extends AppCompatActivity {
@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Usage: Copy resources to the res/raw folder, and access with R.raw.file.
-     * TODO:  This could be done asynchronously for optimization.
      */
     private void loadResources() {
         this.mediaManager.loadResource(R.raw.ping_001, Constants.MEDIA_TYPE_SOUND);
@@ -120,7 +119,11 @@ public class MainActivity extends AppCompatActivity {
      * This gets called when the ball hits the goal
      */
     private void goalReached(){
-        saveTimeToDb();
+        this.levelTimer.stop();
+        this.saveTimeToDb();
+        this.saveTimeToGooglePlay();
+        this.levelTimer.reset();
+
         onBackPressed();
     }
 
@@ -128,12 +131,21 @@ public class MainActivity extends AppCompatActivity {
      * Saves time to database
      */
     private void saveTimeToDb() {
-        this.levelTimer.stop();
         HighScore score = new HighScore();
         score.setLevelName(this.currentLevelName);
         score.setLevelTime(this.levelTimer.getTime());
+
         this.database.highScoreDao().insertAll(score);
-        this.levelTimer.reset();
+    }
+
+    /**
+     * Saves the time to the online leaderboard on Google Play if the user is signed in.
+     */
+    private void saveTimeToGooglePlay() {
+        GooglePlayService googlePlayService = new GooglePlayService(this);
+
+        if (googlePlayService.isSignedIn())
+            googlePlayService.updateLeaderboard(this.currentLevelName, this.levelTimer.getTimeMilliseconds());
     }
 
     /**

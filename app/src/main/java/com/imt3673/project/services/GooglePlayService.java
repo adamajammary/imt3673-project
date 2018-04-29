@@ -3,10 +3,13 @@ package com.imt3673.project.services;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -21,9 +24,14 @@ import com.google.android.gms.games.GamesClient;
 import com.google.android.gms.games.LeaderboardsClient;
 import com.google.android.gms.games.Player;
 import com.google.android.gms.games.PlayersClient;
+import com.google.android.gms.games.leaderboard.ScoreSubmissionData;
 import com.google.android.gms.tasks.Task;
 import com.imt3673.project.main.R;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 /**
@@ -35,7 +43,8 @@ public class GooglePlayService {
     private GoogleSignInAccount         googleAccount;
     private final GoogleApiAvailability googleApiAvailability;
     private LeaderboardsClient          leaderboardsClient;
-    private String                      leaderboardID;
+    private Map<String, String>         leaderboards = new HashMap<>();
+    private final String                LOG_TAG      = GooglePlayService.class.getName();
     private Player                      player;
 
     /**
@@ -57,8 +66,10 @@ public class GooglePlayService {
         if (result.isSuccess())
             this.googleAccount = result.getSignInAccount();
 
-        if (!this.isSignedIn())
-            Log.w("GooglePlayService", context.getString(R.string.error_authentication));
+        if (!this.isSignedIn()) {
+            Toast.makeText(context, context.getString(R.string.error_authentication), Toast.LENGTH_LONG).show();
+            Log.w(LOG_TAG, context.getString(R.string.error_authentication));
+        }
     }
 
     /**
@@ -100,8 +111,7 @@ public class GooglePlayService {
         boolean signedIn;
 
         // Try to re-use existing user account if possible before authenticating the user.
-        if (this.googleAccount == null)
-            this.googleAccount = GoogleSignIn.getLastSignedInAccount(this.context);
+        this.googleAccount = GoogleSignIn.getLastSignedInAccount(this.context);
 
         signedIn = ((this.googleAccount != null) && this.isGoogleApiAvailable());
 
@@ -112,7 +122,6 @@ public class GooglePlayService {
     }
 
     /**
-     * TODO: Set view after creating a view (if we decide to use custom popup views)
      * Assigns the specified resource view to be used for popups like achievements etc.
      * @param resourceID Resource ID of the view
      */
@@ -125,14 +134,13 @@ public class GooglePlayService {
     }
 
     /**
-     * TODO: Link to menu/options
      * Displays the leaderboard UI.
      */
     public void showLeaderboard() {
-        this.leaderboardsClient.getLeaderboardIntent(this.leaderboardID)
-            .addOnSuccessListener((Intent intent) -> ((Activity)context).startActivityForResult(
-                intent, Constants.LEADERBOARD_UI
-            ));
+        ArrayList<String> levels = new ArrayList<>(this.leaderboards.keySet());
+        Collections.sort(levels, (String a, String b) -> a.compareTo(b));
+
+        this.selectLevel(levels);
     }
 
     /**
@@ -152,12 +160,26 @@ public class GooglePlayService {
     }
 
     /**
-     * TODO: Call when the game ends to update the score on the leaderboard
-     * Updates the current leaderboard with the specified score for the current user.
-     * @param score User score
+     * Updates the current leaderboard with the specified time for the current user.
+     * https://developers.google.com/android/reference/com/google/android/gms/games/LeaderboardsClient
+     * @param level Level Name (ID)
+     * @param time Time (in milliseconds) used to complete the level
      */
-    public void updateLeaderboard(final long score) {
-        this.leaderboardsClient.submitScore(this.leaderboardID, score);
+    public void updateLeaderboard(final String level, final long time) {
+        // TODO: Show a dialog asking the user if they want to submit to Google Play?
+        // Notes:
+        // - May get annoying after each level?
+        // - Currently we try to upload if they are signed in, otherwise not.
+        // - Alternatively we could ask the user in options, an save the answer locally.
+        this.leaderboardsClient.submitScoreImmediate(this.leaderboards.get(level), time)
+            .addOnCompleteListener((Task<ScoreSubmissionData> task) -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(context, context.getString(R.string.gp_submit_score_success), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, context.getString(R.string.gp_submit_score_fail), Toast.LENGTH_LONG).show();
+                    Log.w(LOG_TAG, task.getException());
+                }
+            });
     }
 
     /**
@@ -172,8 +194,10 @@ public class GooglePlayService {
             if (task.isSuccessful() && isGoogleApiAvailable()) {
                 googleAccount = task.getResult();
 
-                if (!this.isSignedIn())
-                    Log.w("GooglePlayService", context.getString(R.string.error_authentication));
+                if (!this.isSignedIn()) {
+                    Toast.makeText(context, context.getString(R.string.error_authentication), Toast.LENGTH_LONG).show();
+                    Log.w(LOG_TAG, context.getString(R.string.error_authentication));
+                }
 
                 updatePlayer();
             // Open Google Sign-in (intent result will be handled in the calling activity)
@@ -188,14 +212,15 @@ public class GooglePlayService {
      */
     private void cleanup(Callable<Void> cleanupFunction) {
         this.googleAccount      = null;
-        this.leaderboardID      = "";
         this.leaderboardsClient = null;
         this.player             = null;
+
+        this.leaderboards.clear();
 
         try {
             cleanupFunction.call();
         } catch (Exception e) {
-            Log.w("GooglePlayService", e);
+            Log.w(LOG_TAG, e);
         }
     }
 
@@ -221,10 +246,37 @@ public class GooglePlayService {
     }
 
     /**
+     * Displays a list of levels the user can select from.
+     * @param levels List of levels
+     */
+    private void selectLevel(final ArrayList<String> levels) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this.context);
+
+        dialog.setTitle(R.string.level_chooser_title);
+        dialog.setIcon(R.mipmap.ic_launcher);
+
+        dialog.setItems(
+            levels.toArray(new CharSequence[levels.size()]),
+            (DialogInterface d, int i) -> {
+                d.dismiss();
+                showLeaderboard(levels.get(i));
+            }
+        );
+
+        dialog.show();
+    }
+
+    /**
+     * TODO: Uncomment new levels added (levels list is only available in the LevelChooser activity)
      * Sets the leaderboard for the current user account.
      */
     private void setLeaderboard() {
-        this.leaderboardID      = this.context.getString(R.string.leaderboard_id);
+        this.leaderboards.put("level1", this.context.getString(R.string.leaderboard_level1));
+        this.leaderboards.put("level2", this.context.getString(R.string.leaderboard_level2));
+        this.leaderboards.put("level3", this.context.getString(R.string.leaderboard_level3));
+        //this.leaderboards.put("level4", this.context.getString(R.string.leaderboard_level4));
+        //this.leaderboards.put("level5", this.context.getString(R.string.leaderboard_level5));
+
         this.leaderboardsClient = Games.getLeaderboardsClient(this.context, this.googleAccount);
     }
 
@@ -241,6 +293,21 @@ public class GooglePlayService {
                 player = task.getResult();
             }
         });
+    }
+
+    /**
+     * Displays the leaderboard UI for the specified level.
+     */
+    private void showLeaderboard(final String level) {
+        this.leaderboardsClient.getLeaderboardIntent(this.leaderboards.get(level))
+            .addOnCompleteListener((Task<Intent> task) -> {
+                if (task.isSuccessful()) {
+                    ((Activity)context).startActivityForResult(task.getResult(), Constants.LEADERBOARD_UI);
+                } else {
+                    Toast.makeText(context, context.getString(R.string.gp_show_leaderboard_fail), Toast.LENGTH_LONG).show();
+                    Log.w(LOG_TAG, task.getException());
+                }
+            });
     }
 
     /**
