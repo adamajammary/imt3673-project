@@ -115,7 +115,8 @@ public class Ball extends GameObject {
                                 fall = fall.normalized();
                                 fall.x *= force;
                                 fall.y *= force;
-                                velocity = Vector2.add(velocity, fall);
+                                velocity.x += fall.x;
+                                velocity.y += fall.y;
                             }
                         }
                         else {

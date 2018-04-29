@@ -24,16 +24,15 @@ public class Block extends GameObject{
     public static final int TYPE_GOAL = Color.GREEN;
     public static final int TYPE_SPAWN = Color.BLUE;
     public static final int TYPE_HOLE = Color.CYAN;
-    public static final int TYPE_GFLIP = Color.DKGRAY;
     public static final int TYPE_BREAKABLE = Color.RED;
     public static final Map<Integer, Integer> TYPE_VALUES;
     static
     {
         TYPE_VALUES = new HashMap<Integer, Integer>();
         TYPE_VALUES.put(TYPE_CLEAR, 0);
-        TYPE_VALUES.put(TYPE_OBSTACLE, 1);
-        TYPE_VALUES.put(TYPE_BREAKABLE, 2);
-        TYPE_VALUES.put(TYPE_HOLE, 3);
+        TYPE_VALUES.put(TYPE_HOLE, 1);
+        TYPE_VALUES.put(TYPE_OBSTACLE, 2);
+        TYPE_VALUES.put(TYPE_BREAKABLE, 3);
         TYPE_VALUES.put(TYPE_GOAL, 4);
         TYPE_VALUES.put(TYPE_SPAWN, -1);
     }
