@@ -112,7 +112,7 @@ public class Level {
                 } else if (clr == Block.TYPE_BREAKABLE){
                     createRect(x, y, 1, 1, clr, scaling);
                     level.setPixel(x, y, Block.TYPE_CLEAR);
-                } else if (clr != Block.TYPE_CLEAR){
+                } else if (clr == Block.TYPE_GOAL || clr == Block.TYPE_OBSTACLE){
                     createRect(level, x, y, clr, scaling);
                 }
             }
@@ -204,7 +204,7 @@ public class Level {
             block = new Block(pos, w * scaling, h * scaling, type);
         }
 
-        addBlockTexture(block, type);
+        addBlockTexture(block, type, x, y);
         blocks.add(block);
         for (Pair<RectF, ArrayList<Block>> collisionGroup : collisionGroups){
             if (RectF.intersects(block.getRectangle(), collisionGroup.first)){
@@ -218,7 +218,7 @@ public class Level {
      * @param block block to texture
      * @param type type of the block
      */
-    private void addBlockTexture(Block block, int type) {
+    private void addBlockTexture(Block block, int type, int x, int y) {
         if(type == Block.TYPE_OBSTACLE){
             block.setTexture(textureSet, TextureSet.WALL_TEX);
         }
@@ -227,6 +227,9 @@ public class Level {
         }
         else if (type == Block.TYPE_BREAKABLE){
             block.setTexture(textureSet, TextureSet.CRATE_TEX);
+        } else {
+            Log.d(TAG, "" + x + " " + y);
+            Log.d(TAG, "WHAT " + type);
         }
     }
 
