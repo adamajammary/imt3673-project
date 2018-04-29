@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.imt3673.project.Objects.Ball;
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private SensorListenerManager sensorManager;
     private AppDatabase           database;
     private String currentLevelName;
+    private String goldTime;
+    private String silverTime;
+    private String bronzeTime;
 
     private CanvasView canvas;
     private static int canvasWidth;
@@ -53,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     private Level level;
 
     private Timer levelTimer;
+
+
     private Handler timeHandler;
 
     @Override
@@ -61,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
         this.timeHandler = new Handler();
         this.database = AppDatabase.getAppDatabase(this);
         this.currentLevelName = getIntent().getStringExtra("level");
+        this.goldTime = getIntent().getStringExtra("gold_time");
+        this.silverTime = getIntent().getStringExtra("silver_time");
+        this.bronzeTime = getIntent().getStringExtra("bronze_time");
 
         // Set window fullscreen and remove title bar, and force landscape orientation
        // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -125,14 +134,19 @@ public class MainActivity extends AppCompatActivity {
      * This gets called when the ball hits the goal
      */
     private void goalReached(){
-        setContentView(R.layout.win_screen);
         this.levelTimer.stop();
         this.sensorManager.removeListener(this.acceleratorListener);
-        ((TextView)findViewById(R.id.win_screen_time_view)).setText(this.levelTimer.getTime());
-        Log.i("MAINACTIVITY"," thread id = " + Thread.currentThread().getId());
-        Button doneBtn = findViewById(R.id.win_screen_button);
 
+        displayWinScreen();
         saveTimeToDb();
+        displayLevelChooserButton();
+    }
+
+    /**
+     * Display level chooser button in win screen
+     */
+    private void displayLevelChooserButton() {
+        Button doneBtn = findViewById(R.id.win_screen_button);
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,7 +156,43 @@ public class MainActivity extends AppCompatActivity {
          });
 
         doneBtn.setVisibility(View.VISIBLE);
+    }
 
+    /**
+     * Displays win screen with time and stars earned.
+     */
+    private void displayWinScreen() {
+        setContentView(R.layout.win_screen);
+        ((TextView)findViewById(R.id.win_screen_time_view)).setText(this.levelTimer.getTime());
+
+        // Display and animate stars earned
+        String newTime = this.levelTimer.getTime().replace(":","");
+
+        ImageView goldStar = findViewById(R.id.win_gold_star);
+        ImageView silverStar = findViewById(R.id.win_silver_star);
+        ImageView bronzeStar = findViewById(R.id.win_bronze_star);
+
+        float rotation = 360f;
+        int   duration = 2000;
+
+        if(Integer.parseInt(newTime) < Integer.parseInt(this.goldTime.replace(":",""))){
+            goldStar.setVisibility(View.VISIBLE);
+            goldStar.animate().rotationBy(rotation).setDuration(duration);
+            silverStar.setVisibility(View.VISIBLE);
+            silverStar.animate().rotationBy(rotation).setDuration(duration);
+            bronzeStar.setVisibility(View.VISIBLE);
+            bronzeStar.animate().rotationBy(rotation).setDuration(duration);
+        }
+        else if(Integer.parseInt(newTime) < Integer.parseInt(this.silverTime.replace(":",""))){
+            silverStar.setVisibility(View.VISIBLE);
+            silverStar.animate().rotationBy(rotation).setDuration(duration);
+            bronzeStar.setVisibility(View.VISIBLE);
+            bronzeStar.animate().rotationBy(rotation).setDuration(duration);
+        }
+        else if(Integer.parseInt(newTime) < Integer.parseInt(this.bronzeTime.replace(":",""))){
+            bronzeStar.setVisibility(View.VISIBLE);
+            bronzeStar.animate().rotationBy(rotation).setDuration(duration);
+        }
     }
 
     /**
