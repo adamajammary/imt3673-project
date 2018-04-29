@@ -6,12 +6,18 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
+import android.util.Pair;
 
 import com.imt3673.project.main.R;
 import com.imt3673.project.media.TextureSet;
 import com.imt3673.project.utils.Vector2;
 
+import org.w3c.dom.Text;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -22,6 +28,9 @@ public class Level {
 
     private Block background;
     private ArrayList<Block> blocks = new ArrayList<>();
+    private ArrayList<BreakableBlock> breakableBlocks = new ArrayList<>();
+    private ArrayList<Pair<RectF, ArrayList<Block>>> collisionGroups = new ArrayList<>();
+    private final int collisionGroupLen = 20;
     private static float pixelSize;
     private Vector2 spawnPoint;
     private TextureSet textureSet;
@@ -34,6 +43,20 @@ public class Level {
     public void draw(Canvas canvas, Vector2 cameraPosition){
         for(Block block : blocks){
             block.draw(canvas, cameraPosition);
+        }
+    }
+
+    /**
+     * Updates the level
+     * @param deltaTime
+     */
+    public void update(float deltaTime){
+        for (int i = 0; i < breakableBlocks.size(); i++){
+            if (breakableBlocks.get(i).update(deltaTime)){
+                blocks.remove(breakableBlocks.get(i));
+                breakableBlocks.remove(i);
+                i--;
+            }
         }
     }
 
@@ -54,6 +77,14 @@ public class Level {
     }
 
     /**
+     * Gets the collision groups
+     * @return ArrayList<Pair<RectF, ArrayList<Block>>>  collisionGroups
+     */
+    public ArrayList<Pair<RectF, ArrayList<Block>>> getCollisionGroups(){
+        return collisionGroups;
+    }
+
+    /**
      * Size of one pixel in bitmap in world
      */
     public static float getPixelSize(){
@@ -65,24 +96,46 @@ public class Level {
      * @param level bitmap to use
      * @param phoneHeight height of canvas
      */
-    public void buildFromPNG(Bitmap level, int phoneHeight, Context context){
+    public void buildFromPNG(Bitmap level, int phoneHeight){
         Log.d(TAG, "BUILD LEVEL! Width: " + level.getWidth() + " Height: " + level.getHeight());
         float scaling = phoneHeight / level.getHeight();
         pixelSize = scaling;
 
-        addBackground(context, new PointF(level.getWidth() * scaling, level.getHeight() * scaling));
+        addBackground(new PointF(level.getWidth() * scaling, level.getHeight() * scaling));
+        createCollisionGroups(level, scaling);
 
         for (int x = 0; x < level.getWidth(); x++){
             for (int y = 0; y < level.getHeight(); y++){
                 int clr = level.getPixel(x, y);
-                if (clr == Block.TYPE_OBSTACLE) {
-                    createRect(level, x, y, Block.TYPE_OBSTACLE, scaling, context);
-                } else if(clr == Block.TYPE_GOAL){
-                    createRect(level, x, y, Block.TYPE_GOAL, scaling, context);
-                } else if (clr == Block.TYPE_SPAWN){
+                if (clr == Block.TYPE_SPAWN){
                     addSpawnPoint(level, x, y, scaling);
+                } else if (clr == Block.TYPE_BREAKABLE){
+                    createRect(x, y, 1, 1, clr, scaling);
+                    level.setPixel(x, y, Block.TYPE_CLEAR);
+                } else if (clr == Block.TYPE_GOAL || clr == Block.TYPE_OBSTACLE){
+                    createRect(level, x, y, clr, scaling);
                 }
             }
+        }
+    }
+
+    /**
+     * Creates all collision groups for level
+     * @param level bitmap of level
+     * @param scaling scaling to use
+     */
+    private void createCollisionGroups(Bitmap level, float scaling){
+        int start = 0;
+        while (start < level.getWidth()){
+            RectF rect = new RectF(
+                    start * scaling,
+                    0,
+                    (start + collisionGroupLen) * scaling,
+                    level.getHeight() * scaling
+            );
+            Pair<RectF, ArrayList<Block>> collisionGroup = new Pair<>(rect, new ArrayList<>());
+            collisionGroups.add(collisionGroup);
+            start += collisionGroupLen;
         }
     }
 
@@ -94,7 +147,7 @@ public class Level {
      * @param type type of the block
      * @param scaling scaling to apply to rect
      */
-    private void createRect(Bitmap level, int x, int y, int type, float scaling, Context context){
+    private void createRect(Bitmap level, int x, int y, int type, float scaling){
         int startX = x;
         int startY = y;
         int w = 0;
@@ -129,27 +182,54 @@ public class Level {
             }
         }
 
-        Log.d(TAG, "Made block, width: " + w + " height: " + h + " pos: " + startX + "," + startY);
+        createRect(startX, startY, w, h, type, scaling);
+    }
 
-        Vector2 pos = new Vector2(startX * scaling, startY * scaling);
-        Block block = new Block(pos, w * scaling, h * scaling, type);
-        addBlockTexture(block, type, context);
-        Log.d(TAG, "Scaled block: " + block.getRectangle().toShortString());
+    /**
+     * Creates a rect
+     * @param x x pos
+     * @param y y pos
+     * @param w width
+     * @param h height
+     * @param type type of block
+     * @param scaling scaling to use
+     */
+    private void createRect(int x, int y, int w, int h, int type, float scaling){
+        Vector2 pos = new Vector2(x * scaling, y * scaling);
+        Block block;
+        if (type == Block.TYPE_BREAKABLE) {
+            block = new BreakableBlock(pos, w * scaling, h * scaling, type, textureSet);
+            breakableBlocks.add((BreakableBlock)block);
+        } else {
+            block = new Block(pos, w * scaling, h * scaling, type);
+        }
+
+        addBlockTexture(block, type, x, y);
         blocks.add(block);
+        for (Pair<RectF, ArrayList<Block>> collisionGroup : collisionGroups){
+            if (RectF.intersects(block.getRectangle(), collisionGroup.first)){
+                collisionGroup.second.add(block);
+            }
+        }
     }
 
     /**
      * Adds texture to block
      * @param block block to texture
      * @param type type of the block
-     * @param context context
      */
-    private void addBlockTexture(Block block, int type, Context context) {
+    private void addBlockTexture(Block block, int type, int x, int y) {
         if(type == Block.TYPE_OBSTACLE){
-            block.setTexture(context, textureSet, TextureSet.WALL_TEX);
+            block.setTexture(textureSet, TextureSet.WALL_TEX);
         }
         else if(type == Block.TYPE_GOAL){
-            block.setTexture(context, textureSet, TextureSet.GOAL_TEX);
+            block.setTexture(textureSet, TextureSet.GOAL_TEX);
+        }
+        else if (type == Block.TYPE_BREAKABLE){
+            block.setTexture(textureSet, TextureSet.CRATE_TEX);
+        } else {
+            Log.d(TAG, "" + x + " " + y);
+            Log.d(TAG, "WHAT " + type);
         }
     }
 
@@ -168,9 +248,9 @@ public class Level {
     /**
      * Set up the background block
      */
-    private void addBackground(Context context, PointF levelDims){
+    private void addBackground(PointF levelDims){
         background = new Block(Vector2.zero, levelDims.x, levelDims.y, Block.TYPE_CLEAR);
-        background.setTexture(context, textureSet, TextureSet.FLOOR_TEX);
+        background.setTexture(textureSet, TextureSet.FLOOR_TEX);
     }
 
     /**
