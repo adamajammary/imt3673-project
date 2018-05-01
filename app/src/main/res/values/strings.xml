@@ -10,10 +10,11 @@
     <string name="menu_options_button">OPTIONS</string>
     <string name="menu_signIn_button">SIGN IN (GOOGLE PLAY)</string>
     <string name="menu_signOut_button">SIGN OUT (GOOGLE PLAY)</string>
-    <string name="menu_gpLeaderboard_button">ONLINE LEADERBOARD</string>
+    <string name="menu_gp_leaderboard_button">ONLINE LEADERBOARD</string>
     <string name="menu_exit_button">EXIT</string>
     <string name="option_menu_volume_label">Volume</string>
     <string name="option_menu_vibrate_box">Vibrate</string>
+    <string name="option_menu_gp_score_box">Upload score to Google Play?</string>
     <string name="option_menu_save_button">SAVE</string>
     <string name="content_description_background">Metal background for startup menu and option menu</string>
     <string name="level_chooser_title">Choose Level</string>

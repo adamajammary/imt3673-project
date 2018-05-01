@@ -32,10 +32,13 @@ public class OptionsMenu extends AppCompatActivity {
      */
     private void loadUserPreferences() {
         SharedPreferences settings = getSharedPreferences(Constants.PREFERENCE_FILE, 0);
+
         SeekBar volumeBar = findViewById(R.id.OptionMenu_volume_control);
         int progress = settings.getInt(Constants.PREFERENCE_VOLUME_SLIDER, 1);
         volumeBar.setProgress(progress);
+
         ((CheckBox)findViewById(R.id.OptionsMenu_vibration_box)).setChecked(settings.getBoolean(Constants.PREFERENCE_VIBRATE,true));
+        ((CheckBox)findViewById(R.id.OptionsMenu_gpScore_box)).setChecked(settings.getBoolean(Constants.PREFERENCE_GP_SCORE,true));
     }
 
     /**
@@ -48,6 +51,7 @@ public class OptionsMenu extends AppCompatActivity {
             SharedPreferences.Editor editor = settings.edit();
             editor.putInt(Constants.PREFERENCE_VOLUME_SLIDER, (((SeekBar)findViewById(R.id.OptionMenu_volume_control)).getProgress()));
             editor.putBoolean(Constants.PREFERENCE_VIBRATE, ((CheckBox)findViewById(R.id.OptionsMenu_vibration_box)).isChecked());
+            editor.putBoolean(Constants.PREFERENCE_GP_SCORE, ((CheckBox)findViewById(R.id.OptionsMenu_gpScore_box)).isChecked());
             editor.apply();
             finish();
         });
