@@ -5,7 +5,7 @@
     <string name="error_no_vibrator">This device does not have a vibrator.</string>
     <string name="gp_show_leaderboard_fail">Failed to get the leaderboard from Google Play.</string>
     <string name="gp_submit_score_fail">Failed to submit the score to Google Play.</string>
-    <string name="gp_submit_score_success">The score was successfully submitted the to Google Play.</string>
+    <string name="gp_submit_score_success">The score was successfully submitted to Google Play.</string>
     <string name="menu_play_button">PLAY</string>
     <string name="menu_options_button">OPTIONS</string>
     <string name="menu_signIn_button">SIGN IN (GOOGLE PLAY)</string>
