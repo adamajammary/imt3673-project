@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -33,6 +34,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
+import static com.imt3673.project.graphics.Constants.PREFERENCE_FILE;
+import static com.imt3673.project.graphics.Constants.PREFERENCE_GP_SCORE;
 
 /**
  * Google Play Service - Manages the Google Play Services including authentication, leaderboards etc.
@@ -166,20 +170,20 @@ public class GooglePlayService {
      * @param time Time (in milliseconds) used to complete the level
      */
     public void updateLeaderboard(final String level, final long time) {
-        // TODO: Show a dialog asking the user if they want to submit to Google Play?
-        // Notes:
-        // - May get annoying after each level?
-        // - Currently we try to upload if they are signed in, otherwise not.
-        // - Alternatively we could ask the user in options, an save the answer locally.
-        this.leaderboardsClient.submitScoreImmediate(this.leaderboards.get(level), time)
-            .addOnCompleteListener((Task<ScoreSubmissionData> task) -> {
-                if (task.isSuccessful()) {
-                    Toast.makeText(context, context.getString(R.string.gp_submit_score_success), Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(context, context.getString(R.string.gp_submit_score_fail), Toast.LENGTH_LONG).show();
-                    Log.w(LOG_TAG, task.getException());
-                }
-            });
+        SharedPreferences settings    = this.context.getSharedPreferences(PREFERENCE_FILE, 0);
+        boolean           uploadScore = settings.getBoolean(PREFERENCE_GP_SCORE,true);
+
+        if (uploadScore) {
+            this.leaderboardsClient.submitScoreImmediate(this.leaderboards.get(level), time)
+                .addOnCompleteListener((Task<ScoreSubmissionData> task) -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(context, context.getString(R.string.gp_submit_score_success), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, context.getString(R.string.gp_submit_score_fail), Toast.LENGTH_LONG).show();
+                        Log.w(LOG_TAG, task.getException());
+                    }
+                });
+        }
     }
 
     /**

@@ -8,6 +8,7 @@ public final class Constants {
     public static final String PREFERENCE_FILE          = "MyPreferencesFile";
     public static final String PREFERENCE_VOLUME_SLIDER = "VolumeSlider";
     public static final String PREFERENCE_VIBRATE       = "VibrationCheckBox";
+    public static final String PREFERENCE_GP_SCORE      = "GPScoreCheckBox";
     public static float VOLUME_RANGE = 100.0f;
 
 }
