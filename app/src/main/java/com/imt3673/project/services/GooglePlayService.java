@@ -142,7 +142,7 @@ public class GooglePlayService {
      */
     public void showLeaderboard() {
         ArrayList<String> levels = new ArrayList<>(this.leaderboards.keySet());
-        Collections.sort(levels, (String a, String b) -> a.compareTo(b));
+        Collections.sort(levels, String::compareTo);
 
         this.selectLevel(levels);
     }
@@ -237,7 +237,7 @@ public class GooglePlayService {
         // Tell the user that the service is not available if check failed
         if ((result != ConnectionResult.SUCCESS) || !GoogleSignIn.hasPermissions(this.googleAccount, Games.SCOPE_GAMES_LITE)) {
             Dialog errorDialog = this.googleApiAvailability.getErrorDialog(
-                (Activity)this.context, result, 0, (dialog) -> dialog.dismiss()
+                (Activity)this.context, result, 0, DialogInterface::dismiss
             );
 
             if (errorDialog != null)

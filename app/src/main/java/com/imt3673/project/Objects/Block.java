@@ -1,10 +1,10 @@
 package com.imt3673.project.Objects;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 
 import com.imt3673.project.utils.Vector2;
@@ -28,7 +28,7 @@ public class Block extends GameObject{
     public static final Map<Integer, Integer> TYPE_VALUES;
     static
     {
-        TYPE_VALUES = new HashMap<Integer, Integer>();
+        TYPE_VALUES = new HashMap<>(); // Linter says SparseIntArray is better, but
         TYPE_VALUES.put(TYPE_CLEAR, 0);
         TYPE_VALUES.put(TYPE_OBSTACLE, 1);
         TYPE_VALUES.put(TYPE_BREAKABLE, 2);

@@ -79,7 +79,7 @@ class GLRenderer implements GLSurfaceView.Renderer {
 
     /**
      *
-     * @return
+     * @return angle
      */
     public float getAngle() {
         return this.angle;
@@ -87,7 +87,7 @@ class GLRenderer implements GLSurfaceView.Renderer {
 
     /**
      *
-     * @param angle
+     * @param angle angle
      */
     public void setAngle(final float angle) {
         this.angle = angle;

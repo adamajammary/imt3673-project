@@ -3,6 +3,7 @@ package com.imt3673.project.main;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
+import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -99,15 +100,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         lastUpdateTime = System.currentTimeMillis();
-        canvas.post(new Runnable() {
-            @Override
-            public void run() { //So that we wait until the UI system is ready
+        canvas.post(() -> { //So that we wait until the UI system is ready
 
-                canvasWidth = canvas.getWidth();
-                canvasHeight = canvas.getHeight();
-                if (canvasHeight != 0 && canvasWidth != 0){
-                    new LoadLevel().execute(getIntent().getStringExtra("level"));
-                }
+            canvasWidth = canvas.getWidth();
+            canvasHeight = canvas.getHeight();
+            if (canvasHeight != 0 && canvasWidth != 0){
+                new LoadLevel().execute(getIntent().getStringExtra("level"));
             }
         });
     }
@@ -157,12 +155,7 @@ public class MainActivity extends AppCompatActivity {
     private void displayLevelChooserButton() {
         Button doneBtn = findViewById(R.id.win_screen_button);
 
-        doneBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-                }
-         });
+        doneBtn.setOnClickListener(v -> onBackPressed());
 
         doneBtn.setVisibility(View.VISIBLE);
     }
@@ -332,6 +325,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class LoadLevel extends AsyncTask<String, Void, Void> {
 
         @Override

@@ -11,8 +11,8 @@ class Shader {
 
     /**
      *
-     * @param type
-     * @param shaderSource
+     * @param type type
+     * @param shaderSource source
      */
     Shader(final int type, final String shaderSource){
         this.shader = GLES20.glCreateShader(type);
@@ -23,7 +23,7 @@ class Shader {
 
     /**
      *
-     * @return
+     * @return shader
      */
     public int getShader() {
         return this.shader;

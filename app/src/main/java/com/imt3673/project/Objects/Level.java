@@ -30,15 +30,14 @@ public class Level {
     private ArrayList<Block> blocks = new ArrayList<>();
     private ArrayList<BreakableBlock> breakableBlocks = new ArrayList<>();
     private ArrayList<Pair<RectF, ArrayList<Block>>> collisionGroups = new ArrayList<>();
-    private final int collisionGroupLen = 20;
     private static float pixelSize;
     private Vector2 spawnPoint;
     private TextureSet textureSet;
 
     /**
      * Draws all blocks in level
-     * @param canvas
-     * @param cameraPosition
+     * @param canvas canvas
+     * @param cameraPosition camera position
      */
     public void draw(Canvas canvas, Vector2 cameraPosition){
         for(Block block : blocks){
@@ -48,7 +47,7 @@ public class Level {
 
     /**
      * Updates the level
-     * @param deltaTime
+     * @param deltaTime delta time
      */
     public void update(float deltaTime){
         for (int i = 0; i < breakableBlocks.size(); i++){
@@ -128,6 +127,7 @@ public class Level {
      */
     private void createCollisionGroups(Bitmap level, float scaling){
         int start = 0;
+        final int collisionGroupLen = 20;
         while (start < level.getWidth()){
             RectF rect = new RectF(
                     start * scaling,

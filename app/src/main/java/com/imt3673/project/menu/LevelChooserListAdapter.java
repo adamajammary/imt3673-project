@@ -74,16 +74,13 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
         viewHolder.silverTime.setText(silver);
         String bronze =  " : " + levelInfo.getBronzeTime();
         viewHolder.bronzeTime.setText(bronze);
-        viewHolder.startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                intent.putExtra("level", mLevelsInfo.get(position).getLevelId());
-                intent.putExtra("gold_time",levelInfo.getGoldTime());
-                intent.putExtra("silver_time",levelInfo.getSilverTime());
-                intent.putExtra("bronze_time",levelInfo.getBronzeTime());
-                mContext.startActivity(intent);
-            }
+        viewHolder.startButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            intent.putExtra("level", mLevelsInfo.get(position).getLevelId());
+            intent.putExtra("gold_time",levelInfo.getGoldTime());
+            intent.putExtra("silver_time",levelInfo.getSilverTime());
+            intent.putExtra("bronze_time",levelInfo.getBronzeTime());
+            mContext.startActivity(intent);
         });
 
         handleBestTimesAndStars(viewHolder, levelInfo);
@@ -97,6 +94,8 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
      * @param viewHolder ViewHolder for level_chooser_item
      */
     private void initViewHolder(@Nullable View convertView, ViewHolder viewHolder) {
+        if(convertView == null)
+            throw new NullPointerException();
         viewHolder.levelName = convertView.findViewById(R.id.level_id_label);
         viewHolder.goldTime = convertView.findViewById(R.id.level_gold_time);
         viewHolder.silverTime = convertView.findViewById(R.id.level_silver_time);
@@ -110,7 +109,7 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
 
 
     /**
-     * Populate higscore list and displays time based on Best time
+     * Populate highscore list and displays time based on Best time
      * @param viewHolder holds all the level_chooser_item views
      * @param levelInfo object containing level info
      */

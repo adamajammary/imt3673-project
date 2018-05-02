@@ -24,7 +24,7 @@ public class MediaManager {
 
     /**
      *
-     * @param context
+     * @param context context
      */
     public MediaManager(final Context context) {
         this.context   = context;
@@ -38,8 +38,8 @@ public class MediaManager {
 
     /**
      *
-     * @param resourceID
-     * @param mediaType
+     * @param resourceID resource id
+     * @param mediaType media type
      */
     public void loadResource(final int resourceID, final int mediaType) {
         switch (mediaType) {
@@ -78,8 +78,8 @@ public class MediaManager {
 
     /**
      *
-     * @param resourceID
-     * @param mediaType
+     * @param resourceID resource id
+     * @param mediaType media type
      */
     public void pause(final int resourceID, final int mediaType) {
         switch (mediaType) {
@@ -94,8 +94,8 @@ public class MediaManager {
 
     /**
      *
-     * @param resourceID
-     * @param mediaType
+     * @param resourceID resource id
+     * @param mediaType media type
      */
     public void play(final int resourceID, final int mediaType) {
         switch (mediaType) {
@@ -110,8 +110,8 @@ public class MediaManager {
 
     /**
      *
-     * @param resourceID
-     * @param mediaType
+     * @param resourceID resource id
+     * @param mediaType media type
      */
     public void stop(final int resourceID, final int mediaType) {
         switch (mediaType) {

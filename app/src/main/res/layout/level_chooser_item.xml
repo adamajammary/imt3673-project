@@ -161,7 +161,8 @@
         app:layout_constraintHorizontal_bias="0.246"
         app:layout_constraintStart_toEndOf="@+id/level_gold_time"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_star_big_on" />
+        app:srcCompat="@android:drawable/btn_star_big_on"
+        android:contentDescription="@string/gold_star" />
 
     <ImageView
         android:id="@+id/level_silver_star"
@@ -176,7 +177,8 @@
         app:layout_constraintHorizontal_bias="0.246"
         app:layout_constraintStart_toEndOf="@+id/level_silver_time"
         app:layout_constraintTop_toBottomOf="@+id/level_gold_star"
-        app:srcCompat="@android:drawable/btn_star_big_on" />
+        app:srcCompat="@android:drawable/btn_star_big_on"
+        android:contentDescription="@string/silver_star" />
 
     <ImageView
         android:id="@+id/level_bronze_star"
@@ -194,6 +196,7 @@
         app:layout_constraintStart_toEndOf="@+id/level_bronze_time"
         app:layout_constraintTop_toBottomOf="@+id/level_silver_star"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@android:drawable/btn_star_big_on" />
+        app:srcCompat="@android:drawable/btn_star_big_on"
+        android:contentDescription="@string/bronze_star" />
 
 </android.support.constraint.ConstraintLayout>

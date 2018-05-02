@@ -7,7 +7,7 @@ class Triangle extends Object {
 
     /**
      *
-     * @param vertices
+     * @param vertices vertices of triangle
      */
     public Triangle(final float[] vertices, float[] color) {
         super(vertices, null, color);

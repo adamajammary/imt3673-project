@@ -30,6 +30,7 @@ public class CanvasView extends View {
     private Level level;
     private Ball ball;
     private Timer levelTimer;
+    private Vector2 cameraPos = new Vector2();
 
     /**
      * @param context Context
@@ -49,7 +50,7 @@ public class CanvasView extends View {
 
     /**
      * Adds the GameObject to the canvas
-     * @param obj
+     * @param obj a gameobject to add
      */
     public void addGameObject(GameObject obj){
         gameObjects.add(obj);
@@ -57,7 +58,7 @@ public class CanvasView extends View {
 
     /**
      * Sets the level to draw
-     * @param level
+     * @param level the level
      */
     public void setLevel(Level level) {
         this.level = level;
@@ -66,7 +67,7 @@ public class CanvasView extends View {
 
     /**
      * Sets the ball
-     * @param ball
+     * @param ball the ball
      */
     public void setBall(Ball ball){
         this.ball = ball;
@@ -91,10 +92,11 @@ public class CanvasView extends View {
         // Clear the background
         canvas.drawColor(Color.WHITE);
 
-        Vector2 cameraPos = new Vector2();
+        cameraPos.x = 0;
+        cameraPos.y = 0;
 
         if (ball != null) { // Update camera position
-            cameraPos = new Vector2(ball.getPosition().x - canvas.getWidth() / 2, 0);
+            cameraPos.x = ball.getPosition().x - canvas.getWidth() / 2;
         }
 
         if(level != null){ // Draw background
