@@ -1,6 +1,5 @@
 package com.imt3673.project.Objects;
 
-import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -28,7 +27,7 @@ public class Block extends GameObject{
     public static final Map<Integer, Integer> TYPE_VALUES;
     static
     {
-        TYPE_VALUES = new HashMap<>(); // Linter says SparseIntArray is better, but
+        TYPE_VALUES = new HashMap<>();
         TYPE_VALUES.put(TYPE_CLEAR, 0);
         TYPE_VALUES.put(TYPE_OBSTACLE, 1);
         TYPE_VALUES.put(TYPE_BREAKABLE, 2);
@@ -38,7 +37,7 @@ public class Block extends GameObject{
     }
 
 
-    protected int type = 0;
+    protected int type;
     protected RectF rectangle;
     protected Vector2[] corners;
 

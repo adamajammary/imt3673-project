@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +54,7 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
 
         if(convertView == null){
 
-            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+            LayoutInflater inflater = mContext.getLayoutInflater();
             convertView = inflater.inflate(R.layout.level_chooser_item, parent, false);
 
             viewHolder = new ViewHolder();
@@ -147,7 +146,7 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
                 }
             }
 
-            viewHolder.highScoreList.setAdapter(new ArrayAdapter<String>(mContext,android.R.layout.simple_list_item_1,bestTimes));
+            viewHolder.highScoreList.setAdapter(new ArrayAdapter<>(mContext,android.R.layout.simple_list_item_1,bestTimes));
         }
     }
 

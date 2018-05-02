@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Path;
 
 import android.media.MediaPlayer;
 import android.media.SoundPool;

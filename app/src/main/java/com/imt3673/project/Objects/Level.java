@@ -1,23 +1,16 @@
 package com.imt3673.project.Objects;
 
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 import android.util.Pair;
 
-import com.imt3673.project.main.R;
 import com.imt3673.project.media.TextureSet;
 import com.imt3673.project.utils.Vector2;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -106,15 +99,21 @@ public class Level {
         for (int x = 0; x < level.getWidth(); x++){
             for (int y = 0; y < level.getHeight(); y++){
                 int clr = level.getPixel(x, y);
-                if (clr == Block.TYPE_SPAWN){
-                    addSpawnPoint(level, x, y, scaling);
-                } else if (clr == Block.TYPE_HOLE){
-                    createRect(level, x, y, Block.TYPE_HOLE, scaling);
-                } else if (clr == Block.TYPE_BREAKABLE){
-                    createRect(x, y, 1, 1, clr, scaling);
-                    level.setPixel(x, y, Block.TYPE_CLEAR);
-                } else if (clr == Block.TYPE_GOAL || clr == Block.TYPE_OBSTACLE){
-                    createRect(level, x, y, clr, scaling);
+                switch (clr) {
+                    case Block.TYPE_SPAWN:
+                        addSpawnPoint(level, x, y, scaling);
+                        break;
+                    case Block.TYPE_HOLE:
+                        createRect(level, x, y, Block.TYPE_HOLE, scaling);
+                        break;
+                    case Block.TYPE_BREAKABLE:
+                        createRect(x, y, 1, 1, clr, scaling);
+                        level.setPixel(x, y, Block.TYPE_CLEAR);
+                        break;
+                    case Block.TYPE_GOAL:
+                    case Block.TYPE_OBSTACLE:
+                        createRect(level, x, y, clr, scaling);
+                        break;
                 }
             }
         }
@@ -221,20 +220,23 @@ public class Level {
      * @param type type of the block
      */
     private void addBlockTexture(Block block, int type, int x, int y) {
-        if(type == Block.TYPE_OBSTACLE){
-            block.setTexture(textureSet, TextureSet.WALL_TEX);
-        }
-        else if(type == Block.TYPE_GOAL){
-            block.setTexture(textureSet, TextureSet.GOAL_TEX);
-        }
-        else if (type == Block.TYPE_BREAKABLE){
-            block.setTexture(textureSet, TextureSet.CRATE_TEX);
-        }
-        else if(type == Block.TYPE_HOLE){
-            block.setTexture(textureSet, TextureSet.HOLE_TEX);
-        } else {
-            Log.d(TAG, "" + x + " " + y);
-            Log.d(TAG, "WHAT " + type);
+        switch (type) {
+            case Block.TYPE_OBSTACLE:
+                block.setTexture(textureSet, TextureSet.WALL_TEX);
+                break;
+            case Block.TYPE_GOAL:
+                block.setTexture(textureSet, TextureSet.GOAL_TEX);
+                break;
+            case Block.TYPE_BREAKABLE:
+                block.setTexture(textureSet, TextureSet.CRATE_TEX);
+                break;
+            case Block.TYPE_HOLE:
+                block.setTexture(textureSet, TextureSet.HOLE_TEX);
+                break;
+            default:
+                Log.d(TAG, "" + x + " " + y);
+                Log.d(TAG, "WHAT " + type);
+                break;
         }
     }
 

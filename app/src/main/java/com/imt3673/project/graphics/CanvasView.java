@@ -3,14 +3,10 @@ package com.imt3673.project.graphics;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.imt3673.project.Objects.Ball;
-import com.imt3673.project.Objects.Block;
 import com.imt3673.project.Objects.GameObject;
 import com.imt3673.project.Objects.Level;
 import com.imt3673.project.Objects.Timer;

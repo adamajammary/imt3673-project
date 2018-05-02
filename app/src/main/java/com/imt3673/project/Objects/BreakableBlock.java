@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 
-import com.imt3673.project.media.TextureManager;
 import com.imt3673.project.media.TextureSet;
 import com.imt3673.project.utils.Vector2;
 

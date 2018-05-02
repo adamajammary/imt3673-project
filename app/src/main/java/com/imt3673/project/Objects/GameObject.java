@@ -1,16 +1,11 @@
 package com.imt3673.project.Objects;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.PointF;
 import android.graphics.Shader;
 
-import com.imt3673.project.main.R;
 import com.imt3673.project.media.TextureSet;
 import com.imt3673.project.utils.Vector2;
 

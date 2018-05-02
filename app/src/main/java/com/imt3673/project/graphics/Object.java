@@ -86,7 +86,7 @@ class Object {
      *
      * @param byteBuffer buffer
      * @param data data
-     * @return
+     * @return buffer
      */
     private ShortBuffer getShortBuffer(final ByteBuffer byteBuffer, final short[] data) {
         if ((byteBuffer == null) || (data == null))

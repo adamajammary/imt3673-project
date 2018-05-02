@@ -11,7 +11,6 @@ import com.imt3673.project.utils.LineSegment;
 import com.imt3673.project.utils.Vector2;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * The ball that the player controls

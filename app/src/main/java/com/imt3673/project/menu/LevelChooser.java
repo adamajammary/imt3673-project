@@ -1,21 +1,13 @@
 package com.imt3673.project.menu;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.imt3673.project.database.AppDatabase;
-import com.imt3673.project.database.HighScore;
-import com.imt3673.project.main.MainActivity;
 import com.imt3673.project.main.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * LevelChooser activity
