@@ -18,7 +18,7 @@ public class SensorListenerManager {
 
     /**
      *
-     * @param context
+     * @param context context
      */
     public SensorListenerManager(final Context context) {
         this.context       = context;
@@ -27,8 +27,8 @@ public class SensorListenerManager {
 
     /**
      *
-     * @param sensorListener
-     * @param sensor
+     * @param sensorListener listener
+     * @param sensor sensor
      */
     public void addListener(final SensorEventListener sensorListener, final Sensor sensor) {
         // Tell the user if the device does not support the specified sensor
@@ -40,7 +40,7 @@ public class SensorListenerManager {
 
     /**
      *
-     * @param sensorListener
+     * @param sensorListener listener
      */
     public void removeListener(final SensorEventListener sensorListener) {
         this.sensorManager.unregisterListener(sensorListener);
@@ -48,8 +48,8 @@ public class SensorListenerManager {
 
     /**
      *
-     * @param type
-     * @return
+     * @param type type
+     * @return sensor
      */
     public Sensor getSensor(final int type) {
         return this.sensorManager.getDefaultSensor(type);

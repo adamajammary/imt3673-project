@@ -20,8 +20,8 @@ class Object {
 
     /**
      *
-     * @param vertices
-     * @param indices
+     * @param vertices vertices
+     * @param indices indices
      */
     Object(final float[] vertices, final short[] indices, float[] color) {
         this.color    = color;
@@ -74,9 +74,9 @@ class Object {
 
     /**
      *
-     * @param byteOrder
-     * @param size
-     * @return
+     * @param byteOrder order
+     * @param size size
+     * @return order
      */
     private ByteBuffer getByteOrder(final ByteOrder byteOrder, final int size) {
         return ByteBuffer.allocateDirect(size * Constants.BYTES_PER_FLOAT).order(byteOrder);
@@ -84,9 +84,9 @@ class Object {
 
     /**
      *
-     * @param byteBuffer
-     * @param data
-     * @return
+     * @param byteBuffer buffer
+     * @param data data
+     * @return buffer
      */
     private ShortBuffer getShortBuffer(final ByteBuffer byteBuffer, final short[] data) {
         if ((byteBuffer == null) || (data == null))
@@ -102,9 +102,9 @@ class Object {
 
     /**
      *
-     * @param byteBuffer
-     * @param data
-     * @return
+     * @param byteBuffer buffer
+     * @param data data
+     * @return buffer
      */
     private FloatBuffer getFloatBuffer(final ByteBuffer byteBuffer, final float[] data) {
         if ((byteBuffer == null) || (data == null))

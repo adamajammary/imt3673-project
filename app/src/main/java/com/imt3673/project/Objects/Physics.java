@@ -14,8 +14,8 @@ public class Physics {
      * Circle/Rectangle collision.
      * Based on answer by e.James in thread:
      * https://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
-     * @param ball
-     * @param rect
+     * @param ball ball
+     * @param rect rect
      * @return true if collision
      */
     public static boolean BallBlockCollision(Ball ball, RectF rect){
@@ -41,8 +41,8 @@ public class Physics {
      * Calculates collision between a LineSegment and a block
      * Based on answer by user37968 in thread:
      * https://stackoverflow.com/questions/99353/how-to-test-if-a-line-segment-intersects-an-axis-aligned-rectange-in-2d
-     * @param line
-     * @param block
+     * @param line line
+     * @param block block
      * @return true if collision
      */
     public static boolean LineSegmentBlockCollision(LineSegment line, Block block) {

@@ -7,15 +7,15 @@ public class LineSegment {
     public Vector2 a;
     public Vector2 b;
 
-    float minX;
-    float minY;
-    float maxX;
-    float maxY;
+    private float minX;
+    private float minY;
+    private float maxX;
+    private float maxY;
 
     /**
      * Constructs a line using provided points
-     * @param b
-     * @param a
+     * @param a start of line
+     * @param b end of line
      */
     public LineSegment(Vector2 a, Vector2 b){
         this.a = a;
@@ -29,8 +29,8 @@ public class LineSegment {
 
     /**
      * Implicit equation for this line.
-     * @param x
-     * @param y
+     * @param x x
+     * @param y y
      * @return F(x, y)
      */
     public float implicitEquation(float x, float y){
@@ -39,8 +39,8 @@ public class LineSegment {
 
     /**
      * Checks if the point is within the bounds of the line
-     * @param x
-     * @param y
+     * @param x x
+     * @param y y
      * @return true if inbound
      */
     public boolean inBound(float x, float y){

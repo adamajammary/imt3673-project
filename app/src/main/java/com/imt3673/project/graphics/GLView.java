@@ -1,5 +1,6 @@
 package com.imt3673.project.graphics;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
@@ -14,8 +15,7 @@ public class GLView extends GLSurfaceView {
     private float      previousY;
 
     /**
-     *
-     * @param context
+     * @param context activity context
      */
     public GLView(final Context context){
         super(context);
@@ -23,13 +23,14 @@ public class GLView extends GLSurfaceView {
     }
 
     /**
-     *
-     * @param event
-     * @return
+     * @param event the touch event
+     * @return true
      */
+    @SuppressLint("ClickableViewAccessibility") // Suppressing because the performClick() func would be left empty as we don't know what it should do, and Stack Overflow just says to suppress it ¯\_(ツ)_/¯
     @Override
     public boolean onTouchEvent(final MotionEvent event) {
         super.onTouchEvent(event);
+        performClick();
 
         float x = event.getX();
         float y = event.getY();
@@ -57,7 +58,7 @@ public class GLView extends GLSurfaceView {
     }
 
     /**
-     *
+     * Sets the renderer
      */
     private void setRenderer() {
         setEGLContextClientVersion(2);

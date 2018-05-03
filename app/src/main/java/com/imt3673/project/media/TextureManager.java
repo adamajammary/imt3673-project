@@ -3,7 +3,6 @@ package com.imt3673.project.media;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 
-import com.imt3673.project.main.MainActivity;
 import com.imt3673.project.main.R;
 
 import java.util.HashMap;

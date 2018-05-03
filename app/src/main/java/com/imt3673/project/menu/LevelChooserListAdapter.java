@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +54,7 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
 
         if(convertView == null){
 
-            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+            LayoutInflater inflater = mContext.getLayoutInflater();
             convertView = inflater.inflate(R.layout.level_chooser_item, parent, false);
 
             viewHolder = new ViewHolder();
@@ -74,16 +73,13 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
         viewHolder.silverTime.setText(silver);
         String bronze =  " : " + levelInfo.getBronzeTime();
         viewHolder.bronzeTime.setText(bronze);
-        viewHolder.startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                intent.putExtra("level", mLevelsInfo.get(position).getLevelId());
-                intent.putExtra("gold_time",levelInfo.getGoldTime());
-                intent.putExtra("silver_time",levelInfo.getSilverTime());
-                intent.putExtra("bronze_time",levelInfo.getBronzeTime());
-                mContext.startActivity(intent);
-            }
+        viewHolder.startButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            intent.putExtra("level", mLevelsInfo.get(position).getLevelId());
+            intent.putExtra("gold_time",levelInfo.getGoldTime());
+            intent.putExtra("silver_time",levelInfo.getSilverTime());
+            intent.putExtra("bronze_time",levelInfo.getBronzeTime());
+            mContext.startActivity(intent);
         });
 
         handleBestTimesAndStars(viewHolder, levelInfo);
@@ -97,6 +93,8 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
      * @param viewHolder ViewHolder for level_chooser_item
      */
     private void initViewHolder(@Nullable View convertView, ViewHolder viewHolder) {
+        if(convertView == null)
+            throw new NullPointerException();
         viewHolder.levelName = convertView.findViewById(R.id.level_id_label);
         viewHolder.goldTime = convertView.findViewById(R.id.level_gold_time);
         viewHolder.silverTime = convertView.findViewById(R.id.level_silver_time);
@@ -110,7 +108,7 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
 
 
     /**
-     * Populate higscore list and displays time based on Best time
+     * Populate highscore list and displays time based on Best time
      * @param viewHolder holds all the level_chooser_item views
      * @param levelInfo object containing level info
      */
@@ -148,7 +146,7 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
                 }
             }
 
-            viewHolder.highScoreList.setAdapter(new ArrayAdapter<String>(mContext,android.R.layout.simple_list_item_1,bestTimes));
+            viewHolder.highScoreList.setAdapter(new ArrayAdapter<>(mContext,android.R.layout.simple_list_item_1,bestTimes));
         }
     }
 

@@ -42,7 +42,7 @@ class ShaderManager {
 
     /**
      *
-     * @return
+     * @return program
      */
     public int getProgram() {
         return this.program;

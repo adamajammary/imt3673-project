@@ -11,7 +11,6 @@ import com.imt3673.project.utils.LineSegment;
 import com.imt3673.project.utils.Vector2;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * The ball that the player controls
@@ -25,12 +24,12 @@ public class Ball extends GameObject {
     //Ball physics variables
     private float accelDelta; //Used for acceleration calculations
     private final float drag = 0.75f; //Used for slowing down ball when hitting wall
-    private boolean reversePhysics = false; // Used to flip acceleration data while physics are "flipped"
+    //private boolean reversePhysics = false; // Used to flip acceleration data while physics are "flipped"
 
     /**
      * Constructs the ball
      * @param position position of ball
-     * @param phoneHeight
+     * @param phoneHeight height of phone
      */
     public Ball(Vector2 position, int phoneHeight){
         this.position = position;
@@ -57,15 +56,15 @@ public class Ball extends GameObject {
     /**
      * Does the physics update for ball.
      * @param accelData xyz acceleration data
-     * @param collisionGroups
+     * @param collisionGroups collision groups
      * @return what the ball collided with
      */
     public BallCollision physicsUpdate(final float[] accelData, float deltaTime, ArrayList<Pair<RectF, ArrayList<Block>>> collisionGroups){
-        if(reversePhysics){
+        /*if(reversePhysics){
             accelData[0] = -accelData[0];
             accelData[1] = -accelData[1];
             accelData[2] = -accelData[2];
-        }
+        }*/
         //zFactor helps reduce acceleration when the phone is put flat on a table
         float zFactor = 1 - (Math.abs(accelData[2]) / (Math.abs(accelData[0]) + Math.abs(accelData[1]) + Math.abs(accelData[2])));
         velocity = Vector2.add(velocity, new Vector2(accelData[1] * accelDelta * zFactor, accelData[0] * accelDelta * zFactor));
@@ -125,9 +124,9 @@ public class Ball extends GameObject {
 
     /**
      * Sets the position of the ball and sets velocity to 0
-     * @param pos
+     * @param pos position to set
      */
-    public void setPosition(Vector2 pos){
+    private void setPosition(Vector2 pos){
         position = pos;
         velocity = Vector2.zero;
     }
@@ -138,7 +137,7 @@ public class Ball extends GameObject {
      * Resets the player position if close enough to hole center
      * "Pulls" the ball towards the center if not close enough
      */
-    public void holeTrigger(Block block){
+    private void holeTrigger(Block block){
         if(Vector2.distance(block.getCenter(), getPosition()) < Level.getPixelSize() * 0.35f){
             setPosition(new Vector2(spawnPoint));
         }

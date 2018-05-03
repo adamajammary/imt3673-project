@@ -23,5 +23,14 @@
     <string name="level_silver">Silver</string>
     <string name="level_bronsze">Bronze</string>
     <string name="level_best_time">Best Time</string>
+    <string name="gold_star">gold star</string>
+    <string name="silver_star">silver star</string>
+    <string name="bronze_star">bronze star</string>
+    <string name="big_star">big star</string>
+    <string name="choose_level">choose level</string>
+    <string name="win_gold_star">win gold star</string>
+    <string name="win_silver_star">win silver star</string>
+    <string name="win_bronze_star">win bronze star</string>
+    <string name="times_to_beat">Times to beat</string>
 
 </resources>

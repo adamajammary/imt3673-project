@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 
-import com.imt3673.project.media.TextureManager;
 import com.imt3673.project.media.TextureSet;
 import com.imt3673.project.utils.Vector2;
 
@@ -18,7 +17,6 @@ public class BreakableBlock extends Block {
     private TextureSet textureSet;
 
     private float timer;
-    private final float brokenTTL = 1f;
 
     private float width;
     private float height;
@@ -51,14 +49,15 @@ public class BreakableBlock extends Block {
 
     /**
      * Updates block, returns true when the block is gone
-     * @param deltaTime
-     * @return
+     * @param deltaTime deltaTime
+     * @return if block is gone
      */
     public boolean update(float deltaTime){
         if (broken){
             position = Vector2.add(position, Vector2.mult(velocity, deltaTime));
             timer += deltaTime;
 
+            float brokenTTL = 1f;
             float shrinkDelta = deltaTime * brokenTTL / 2f;
             widthMod += shrinkDelta;
             heightMod += shrinkDelta;
@@ -71,14 +70,6 @@ public class BreakableBlock extends Block {
         } else {
             return false;
         }
-    }
-
-    /**
-     * Get broken state of block
-     * @return
-     */
-    public boolean getBroken(){
-        return broken;
     }
 
 

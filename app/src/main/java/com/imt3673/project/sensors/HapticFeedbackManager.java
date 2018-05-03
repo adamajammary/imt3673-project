@@ -3,7 +3,6 @@ package com.imt3673.project.sensors;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Vibrator;
-import android.util.Log;
 
 import com.imt3673.project.graphics.Constants;
 import com.imt3673.project.main.R;
