@@ -20,8 +20,6 @@ import java.util.ArrayList;
 public class CanvasView extends View {
     private static final String TAG = CanvasView.class.getName();
 
-    private long        lastDrawTime = 0;
-
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
     private Level level;
     private Ball ball;
@@ -80,11 +78,6 @@ public class CanvasView extends View {
      * @param canvas Canvas
      */
     protected void onDraw(final Canvas canvas) {
-        long  currentTime = System.currentTimeMillis();
-        float deltaTime   = (1.0f / (float)(currentTime - this.lastDrawTime));
-
-        this.lastDrawTime = currentTime;
-
         // Clear the background
         canvas.drawColor(Color.WHITE);
 

@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Timer levelTimer;
 
-
     private Handler timeHandler;
 
     @Override
