@@ -7,6 +7,9 @@ Magnus W. Enggrav - 470917
 Michael Bråten - 470912  
 Martin Bjerknes - 757948  
 
+# Report
+See gravity_ball.pdf in repo for report.
+
 ## App ball game - Game(3D/2D) (lab 3 expansion)
 * Code: lab3-expansion
 * Category: game
@@ -42,6 +45,3 @@ If he needs to do something special to use our services.
 * "Overdraw: Painting regions more than once": The error is due to the fact that we draw custom backgrounds in menus, while the theme draws its own. It is intentional, but we could perhaps have used a custom theme without a background in it. 
 
 * Block.TYPE_VALUES could be SparseIntArray instead of HashMap. Linter says its because of performance, but apparently it is not always more performant to use SIA over HM(according to Stack Overflow). We left it as HashMap because we didn't feel that it was neccessary to make the switch.
-
-
-**I will place this into the README, as an explanation of the still-existing linter warnings (If anyone deals with any of these existing warnings, just remove the relevant bulletpoint from the README)**
