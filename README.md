@@ -2,10 +2,10 @@
 IMT3673 Project - App Ball Game (Android, Java)
 
 # Members
-Adam Jammary - 771962
-Magnus W. Enggrav - 470917
-Michael Bråten - 470912
-Martin Bjerknes - 757948
+Adam Jammary - 771962  
+Magnus W. Enggrav - 470917  
+Michael Bråten - 470912  
+Martin Bjerknes - 757948  
 
 ## App ball game - Game(3D/2D) (lab 3 expansion)
 * Code: lab3-expansion
