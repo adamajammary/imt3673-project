@@ -8,7 +8,7 @@ Michael Bråten - 470912
 Martin Bjerknes - 757948  
 
 # Report
-See gravity_ball.pdf in repo for report.
+See imt3673_Project__Gravity_Ball.pdf in repo for report.
 
 ## App ball game - Game(3D/2D) (lab 3 expansion)
 * Code: lab3-expansion
