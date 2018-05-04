@@ -47,7 +47,7 @@ public class GooglePlayService {
     private GoogleSignInAccount         googleAccount;
     private final GoogleApiAvailability googleApiAvailability;
     private LeaderboardsClient          leaderboardsClient;
-    private Map<String, String>         leaderboards = new HashMap<>();
+    private final Map<String, String>   leaderboards = new HashMap<>();
     private final String                LOG_TAG      = GooglePlayService.class.getName();
     private Player                      player;
 

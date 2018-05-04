@@ -117,6 +117,14 @@ public class LevelChooserListAdapter extends ArrayAdapter<LevelInfo>{
         List<HighScore> dbScores = this.mDatabase.highScoreDao().getTopScoresFromLevelSorted(levelInfo.getLevelId());
         ArrayList<String> bestTimes = new ArrayList<>();
 
+        // Hide all stars initially to avoid level duplication due to caching
+        viewHolder.goldStar.setVisibility(View.INVISIBLE);
+        viewHolder.silverStar.setVisibility(View.INVISIBLE);
+        viewHolder.bronzeStar.setVisibility(View.INVISIBLE);
+
+        // Remove existing adapter to avoid level duplication due to caching
+        viewHolder.highScoreList.setAdapter(null);
+
         // Display stars based on time
         if(!dbScores.isEmpty()){
             HighScore currentHighScore = dbScores.get(0);
