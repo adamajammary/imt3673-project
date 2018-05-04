@@ -21,7 +21,9 @@ There are 3 tiers of times to beat on each level, meant to challenge the player.
 Scores are added to a local leaderboard for each level and an opt in online leader board.
 
 ## Code organization 
-
+We have organized our classes into appropriately named packages.
+The varius menu activities are in the menu package. The game activity is in the main package.
+Bitmaps for the levels are in res/raw and textures are in res/drawable. 
 
 ## Login/server side stuff(?)
 If he needs to do something special to use our services. 
