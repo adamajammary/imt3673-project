@@ -218,6 +218,8 @@ public class Level {
      * Adds texture to block
      * @param block block to texture
      * @param type type of the block
+     * @param x position
+     * @param y position
      */
     private void addBlockTexture(Block block, int type, int x, int y) {
         switch (type) {

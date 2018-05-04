@@ -24,4 +24,8 @@ public class BallCollision {
             return magnitudeComp;
         }
     }
+
+    public boolean isImpactful(){
+        return magnitude > 250;
+    }
 }

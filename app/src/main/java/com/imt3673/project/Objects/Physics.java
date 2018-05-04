@@ -2,7 +2,6 @@ package com.imt3673.project.Objects;
 
 import android.graphics.RectF;
 
-import com.imt3673.project.utils.LineSegment;
 import com.imt3673.project.utils.Vector2;
 
 /**
@@ -35,28 +34,5 @@ public class Physics {
                 (float)Math.pow(circleDistance.y - rect.height()/2,2 );
 
         return (cornerDistance_sq <= (Math.pow(ball.getRadius(), 2)));
-    }
-
-    /**
-     * Calculates collision between a LineSegment and a block
-     * Based on answer by user37968 in thread:
-     * https://stackoverflow.com/questions/99353/how-to-test-if-a-line-segment-intersects-an-axis-aligned-rectange-in-2d
-     * @param line line
-     * @param block block
-     * @return true if collision
-     */
-    public static boolean LineSegmentBlockCollision(LineSegment line, Block block) {
-        Vector2[] corners = block.getCorners();
-        int total = 0;
-        int maxTotal = corners.length;
-        for (Vector2 corner : corners){
-            if (line.inBound(corner.x, corner.y)){
-                total += Math.signum(line.implicitEquation(corner.x, corner.y));
-            } else {
-                maxTotal--;
-            }
-        }
-
-        return total != maxTotal;
     }
 }
