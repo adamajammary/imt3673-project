@@ -1,39 +1,41 @@
 # imt3673-project
 IMT3673 Project - App Ball Game (Android, Java)
 
+# Members
+Adam Jammary - 771962  
+Magnus W. Enggrav - 470917  
+Michael Bråten - 470912  
+Martin Bjerknes - 757948  
+
+# Report
+See gravity_ball.pdf in repo for report.
+
 ## App ball game - Game(3D/2D) (lab 3 expansion)
 * Code: lab3-expansion
 * Category: game
 
-## Main idea
+## Game idea
+Our game is about guiding a ball towards a goal on obstacle filled levels using gravity.
+The completion time of a level is timed, the achieved time is the score.
+There are 3 tiers of times to beat on each level, meant to challenge the player.
+Scores are added to a local leaderboard for each level and an opt in online leader board.
 
-Create a game using lab 3's ball (using physics to move the ball with acceleration and collision).
+## Code organization 
+We have organized our classes into appropriately named packages.
+The varius menu activities are in the menu package. The game activity is in the main package.
+Bitmaps for the levels are in res/raw and textures are in res/drawable. 
 
-Either OpenGL or native Android graphics libraries can be used.
+## Login/server side (Google Play Games Services)
 
-* https://developer.android.com/training/graphics/opengl/environment.html
+Only our team members can test this for now, please see the report for more details on Google Play Games Services.
 
-Requirements:
-* There should be an objective within the game (if not it wouldn't be a game really, would it?) and something to interact with (maybe: levers, pressure plates, ramps, holes, walls etc).
-* There should be a menu the app starts up on, where the user can select:
-  * Play
-  * Options
-  * Exit
-  * Possibly others?
-* There should be a User Preferences screen:
-  * The progress of a user should be able to be private/hidden.
-  * Blocking of users/friends.
-* The game should have Google Play integration.
-* Scoreboard (local and public) and be able to, if they want to, save a score to it.
-* Be able to add friends (via Google play) and see their progress with the game (which levels they are on/have completed, highscores) (IF Available).
+If you want to test it, you need to, send an email to Adam Jammary with your:
 
-## Optional:
-* Local Multiplayer: Should display devices that's close and once connected can play together (possibly BlueTooth or LAN?).
-* Global multiplayer: A user should be able to invite their friends to play with them (WiFi).
-* Security on multiplayer: Could anyone tamper with the packets (overwrite data, events that happen and more)? Hijack a game session to join private parties/games they shouldn't have access too? Other vulnerabilities?
+* Gmail account, so you can be added as a tester on Google Play Console.
+* The SHA-1 key you use to build the APK, the key for debug builds can be obtained with (on Windows):
 
 
-
+    keytool -exportcert -keystore %USERPROFILE%\.android\debug.keystore -list
 
 ## Linter Warnings:
 
@@ -47,13 +49,8 @@ Requirements:
 
 * Some "unused" resources are not directly referenced in the code (eg. levels) so the linter think they are unused.
 
-* ID "StartupMenu_googlePlayLeaderboard_btn" is missing from land layout because we have not kept this layout up-to-date due to the screen being locked to vertical mode on main menu.
-
 * Image defined in density-independent drawable folder: For simplicity's sake we kept all drawables in one folder, but could probably have moved these to size-specific folders.
 
 * "Overdraw: Painting regions more than once": The error is due to the fact that we draw custom backgrounds in menus, while the theme draws its own. It is intentional, but we could perhaps have used a custom theme without a background in it. 
 
 * Block.TYPE_VALUES could be SparseIntArray instead of HashMap. Linter says its because of performance, but apparently it is not always more performant to use SIA over HM(according to Stack Overflow). We left it as HashMap because we didn't feel that it was neccessary to make the switch.
-
-
-**I will place this into the README, as an explanation of the still-existing linter warnings (If anyone deals with any of these existing warnings, just remove the relevant bulletpoint from the README)**
