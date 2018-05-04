@@ -39,7 +39,6 @@ public class Block extends GameObject{
 
     protected int type;
     protected RectF rectangle;
-    protected Vector2[] corners;
 
     /**
      * Creates a boundry box
@@ -49,13 +48,6 @@ public class Block extends GameObject{
     public Block(Vector2 position, float width, float height, int type){
         this.position = position;
         this.type = type;
-
-        corners = new Vector2[]{
-            position,
-            new Vector2(position.x + width, position.y),
-            new Vector2(position.x, position.y + height),
-            new Vector2(position.x + width, position.y + height)
-        };
 
         rectangle = new RectF(position.x, position.y, position.x + width, position.y + height);
 
@@ -69,14 +61,6 @@ public class Block extends GameObject{
      */
     public RectF getRectangle(){
         return rectangle;
-    }
-
-    /**
-     * Gets the corners of the rectangle
-     * @return Vector2[4] corners
-     */
-    public Vector2[] getCorners(){
-        return corners;
     }
 
     /**
