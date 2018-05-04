@@ -25,8 +25,17 @@ We have organized our classes into appropriately named packages.
 The varius menu activities are in the menu package. The game activity is in the main package.
 Bitmaps for the levels are in res/raw and textures are in res/drawable. 
 
-## Login/server side stuff(?)
-If he needs to do something special to use our services. 
+## Login/server side (Google Play Games Services)
+
+Only our team members can test this for now, please see the report for more details on Google Play Games Services.
+
+If you want to test it, you need to, send an email to Adam Jammary with your:
+
+* Gmail account, so you can be added as a tester on Google Play Console.
+* The SHA-1 key you use to build the APK, the key for debug builds can be obtained with (on Windows):
+
+
+    keytool -exportcert -keystore %USERPROFILE%\.android\debug.keystore -list
 
 ## Linter Warnings:
 
@@ -39,8 +48,6 @@ If he needs to do something special to use our services.
 * All linter suggestions about making things package private are purposefully ignored.
 
 * Some "unused" resources are not directly referenced in the code (eg. levels) so the linter think they are unused.
-
-* ID "StartupMenu_googlePlayLeaderboard_btn" is missing from land layout because we have not kept this layout up-to-date due to the screen being locked to vertical mode on main menu.
 
 * Image defined in density-independent drawable folder: For simplicity's sake we kept all drawables in one folder, but could probably have moved these to size-specific folders.
 
