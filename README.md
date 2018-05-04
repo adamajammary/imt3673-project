@@ -41,9 +41,7 @@ Requirements:
 
 * Ball.drag is left non-local because we want the ball physics variables in one place.
 
-* Block.type, .rect and .corners are left protected because classes that inherit from Block should have access if they want to use them.
-
-* LineSegment.b is left public because it should be publically available. LineSegment.a for example is used accessed outside LineSegment.
+* Block.type and .rect are left protected because classes that inherit from Block should have access if they want to use them.
 
 * All linter suggestions about making things package private are purposefully ignored.
 
