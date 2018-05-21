@@ -54,8 +54,15 @@ public class MainActivity extends AppCompatActivity {
     private CanvasView canvas;
     private static int canvasWidth;
     private static int canvasHeight;
+
     private Boolean ready = false;
     private long lastUpdateTime = 0;
+
+    // Medals
+    private final int GOLD   = 1;
+    private final int SILVER = 2;
+    private final int BRONZE = 3;
+
 
     //GameObjects
     private Ball ball;
@@ -179,54 +186,118 @@ public class MainActivity extends AppCompatActivity {
      * Displays win screen with time and stars earned.
      */
     private void displayWinScreen() {
+
+        // Switch to the Win Screen layout
         setContentView(R.layout.win_screen);
-        ((TextView)findViewById(R.id.win_screen_time_view)).setText(this.levelTimer.getTime());
 
-        TextView goldTime = findViewById(R.id.times_to_beat_gold);
-        goldTime.setText(this.goldTime);
-        TextView silverTime = findViewById(R.id.times_to_beat_silver);
-        silverTime.setText(this.silverTime);
-        TextView bronzeTime = findViewById(R.id.times_to_beat_bronze);
-        bronzeTime.setText(this.bronzeTime);
-
+        // Display and animate the big star
         this.animateBigStar();
 
-        // Display and animate stars earned
-        String newTime = this.levelTimer.getTime().replace(":","");
+        // Get the int value to calculate number of stars displayed
+        int newTime    = Integer.parseInt(this.levelTimer.getTime().replace(":",""));
+        int goldTime   = Integer.parseInt(this.goldTime.replace(":",""));
+        int silverTime = Integer.parseInt(this.silverTime.replace(":",""));
+        int bronzeTime = Integer.parseInt(this.bronzeTime.replace(":",""));
 
-        ImageView goldStar = findViewById(R.id.win_gold_star);
+        // Check times and display level-time and stars.
+        if(newTime < goldTime){
+
+            this.animateSmallStars(GOLD);
+            this.displayLevelTimes(GOLD);
+        }
+        else if(newTime < silverTime){
+
+            this.animateSmallStars(SILVER);
+            this.displayLevelTimes(SILVER);
+        }
+        else if(newTime < bronzeTime){
+
+            this.animateSmallStars(BRONZE);
+            this.displayLevelTimes(BRONZE);
+        }
+    }
+
+    /**
+     * Will display the the level times to beat in the WinScreen
+     * with a green color based on what times are beaten.
+     * Gold will display green time for Gold, Silver and Bronze
+     * Silver will display green time for Silver and Bronze
+     * Bronze will display green time for Bronze
+     * @param medal Medals earned
+     */
+    private void displayLevelTimes(final int medal){
+
+        // Get text views
+        TextView goldTimeView   = findViewById(R.id.times_to_beat_gold);
+        TextView silverTimeView = findViewById(R.id.times_to_beat_silver);
+        TextView bronzeTimeView = findViewById(R.id.times_to_beat_bronze);
+
+        // Set the level times to beat
+        goldTimeView.setText(this.goldTime);
+        silverTimeView.setText(this.silverTime);
+        bronzeTimeView.setText(this.bronzeTime);
+
+        // Display green text color based on medals
+        switch (medal){
+            case GOLD:
+                goldTimeView.setTextColor(Color.GREEN);
+                silverTimeView.setTextColor(Color.GREEN);
+                bronzeTimeView.setTextColor(Color.GREEN);
+                break;
+
+            case SILVER:
+                silverTimeView.setTextColor(Color.GREEN);
+                bronzeTimeView.setTextColor(Color.GREEN);
+                break;
+
+            case BRONZE:
+                bronzeTimeView.setTextColor(Color.GREEN);
+                break;
+        }
+    }
+
+    /**
+     * Will display and animate number of stars based on medals in the WinScreen
+     * Gold will display and animate stars for Gold, Silver and Bronze
+     * Silver will display and animate stars for Silver and Bronze
+     * Bronze will display and animate star for Bronze
+     * @param medal Medals to be displayed GOLD, SILVER OR BRONZE
+     */
+    private void animateSmallStars(final int medal){
+
+       final float rotation = 360f;
+       final int   duration = 2000;
+
+        // Get image views
+        ImageView goldStar   = findViewById(R.id.win_gold_star);
         ImageView silverStar = findViewById(R.id.win_silver_star);
         ImageView bronzeStar = findViewById(R.id.win_bronze_star);
 
-        float rotation = 360f;
-        int   duration = 2000;
+        switch (medal){
+            case GOLD:
+                // Set star visibility
+                goldStar.setVisibility(View.VISIBLE);
+                silverStar.setVisibility(View.VISIBLE);
+                bronzeStar.setVisibility(View.VISIBLE);
 
-        // Check times and animate stars
-        if(Integer.parseInt(newTime) < Integer.parseInt(this.goldTime.replace(":",""))){
-            goldStar.setVisibility(View.VISIBLE);
-            goldStar.animate().rotationBy(rotation).setDuration(duration);
-            silverStar.setVisibility(View.VISIBLE);
-            silverStar.animate().rotationBy(rotation).setDuration(duration);
-            bronzeStar.setVisibility(View.VISIBLE);
-            bronzeStar.animate().rotationBy(rotation).setDuration(duration);
+                // Animate
+                goldStar.animate().rotationBy(rotation).setDuration(duration);
+                silverStar.animate().rotationBy(rotation).setDuration(duration);
+                bronzeStar.animate().rotationBy(rotation).setDuration(duration);
+                break;
 
-            goldTime.setTextColor(Color.GREEN);
-            silverTime.setTextColor(Color.GREEN);
-            bronzeTime.setTextColor(Color.GREEN);
-        }
-        else if(Integer.parseInt(newTime) < Integer.parseInt(this.silverTime.replace(":",""))){
-            silverStar.setVisibility(View.VISIBLE);
-            silverStar.animate().rotationBy(rotation).setDuration(duration);
-            bronzeStar.setVisibility(View.VISIBLE);
-            bronzeStar.animate().rotationBy(rotation).setDuration(duration);
+            case SILVER:
+                silverStar.setVisibility(View.VISIBLE);
+                bronzeStar.setVisibility(View.VISIBLE);
 
-            silverTime.setTextColor(Color.GREEN);
-            bronzeTime.setTextColor(Color.GREEN);
-        }
-        else if(Integer.parseInt(newTime) < Integer.parseInt(this.bronzeTime.replace(":",""))){
-            bronzeStar.setVisibility(View.VISIBLE);
-            bronzeStar.animate().rotationBy(rotation).setDuration(duration);
-            bronzeTime.setTextColor(Color.GREEN);
+                silverStar.animate().rotationBy(rotation).setDuration(duration);
+                bronzeStar.animate().rotationBy(rotation).setDuration(duration);
+                break;
+
+            case BRONZE:
+                bronzeStar.setVisibility(View.VISIBLE);
+                bronzeStar.animate().rotationBy(rotation).setDuration(duration);
+                break;
         }
     }
 
@@ -234,6 +305,9 @@ public class MainActivity extends AppCompatActivity {
      * Animate the big star containing the time in the win screen
      */
     private void animateBigStar() {
+
+        ((TextView)findViewById(R.id.win_screen_time_view)).setText(this.levelTimer.getTime());
+
         ImageView bigStar = findViewById(R.id.win_screen_big_star);
 
         Animator scaleDown = AnimatorInflater.loadAnimator(this, R.animator.scale_down_animation);
