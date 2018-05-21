@@ -68,31 +68,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.timeHandler = new Handler();
-        this.database = AppDatabase.getAppDatabase(this);
-        this.currentLevelName = getIntent().getStringExtra("level");
-        this.goldTime = getIntent().getStringExtra("gold_time");
-        this.silverTime = getIntent().getStringExtra("silver_time");
-        this.bronzeTime = getIntent().getStringExtra("bronze_time");
 
-        // Set window fullscreen and remove title bar, and force landscape orientation
-       // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
-        canvas = new CanvasView(this);
-        setContentView(canvas);
-
-        this.sensorManager       = new SensorListenerManager(this);
-        this.acceleratorListener = new AcceleratorListener();
-        this.acceleratorSensor   = this.sensorManager.getSensor(Sensor.TYPE_ACCELEROMETER);
-        this.hapticManager       = new HapticFeedbackManager(this);
-        this.mediaManager        = new MediaManager(this);
-
+        this.initMain();
+        this.initGraphics();
+        this.initManagers();
         this.loadResources();
+        this.initCanvas();
+    }
 
-
-
+    /**
+     * Initializes the canvas and loads the selected level.
+     */
+    private void initCanvas() {
         lastUpdateTime = System.currentTimeMillis();
         canvas.post(() -> { //So that we wait until the UI system is ready
 
@@ -104,6 +91,40 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sets window fullscreen and removes title bar, and forces landscape orientation.
+     */
+    private void initGraphics() {
+        // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        this.canvas = new CanvasView(this);
+        setContentView(this.canvas);
+    }
+
+    /**
+     * Initializes the main resources used by the main activity.
+     */
+    private void initMain() {
+        this.timeHandler      = new Handler();
+        this.database         = AppDatabase.getAppDatabase(this);
+        this.currentLevelName = getIntent().getStringExtra("level");
+        this.goldTime         = getIntent().getStringExtra("gold_time");
+        this.silverTime       = getIntent().getStringExtra("silver_time");
+        this.bronzeTime       = getIntent().getStringExtra("bronze_time");
+    }
+
+    /**
+     * Initializes the various resource managers the main activity will use.
+     */
+    private void initManagers() {
+        this.sensorManager       = new SensorListenerManager(this);
+        this.acceleratorListener = new AcceleratorListener();
+        this.acceleratorSensor   = this.sensorManager.getSensor(Sensor.TYPE_ACCELEROMETER);
+        this.hapticManager       = new HapticFeedbackManager(this);
+        this.mediaManager        = new MediaManager(this);
+    }
 
     @Override
     protected void onPause() {
