@@ -83,7 +83,40 @@ https://github.com/adamajammary/imt3673-project/pull/35
 
 ## Individual discussion - Magnus
 
+### What is good?
 
+**StartupMenu.java**
+
+https://github.com/adamajammary/imt3673-project/blob/master/app/src/main/java/com/imt3673/project/menu/StartupMenu.java
+
+#### Quality of code written
+Although the code is not very complicated it uses self explanatory method and variable names. The methods themselves are short and easy to read, this avoid clutter and large complicated methods..
+
+All string that are displayed are located in the /res/values/strings.xml this makes it easier if one were to implement I18n. It also keeps all strings in the same place makes it easier to locate and change and  gives the opportunity to share string between different layouts if needed.
+
+I did run a lint scan to check the structure of the code, and other than a simple typo in one of the variable names it did not complain about anything.
+
+#### Quality of comments and coding style
+
+The class is well documented using the JavaDoc style of commenting over different methods except for inherited methods that use “@Override”. The code also have more specific comments like “//” over code that does not have any specific method/variable names or gives a short explanation to why this sniped of code is implemented to make it more readable for other group members.
+
+#### Quality and relevance of commit comments in version control
+
+Each commit message contains the issue number and a short explanation of what has been implemented. 
+Commit message example:
+https://github.com/adamajammary/imt3673-project/commit/a433fa684c9ec9915ad56fc8717a1deb11b3529e
+
+```
+ #4 Menu - Play, Options, Exit etc.
+* Added Startup menu. with functional Play, Option and Exit buttons
+* Added background image.
+* Added logo.
+* Added Option menu.
+```
+
+The pull request gives a more detailed description on how the code works. together with all the commits for this specific issue.this makes it is easier for other members of the team to test ang look through the new code, when they do a code review. 
+ex:
+https://github.com/adamajammary/imt3673-project/pull/16 
 
 ## Individual discussion - Adam
 
