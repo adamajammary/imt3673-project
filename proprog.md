@@ -118,6 +118,45 @@ The pull request gives a more detailed description on how the code works. togeth
 ex:
 https://github.com/adamajammary/imt3673-project/pull/16 
 
+### What is bad?
+
+**MainPage.java - private void displayWinScreen()**
+link
+
+#### Quality of code written
+The method is big and can be hard to read at first sight, and is not very organized. 
+
+#### Quality of comments and coding style
+Some parts of the method is commented and understandable. But some of the variable names can be better to explain what they are.
+
+#### Refactoring
+
+Gathered everything that has to do with displaying and animations of stars into its new method called animateSmallStars(), this make it easier to read and it is easier to do changes when everything is gathered in one method instead of being spread out in one big method.
+
+Did the same with everything that has do do with displaying and changing color of times that the player has beaten the game, called displayLevelTimes(). for the same reason.
+
+I also moved the textview that displays the time when player reaches gold in to the animateBigStar() method since it is displayed inside the big star, in the win screen layout.
+
+Added final int medals to use ase parameters in the two new methods to avoid using “magic “ numbers.
+
+Organized the code a little so it is easier to read the if checks and added some small comments so it easier to read when glancing over the code.
+
+**Commit:**
+
+https://github.com/adamajammary/imt3673-project/commit/6169adf85bf4bd0c598fc3d43eb4e0c38d7ec8be
+
+**Old File:**
+
+https://github.com/adamajammary/imt3673-project/blob/5a22e801184e596295fb0de76216aa4b695a1959/app/src/main/java/com/imt3673/project/main/MainActivity.java
+
+**New File:**
+
+https://github.com/adamajammary/imt3673-project/blob/6169adf85bf4bd0c598fc3d43eb4e0c38d7ec8be/app/src/main/java/com/imt3673/project/main/MainActivity.java
+
+### A personal reflection about professionalism in programming
+
+
+
 ## Individual discussion - Adam
 
 ### What is good?
