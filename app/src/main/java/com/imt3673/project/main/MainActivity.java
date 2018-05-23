@@ -186,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
      * Displays win screen with time and stars earned.
      */
     private void displayWinScreen() {
-
         // Switch to the Win Screen layout
         setContentView(R.layout.win_screen);
 
@@ -201,17 +200,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Check times and display level-time and stars.
         if(newTime < goldTime){
-
             this.animateSmallStars(GOLD);
             this.displayLevelTimes(GOLD);
         }
         else if(newTime < silverTime){
-
             this.animateSmallStars(SILVER);
             this.displayLevelTimes(SILVER);
         }
         else if(newTime < bronzeTime){
-
             this.animateSmallStars(BRONZE);
             this.displayLevelTimes(BRONZE);
         }
@@ -226,7 +222,6 @@ public class MainActivity extends AppCompatActivity {
      * @param medal Medals earned
      */
     private void displayLevelTimes(final int medal){
-
         // Get text views
         TextView goldTimeView   = findViewById(R.id.times_to_beat_gold);
         TextView silverTimeView = findViewById(R.id.times_to_beat_silver);
