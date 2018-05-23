@@ -19,11 +19,12 @@ We wrote everything in Java using Android Studio as this is the official languag
 
 #### Room Persistence Library VS SQLite
 
-https://medium.com/mindorks/sqlite-made-easy-room-persistence-library-ecd1a5bb0a2c
-
-https://medium.com/@anujguptawork/note-making-application-using-sqlite-vs-room-part-2-using-room-becf92672e29 
-
 “Room provides an abstraction layer over SQLite to allow fluent database access while harnessing the full power of SQLite.” When we looked for a way to store highscores locally on the android phone, the Room Persistence Library was one of the first things that popped up when googling “local database on android” It was also the one recommended on the https://developer.android.com/training/data-storage/room/ page, instead of directly using SQLite, Alot of the problems of using SQLite direcly is that you need to use alot of boilderplate code to convert between SQL queries and java data object. but when using the Room Persistence Library you can use annotations to reduce the boilerplate code. There are also the fact that with SQLite, if you database changes you have to update the affected SQL queries manually, this can be time time consuming and one could easily get errors. The Room persistence library takes care of and it was also easy to set up and use.
+
+Reasearch links:
+
+https://medium.com/mindorks/sqlite-made-easy-room-persistence-library-ecd1a5bb0a2c
+https://medium.com/@anujguptawork/note-making-application-using-sqlite-vs-room-part-2-using-room-becf92672e29 
 
 ### How we controlled communication systems during development
 
@@ -152,7 +153,7 @@ https://github.com/adamajammary/imt3673-project/blob/5a22e801184e596295fb0de7621
 
 **New File:**
 
-https://github.com/adamajammary/imt3673-project/blob/6169adf85bf4bd0c598fc3d43eb4e0c38d7ec8be/app/src/main/java/com/imt3673/project/main/MainActivity.java
+https://github.com/adamajammary/imt3673-project/blob/622c32d58a98bc9de7c91f3b307e859a70034192/app/src/main/java/com/imt3673/project/main/MainActivity.java
 
 ### A personal reflection about professionalism in programming
 
