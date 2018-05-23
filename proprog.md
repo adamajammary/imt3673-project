@@ -90,15 +90,15 @@ https://github.com/adamajammary/imt3673-project/pull/35
 https://github.com/adamajammary/imt3673-project/blob/master/app/src/main/java/com/imt3673/project/menu/StartupMenu.java
 
 #### Quality of code written
-Although the code is not very complicated it uses self explanatory method and variable names. The methods themselves are short and easy to read, this avoid clutter and large complicated methods..
+Although the code is not very complicated it is organized well and uses self explanatory method and variable names. The methods themselves are short and easy to read, this avoids clutter and large complicated methods.
 
-All string that are displayed are located in the /res/values/strings.xml this makes it easier if one were to implement I18n. It also keeps all strings in the same place makes it easier to locate and change and  gives the opportunity to share string between different layouts if needed.
+All string that are displayed are located in the /res/values/strings.xml this makes it easier if one were to implement I18n. It also keeps all strings in the same place, this makes it easier to locate and change the strings you want, it also gives the opportunity to share strings between different layouts if needed.
 
-I did run a lint scan to check the structure of the code, and other than a simple typo in one of the variable names it did not complain about anything.
+I did run a lint scan to check the structure of the code, and other than a simple typo in one of the variable names it did not display any warnings.
 
 #### Quality of comments and coding style
 
-The class is well documented using the JavaDoc style of commenting over different methods except for inherited methods that use “@Override”. The code also have more specific comments like “//” over code that does not have any specific method/variable names or gives a short explanation to why this sniped of code is implemented to make it more readable for other group members.
+The class is well documented using the JavaDoc style of commenting over different methods except for inherited methods that use “@Override”. The code also have more specific comments like “//” over code that does not have any specific method/variable names that gives a short explanation to why this sniped of code is implemented and to make it more readable for other group members.
 
 #### Quality and relevance of commit comments in version control
 
@@ -114,9 +114,54 @@ https://github.com/adamajammary/imt3673-project/commit/a433fa684c9ec9915ad56fc87
 * Added Option menu.
 ```
 
-The pull request gives a more detailed description on how the code works. together with all the commits for this specific issue.this makes it is easier for other members of the team to test ang look through the new code, when they do a code review. 
+The pull request gives a more detailed description on how the code works. together with all the commits for this specific issue, this makes it is easier for other members of the team, to test ang look through the new code when they do a code review. 
 ex:
 https://github.com/adamajammary/imt3673-project/pull/16 
+
+### What is bad?
+
+**MainPage.java - private void displayWinScreen()**
+
+https://github.com/adamajammary/imt3673-project/blob/5a22e801184e596295fb0de76216aa4b695a1959/app/src/main/java/com/imt3673/project/main/MainActivity.java
+
+#### Quality of code written
+The method is big and can be hard to read at first sight, and is not very organized. 
+
+#### Quality of comments and coding style
+Some parts of the method is commented and understandable. But some of the variable names can be better, to make it clearer what they are.
+
+#### Refactoring
+
+Gathered the code that has to do with displaying and animate of stars into a new method called animateSmallStars(), this make it easier to read and it is easier to do changes, when the code that belonges together is gathered in one method instead of being spread out in one big method with other pieces of code.
+
+Did the same with the code that has do with displaying and changing color of times the player has beaten. It is called displayLevelTimes(). for the same reason as the description above.
+
+I also moved the textview that displays the time when the player reaches goal in to the animateBigStar() method, since the time  is displayed inside the big animated star in the win screen layout and they kind of belong together..
+
+Added final int GOLD, SILVER and BRONZE to use ase parameters in the two new methods to avoid using “magic “ numbers.
+
+Organized the code a little so it is easier to read the "if" checks and added some small comments so it easier to read when glancing over the code.
+
+**Commit:**
+
+https://github.com/adamajammary/imt3673-project/commit/6169adf85bf4bd0c598fc3d43eb4e0c38d7ec8be
+
+**Old File:**
+
+https://github.com/adamajammary/imt3673-project/blob/5a22e801184e596295fb0de76216aa4b695a1959/app/src/main/java/com/imt3673/project/main/MainActivity.java
+
+**New File:**
+
+https://github.com/adamajammary/imt3673-project/blob/6169adf85bf4bd0c598fc3d43eb4e0c38d7ec8be/app/src/main/java/com/imt3673/project/main/MainActivity.java
+
+### A personal reflection about professionalism in programming
+
+I research whenever I start to plan a project, to find the best way to do something, like coding styles that is most used in the industry for this type of project and what is the recommended technologies, libraries, language etc. to use for this type of project. I try to follow this to the best of my abilities, in case there is a chance that other people also will be working on it.
+
+I always try to write the best code I can, by commenting well, write self-explaining variable/method names and making it as organized and easy to read as possible, for others and myself, if I were to look at the code again later. I do my best to learn from my mistakes either if I spot the mistakes myself, or others tell/comment on my code during a code review. I always try to absorb knowledge from people around me, either through discussions or looking at others code. I do my best to communicate well and be honest in a nice way, with fellow team members, to avoid conflicts either between team members but also to avoid merge conflicts if possible. 
+
+I always try to write easy to understand commit messages and linking each commit to the issue I am working on, by adding “#issueNr”.  I also write good descriptions of what is implemented in pull requests so it is easier to test and review for other members on the team.
+
 
 ## Individual discussion - Adam
 
